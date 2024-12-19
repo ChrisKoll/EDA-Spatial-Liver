@@ -1,0 +1,539 @@
+---
+title: Exploratory Data Analysis
+author: Christian Kolland
+date: today
+---
+
+```{r}
+#| label: load-packages
+#| echo: false
+#| include: false
+
+box::use(
+  dplyr,
+  DT,
+  ggplot2,
+  patchwork,
+  Seurat,
+  SeuratObject,
+  tibble
+)
+```
+
+```{r}
+#| label: load-utils
+#| echo: false
+#| include: false
+
+#' @export
+get_border_boundaries <- function(sobj, fovs) {
+  box::use(
+    Seurat[Images]
+  )
+
+  # Images() returns the slide name --> Only one value
+  slide_name <- Images(sobj)[1]
+  # Returns the first tissue name in a vector
+  # Apparently all the same value
+  tissue_name <- sobj@meta.data$Run_Tissue_name[1]
+
+  # `id` returns the cell id
+  # `fov` must be part of the given FOVs (only take chosen ones)
+  # Tissue must be identical?
+  # Returns all cells that are part of the FOVs
+  cells_in_boundary <- sobj$id[
+    (sobj$fov %in% fovs) &
+      (sobj$Run_Tissue_name == tissue_name)
+  ]
+
+  # Returns all centroids for the slide
+  centroids <- sobj@images[[slide_name]]$centroids
+  # Renames all cells according to the slide
+  centroids@cells <- paste(slide_name, centroids@cells, sep = "_")
+
+  # Returns 4 coordinates to build a boundary box for the cells of interest
+  border_boundaries <- apply(
+    centroids@coords[centroids@cells %in% cells_in_boundary, ],
+    2,
+    range
+  )
+
+  border_boundaries
+}
+
+#' @export
+plot_cells_in_fov <- function(sobj, fovs) {
+  box::use(
+    ggplot2[xlim, ylim],
+    Seurat[ImageDimPlot, Images]
+  )
+
+  # Get the border boundaries for ours FOVs
+  fov_boundaries <- get_border_boundaries(sobj, fovs)
+  slide_name <- Images(sobj)[1]
+
+  ImageDimPlot(
+    sobj,
+    fov = slide_name,
+    border.color = "black"
+  ) +
+    xlim(fov_boundaries[, 2]) +
+    ylim(fov_boundaries[, 1])
+}
+
+#' @export
+plot_gene_expression_markers <- function(sobj, fovs, genes) {
+  box::use(
+    ggplot2[xlim, ylim],
+    Seurat[ImageDimPlot]
+  )
+
+  fov_boundaries <- get_border_boundaries(sobj, fovs)
+  slide_name <- Images(sobj)[1]
+
+  ImageDimPlot(
+    sobj,
+    fov = slide_name,
+    border.color = "black",
+    alpha = 0.3, # Reduce alpha of cell fills to improve molecule visualization
+    molecules = genes,
+    mols.size = 0.8,
+    nmols = 100000, # Set the total number of molecules to visualize
+    axes = FALSE
+  ) +
+    xlim(fov_boundaries[, 2]) +
+    ylim(fov_boundaries[, 1])
+}
+```
+
+## What Data do We Have?
+
+The data analyzed in this EDA consists of mouse model data related to alcoholic 
+liver disease. The data consists of two FFPE samples (slides).
+
+:::{.callout-note title="FFPE"}
+The acronym FFPE stands for "formalin-fixed paraffin-embedded".
+:::
+
+The samples stem from the CosMx Mouse Neuroscience Panel (product of 
+[nanoString](https://nanostring.com/products/cosmx-spatial-molecular-imager/cosmx-rna-assays/cosmx-mouse-neuroscience-panel/)) 
+Enables for expression profiling of 1000 highly curated targets at subcellular 
+resolution. Customizable with up to 50 of own targets.
+
+Morphology visualization for (these are markers):
+
+B2M
+: Beta-2 Microglobulin, a small protein that is a component of MHC class I 
+molecules found on all nucleated cells. It is often used as a marker in 
+immunohistochemistry.
+
+CD298 (SLC12A2)
+: Protein associated with ion transport and is often used as a marker for 
+certain cellular functions.
+
+PanCK
+: Pan-Cytokeratin, a group of cytoskeletal proteins found in epithelial cells. 
+It is used to identify epithelial cell populations in tissue.
+
+CD45
+: Marker for leukocytes (white blood cells). It is used to identify immune cells 
+in tissues.
+
+CK8/18
+: Cytokeratin 8/18, which are intermediate filament proteins expressed in 
+epithelial cells, particularly in simple epithelia such as those of the liver.
+
+DAPI
+: 4′,6-diamidino-2-phenylindole, a fluorescent stain that binds strongly to DNA, 
+commonly used for nuclear staining in microscopy.
+
+## Load the Data
+
+The Seurat objects contain 4 different types of information:
+
+1. Read counts per gene per cell
+2. Location of cells on slide
+3. Inferred information (cell cluster, cell type)
+4. Cell annotation (with respect to field of view (FOV))
+
+```{r}
+#| label: load-data-liver1
+
+sobj_liver1 <- SeuratObject$LoadSeuratRds("../data/liver1_seurat_object.Rds")
+sobj_liver1
+```
+
+```{r}
+#| label: load-data-liver2
+
+sobj_liver2 <- SeuratObject$LoadSeuratRds("../data/liver2_seurat_object.Rds")
+sobj_liver2
+```
+
+## Data Exploration
+
+:::{.callout-note title="Access Seurat object"}
+To access the count information in the Seurat object:
+
+```
+sobj_liver1@assays$Nanostring$counts
+```
+
+To access other metadata:
+
+```
+sobj_liver1@meta.data
+```
+:::
+
+```{r}
+#| label: explore-metadata-1
+
+sobj_liver1@meta.data
+```
+
+```{r}
+#| label: explore-metadata-2
+
+colnames(sobj_liver1@meta.data)
+```
+
+Each column holds the metadata of a specific type for all 
+`r nrow(sobj_liver1@meta.data)` samples.
+
+### nCount_Nanostring
+
+Apparently holds the number of counted features inside the cell.
+This means the first cell had **450** counted features inside of it.
+
+```{r}
+#| label: explore-metadata-ncount-1
+
+sobj_liver1@meta.data$nCount_Nanostring[1:10]
+```
+
+```{r}
+#| label: explore-metadata-ncount-2
+
+min_val <- min(sobj_liver1@meta.data$nCount_Nanostring)
+max_val <- max(sobj_liver1@meta.data$nCount_Nanostring)
+mean_val <- mean(sobj_liver1@meta.data$nCount_Nanostring)
+
+message(paste0("Min: ", min_val, ", Max: ", max_val, ", Mean: ", mean_val))
+```
+
+```{r}
+#| label: plot-metadata-ncount
+
+p_count_dist_l1 <- tibble$as_tibble(sobj_liver1@meta.data$nCount_Nanostring) |>
+  ggplot2$ggplot(ggplot2$aes(x = value)) +
+  ggplot2$geom_histogram(bins = 20, fill = "#a6cee3", color = "#1f78b4") +
+  ggplot2$ylim(0, 10000) +
+  ggplot2$labs(
+    x = "Values",
+    y = "Counts"
+  ) +
+  ggplot2$theme_minimal()
+
+p_count_dist_l2 <- tibble$as_tibble(sobj_liver2@meta.data$nCount_Nanostring) |>
+  ggplot2$ggplot(ggplot2$aes(x = value)) +
+  ggplot2$geom_histogram(bins = 20, fill = "#a6cee3", color = "#1f78b4") +
+  ggplot2$ylim(0, 10000) +
+  ggplot2$labs(
+    x = "Values",
+    y = "Counts"
+  ) +
+  ggplot2$theme_minimal()
+
+comb_count_plot <- p_count_dist_l1 + p_count_dist_l2 +
+  patchwork$plot_annotation(
+    title = "Count Distributions",
+    caption = "Liver1 vs. Liver2"
+  )
+
+ggplot2$ggsave("../output/fig_count_distribution.png", comb_count_plot)
+comb_count_plot
+```
+
+### nFeature_Nanostring
+
+Number of individual features found in one cell.
+The first cell had **181** individual features counted inside of it.
+
+```{r}
+#| label: explore-metadata-nfeature-1
+
+sobj_liver1@meta.data$nFeature_Nanostring[1:10]
+```
+
+```{r}
+#| label: explore-metadata-nfeature-2
+
+min_val <- min(sobj_liver1@meta.data$nFeature_Nanostring)
+max_val <- max(sobj_liver1@meta.data$nFeature_Nanostring)
+mean_val <- mean(sobj_liver1@meta.data$nFeature_Nanostring)
+
+message(paste0("Min: ", min_val, ", Max: ", max_val, ", Mean: ", mean_val))
+```
+
+```{r}
+#| label: plot-metadata-nfeature
+
+p_feat_dist_l1 <- tibble$as_tibble(sobj_liver1@meta.data$nFeature_Nanostring) |>
+  ggplot2$ggplot(ggplot2$aes(x = value)) +
+  ggplot2$geom_histogram(bins = 20, fill = "#b2df8a", color = "#33a02c") +
+  ggplot2$labs(
+    x = "Values",
+    y = "Counts"
+  ) +
+  ggplot2$theme_minimal()
+
+p_feat_dist_l2 <- tibble$as_tibble(sobj_liver2@meta.data$nFeature_Nanostring) |>
+  ggplot2$ggplot(ggplot2$aes(x = value)) +
+  ggplot2$geom_histogram(bins = 20, fill = "#b2df8a", color = "#33a02c") +
+  ggplot2$labs(
+    x = "Values",
+    y = "Counts"
+  ) +
+  ggplot2$theme_minimal()
+
+comb_feat_plot <- p_feat_dist_l1 + p_feat_dist_l2 +
+  patchwork$plot_annotation(
+    title = "Feature Distributions",
+    caption = "Liver1 vs. Liver2"
+  )
+
+ggplot2$ggsave("../output/fig_feature_distribution.png", comb_feat_plot)
+comb_feat_plot
+```
+
+### fov
+
+Provides all tissue stamps of a slide.
+A slide contains a number of tissue slices. Each tissue slice is "stamped" n 
+times. `fov` tells on which stamp the given cell can be found.
+
+```{r}
+#| label: explore-metadata-fov-liver1
+
+unique(sobj_liver1@meta.data$fov)
+```
+
+```{r}
+#| label: plot-metadata-fov-liver1
+
+fov_dist_liver1 <- sobj_liver1@meta.data$fov |>
+  tibble$as_tibble() |>
+  dplyr$count(value, sort = TRUE)
+
+p_fov_dist_l1 <- fov_dist_liver1 |>
+  ggplot2$ggplot(ggplot2$aes(x = as.factor(value), y = n)) +
+  ggplot2$geom_col(fill = "#cab2d6") +
+  ggplot2$ylim(0, 1250) +
+  ggplot2$labs(
+    x = "FOVs",
+    y = "Counts"
+  ) +
+  ggplot2$theme_minimal() +
+  ggplot2$theme(
+    axis.text.x = ggplot2$element_text(angle = 90, hjust = 1)
+  )
+```
+
+```{r}
+#| label: explore-metadata-fov-liver2
+
+unique(sobj_liver2@meta.data$fov)
+```
+
+```{r}
+#| label: plot-metadata-fov-liver2
+
+fov_dist_liver2 <- sobj_liver2@meta.data$fov |>
+  tibble$as_tibble() |>
+  dplyr$count(value, sort = TRUE)
+
+p_fov_dist_l2 <- fov_dist_liver2 |>
+  ggplot2$ggplot(ggplot2$aes(x = as.factor(value), y = n)) +
+  ggplot2$geom_col(fill = "#cab2d6") +
+  ggplot2$ylim(0, 1250) +
+  ggplot2$labs(
+    x = "FOVs",
+    y = "Counts"
+  ) +
+  ggplot2$theme_minimal() +
+  ggplot2$theme(
+    axis.text.x = ggplot2$element_text(angle = 90, hjust = 1)
+  )
+```
+
+```{r}
+#| label: plot-metadata-fov-combined
+
+comb_fov_plot <- p_fov_dist_l1 + p_fov_dist_l2 +
+  patchwork$plot_annotation(
+    title = "Sample Counts per FOV",
+    caption = "Liver1 vs. Liver2"
+  )
+
+ggplot2$ggsave("../output/fig_fov_distribution.png", comb_fov_plot)
+comb_fov_plot
+```
+
+### Counts
+
+```{r}
+#| label: explore-counts-l1-1
+
+sobj_liver1@assays$Nanostring$counts[1:5, 1:5]
+```
+
+```{r}
+#| label: explore-counts-l1-2
+
+num_rows <- nrow(sobj_liver1@assays$Nanostring$counts)
+num_cols <- ncol(sobj_liver1@assays$Nanostring$counts)
+
+message(paste0("Rows: ", num_rows, ", Cols: ", num_cols))
+```
+
+A gene to cell matrix (usually genes on cols).
+
+```{r}
+#| label: explore-counts-l2
+
+num_rows <- nrow(sobj_liver2@assays$Nanostring$counts)
+num_cols <- ncol(sobj_liver2@assays$Nanostring$counts)
+
+message(paste0("Rows: ", num_rows, ", Cols: ", num_cols))
+```
+
+## Visualization
+
+```{r}
+#| label: plot-cells-fov-1-2-l1
+
+p_cells_fov_1_2_l1 <- plot_cells_in_fov(sobj_liver1, c(1, 2))
+
+ggplot2$ggsave("../output/fig_cells_fov_1_2_l1.png", p_cells_fov_1_2_l1)
+p_cells_fov_1_2_l1
+```
+
+```{r}
+#| label: plot-cells-fov-1-2-l2
+
+p_cells_fov_1_2_l2 <- plot_cells_in_fov(sobj_liver2, c(1, 2))
+
+ggplot2$ggsave("../output/fig_cells_fov_1_2_l2.png", p_cells_fov_1_2_l2)
+p_cells_fov_1_2_l2
+```
+
+```{r}
+#| label: plot-gexprm-fov-1-2-l1
+
+p_gexprm_fov_1_2_l1 <- plot_gene_expression_markers(
+  sobj_liver1,
+  c(1, 2),
+  c("Slc17a7", "Rgs5")
+)
+
+ggplot2$ggsave("../output/fig_gexprm_fov_1_2_l1.png", p_gexprm_fov_1_2_l1)
+p_gexprm_fov_1_2_l1
+```
+
+```{r}
+#| label: plot-feat-rgs5-l1
+
+p_feat_rgs5_l1 <- Seurat$FeaturePlot(
+  sobj_liver1,
+  features = "Rgs5",
+  order = TRUE
+)
+
+ggplot2$ggsave("../output/fig_feature_rgs5_l1.png", p_feat_rgs5_l1)
+p_feat_rgs5_l1
+```
+
+## Disease Conditions
+
+```{r}
+#| label: disease-conditions-l1
+
+healthy <- c(1, 2, 15, 16, 17, 18, 19, 20, 21, 22, 23, 45)
+cirrhosis <- c(5, 6, 24, 25, 26, 30, 31, 34, 35, 40, 41, 44)
+steatosis <- c(3, 4, 9, 10, 13, 14, 27, 28, 29, 38, 39)
+aclf <- c(7, 8, 11, 12, 32, 33, 36, 37, 42, 43)
+
+conditions_l1 <- sobj_liver1@meta.data$fov |>
+  tibble$as_tibble() |>
+  dplyr$rename(FOV = value) |>
+  # dplyr$distinct() |>
+  dplyr$mutate(
+    condition = dplyr$case_when(
+      FOV %in% healthy ~ "healthy",
+      FOV %in% cirrhosis ~ "cirrhosis",
+      FOV %in% steatosis ~ "steatosis",
+      FOV %in% aclf ~ "aclf",
+      TRUE ~ "Other"
+    )
+  )
+
+conditions_l1
+```
+
+```{r}
+#| label: disease-conditions-l2
+
+cirrhosis <- c(1, 2, 3, 4, 5, 6, 7, 8, 13, 14, 17, 18, 19, 20, 21, 22, 23, 24, 25, 36, 37, 44, 45)
+aclf <- c(9, 10, 11, 12, 15, 16, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 38, 39, 40, 41, 42, 43)
+
+conditions_l2 <- sobj_liver2@meta.data$fov |>
+  tibble$as_tibble() |>
+  dplyr$rename(FOV = value) |>
+  # dplyr$distinct() |>
+  dplyr$mutate(
+    condition = dplyr$case_when(
+      FOV %in% cirrhosis ~ "cirrhosis",
+      FOV %in% aclf ~ "aclf",
+      TRUE ~ "Other"
+    )
+  )
+
+conditions_l2
+```
+
+## Prepare Combined Object
+
+All three operations can not be run due to memory constraints.
+Need to be outsourced to cluster.
+
+```{r}
+#| label: add-metadata-l1
+#| eval: false
+
+sobj_liver1 <- Seurat$AddMetaData(
+  sobj_liver1,
+  metadata = conditions_l1 |>
+    dplyr$select(-FOV)
+)
+```
+
+```{r}
+#| label: add-metadata-l2
+#| eval: false
+
+sobj_liver2 <- Seurat$AddMetaData(
+  sobj_liver2,
+  metadata = conditions_l2 |>
+    dplyr$select(-FOV)
+)
+```
+
+Rename cells with slide prefix.
+
+```{r}
+#| label: merge-objects
+
+sobj_combined_liver <- merge(sobj_liver1, sobj_liver2)
+```
+
