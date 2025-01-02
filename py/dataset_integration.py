@@ -1,5 +1,6 @@
 # Standard imports
 import os
+import sys
 import tempfile
 
 # Third-party imports
@@ -15,20 +16,20 @@ torch.set_float32_matmul_precision("high")
 save_dir = tempfile.TemporaryDirectory()
 
 
-def main(**kwargs):
+def main(path_to_data: str):
     """
     Runs the scVI model on the spatial liver dataset
 
     Args:
-        **kwargs: Keyword arguments for the program.
+        path_to_data: Path to data source.
     """
-    args = {"path_to_data": kwargs.get("data", None)}
-
-    if not args["path_to_data"]:
+    if not path_to_data:
         raise ValueError("Path to data must be provided")
 
     # Load data
-    adata = scvi.data.read_h5ad("args.path_to_data")
+    adata = scvi.data.read_h5ad(path_to_data)
+    print("AnnData loaded successfully")
+    print(adata)
 
     scvi.model.SCVI.setup_anndata(adata, batch_key=["Slide_name"])
     # Standard values from tutorial
@@ -57,4 +58,4 @@ def main(**kwargs):
 
 
 if __name__ == "__main__":
-    main()
+    main(sys.argv[1])
