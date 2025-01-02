@@ -54,3 +54,7 @@ def main(**kwargs):
         frameon=False,
         ncols=1,
     )
+
+
+if __name__ == "__main__":
+    main()
