@@ -10,6 +10,7 @@ import torch
 
 sc.set_figure_params(figsize=(6, 6), frameon=False)
 sns.set_theme()
+scvi.settings.verbosity = 10
 torch.set_float32_matmul_precision("high")
 save_dir = tempfile.TemporaryDirectory()
 
@@ -35,6 +36,9 @@ def main(**kwargs):
     # Gene likelihood might need to change
     model = scvi.model.SCVI(adata, n_layers=2, n_latent=30, gene_likelihood="nb")
     model.train()
+
+    model_dir = os.path.join(save_dir.name, "scvi_model")
+    model.save(model_dir, overwrite=True)
 
     SCVI_LATENT_KEY = "X_scVI"
     adata.obsm[SCVI_LATENT_KEY] = model.get_latent_representation()
