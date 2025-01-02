@@ -31,7 +31,7 @@ def main(path_to_data: str):
     print("AnnData loaded successfully")
     print(adata)
 
-    scvi.model.SCVI.setup_anndata(adata, batch_key=["Slide_name"])
+    scvi.model.SCVI.setup_anndata(adata, batch_key="Slide_name")
     # Standard values from tutorial
     # https://docs.scvi-tools.org/en/stable/tutorials/notebooks/scrna/harmonization.html
     # Gene likelihood might need to change
