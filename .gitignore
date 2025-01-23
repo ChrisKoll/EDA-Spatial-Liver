@@ -1,3 +1,9 @@
+# Project folders
+data/*
+output/*
+py/figures/*
+py/scvi_model_23-01-2025_05:41/*
+
 # History files
 .Rhistory
 .Rapp.history
