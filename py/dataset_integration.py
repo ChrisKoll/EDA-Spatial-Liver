@@ -1,7 +1,7 @@
 # Standard imports
+from datetime import datetime
 import os
 import sys
-import tempfile
 
 # Third-party imports
 import scanpy as sc
@@ -9,11 +9,12 @@ import scvi
 import seaborn as sns
 import torch
 
-sc.set_figure_params(figsize=(6, 6), frameon=False)
-sns.set_theme()
+# Set options
 scvi.settings.verbosity = 10
 torch.set_float32_matmul_precision("high")
-save_dir = tempfile.TemporaryDirectory()
+sc.set_figure_params(figsize=(6, 6), frameon=False)
+sns.set_theme()
+save_dir = "./"
 
 
 def main(path_to_data: str):
@@ -26,35 +27,81 @@ def main(path_to_data: str):
     if not path_to_data:
         raise ValueError("Path to data must be provided")
 
+    print(">>> Start")
+
     # Load data
     adata = scvi.data.read_h5ad(path_to_data)
     print("AnnData loaded successfully")
     print(adata)
 
-    scvi.model.SCVI.setup_anndata(adata, batch_key="Slide_name")
+    # Setup the data for processing
+    # Model should correct for slide and condition
+    scvi.model.SCVI.setup_anndata(
+        adata, categorical_covariate_keys=["Slide_name", "condition"]
+    )
+
     # Standard values from tutorial
     # https://docs.scvi-tools.org/en/stable/tutorials/notebooks/scrna/harmonization.html
-    # Gene likelihood might need to change
     model = scvi.model.SCVI(adata, n_layers=2, n_latent=30, gene_likelihood="nb")
+    print(model)
+
     model.train()
 
-    model_dir = os.path.join(save_dir.name, "scvi_model")
+    # Save model
+    model_dir = os.path.join(
+        save_dir, f"scvi_model_{datetime.now().strftime('%d-%m-%Y_%H:%M')}"
+    )
     model.save(model_dir, overwrite=True)
 
+    # Save latent representation
     SCVI_LATENT_KEY = "X_scVI"
-    adata.obsm[SCVI_LATENT_KEY] = model.get_latent_representation()
 
-    # Cluster dataset and visualize latent space
-    sc.pp.neighbors(adata, use_rep=SCVI_LATENT_KEY)
-    sc.tl.leiden(adata)
+    latent = model.get_latent_representation()
+    adata.obsm[SCVI_LATENT_KEY] = latent
+    print(latent.shape)
 
+    # Calculate UMAP for non-corrected data
+    # Visualize afterwards
+    sc.tl.pca(adata)
+    sc.pp.neighbors(adata, n_pcs=30, n_neighbors=20)
     sc.tl.umap(adata, min_dist=0.3)
+
     sc.pl.umap(
         adata,
-        color=["Slide_name", "leiden"],
+        color=["Slide_name"],
         frameon=False,
-        ncols=1,
+        save="UMAP_slide_name_not_corrected.svg",
+        show=False,
     )
+    sc.pl.umap(
+        adata,
+        color=["condition"],
+        frameon=False,
+        save="UMAP_condition_not_corrected.svg",
+        show=False,
+    )
+
+    # Calculate UMAP for corrected data
+    # Visualize afterwards
+    sc.pp.neighbors(adata, use_rep=SCVI_LATENT_KEY)
+    sc.tl.umap(adata, min_dist=0.3)
+
+    sc.pl.umap(
+        adata,
+        color=["Slide_name"],
+        frameon=False,
+        save="UMAP_slide_name_corrected.svg",
+        show=False,
+    )
+    sc.pl.umap(
+        adata,
+        color=["condition"],
+        frameon=False,
+        save="UMAP_condition_corrected.svg",
+        show=False,
+    )
+
+    print(">>> Done!")
 
 
 if __name__ == "__main__":
