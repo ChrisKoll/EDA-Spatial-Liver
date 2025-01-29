@@ -49,7 +49,7 @@ def main(path_to_data: str):
 
     # Save model
     model_dir = os.path.join(
-        save_dir, f"scvi_model_{datetime.now().strftime('%d-%m-%Y_%H:%M')}"
+        save_dir, f"scvi_model_{datetime.now().strftime('%d-%m-%Y_%H-%M')}"
     )
     model.save(model_dir, overwrite=True)
 
@@ -70,14 +70,14 @@ def main(path_to_data: str):
         adata,
         color=["Slide_name"],
         frameon=False,
-        save="UMAP_slide_name_not_corrected.svg",
+        save="_slide_name_not_corrected.png",
         show=False,
     )
     sc.pl.umap(
         adata,
         color=["condition"],
         frameon=False,
-        save="UMAP_condition_not_corrected.svg",
+        save="_condition_not_corrected.png",
         show=False,
     )
 
@@ -90,16 +90,19 @@ def main(path_to_data: str):
         adata,
         color=["Slide_name"],
         frameon=False,
-        save="UMAP_slide_name_corrected.svg",
+        save="_slide_name_corrected.png",
         show=False,
     )
     sc.pl.umap(
         adata,
         color=["condition"],
         frameon=False,
-        save="UMAP_condition_corrected.svg",
+        save="_condition_corrected.png",
         show=False,
     )
+
+    adata.write("scvi_processed.h5ad")
+    print("Saved AnnData object")
 
     print(">>> Done!")
 
