@@ -1,0 +1,151 @@
+---
+title: "Extract Data From Seurat Object"
+date: today
+date-format: "DD.MM.YYYY"
+author: 
+  - name: Christian Kolland
+    email: christian.kolland@stud.uni-frankfurt.de
+    affiliation:
+      - name: Goethe University Frankfurt
+        city: Frankfurt am Main
+abstract: >
+  Extract the relevant data from the merged liver Seurat object to prepare it 
+  for conversion into an AnnData object in Python. This includes the expression 
+  matrix as well as metadata such as condition, field of view (FOV), and other 
+  relevant annotations.
+copyright: 
+  holder: Christian Kolland
+  year: 2025
+title-block-banner: "#002147"
+---
+
+```{r}
+#| label: load-packages
+#| echo: false
+#| include: false
+
+box::use(
+  dplyr[select],
+  glue[glue],
+  Matrix[writeMM],
+  readr[write_csv],
+  SeuratObject[LoadSeuratRds]
+)
+```
+
+```{r}
+#| label: load-params
+#| echo: false
+
+# Input directories
+data_dir <- "../data"
+sobj_dir <- file.path(data_dir, "seurat_objects")
+
+# Output directories
+out_dir <- "../data"
+conversion_dir <- "adata_conversion"
+extraction_out <- file.path(out_dir, conversion_dir, glue("data_extraction_{format(Sys.time(), '%d-%m-%Y_%H-%M')}"))
+
+# Create directory only if it not exists
+if (!dir.exists(extraction_out)) {
+    dir.create(extraction_out, recursive = TRUE)
+}
+
+message(glue("
+📂 Input Seurat objects from: {sobj_dir}
+💾 Outputs will be saved under: {extraction_out}
+"))
+```
+
+## Load the Data
+
+```{r}
+#| label: load-data
+
+sobj_liver <- LoadSeuratRds(file.path(
+  sobj_dir,
+  "sobj_merged_liver.Rds"
+))
+sobj_liver
+```
+
+## Counts
+
+```{r}
+#| label: extract-counts
+
+# Save sparse counts
+counts <- sobj_liver@assays$Nanostring$counts
+
+# Write to format that keeps sparsity in tact
+write_out <- writeMM(counts, file.path(extraction_out, "seurat_counts.mtx"))
+
+# Print for visual confirmation
+counts |> 
+  head(10)
+```
+
+## Extract Row and Column Names
+
+Row and column names are not stored inside the `mtx` file created above. 
+Therefor this information needs to be stored separately.
+
+### Row Names
+
+```{r}
+#| label: extract-row-names
+
+# Save row names to csv
+write_csv(
+  as.data.frame(rownames(counts)),
+  file.path(extraction_out, "seurat_counts_row_names.csv"),
+  col_names = FALSE
+)
+
+as.data.frame(rownames(counts))
+```
+
+```{r}
+#| label: extract-col-names
+#| 
+# Save column names to csv
+write_csv(
+  as.data.frame(colnames(counts)),
+  file.path(extraction_out, "seurat_counts_col_names.csv"),
+  col_names = FALSE
+)
+
+as.data.frame(colnames(counts))
+```
+
+## Extract Metadata
+
+Identify if these values are identical.
+
+```{r}
+#| label: compare-tissues-runtissues
+
+tissues <- sobj_liver@meta.data$tissue
+run_tissues <- sobj_liver@meta.data$Run_Tissue_name
+identical(tissues, run_tissues)
+```
+
+```{r}
+#| label: extract-metadata
+
+# Store metadata as 
+metadata <- sobj_liver@meta.data |>
+  select(
+    nCount_Nanostring, 
+    nFeature_Nanostring, 
+    cell_ID, 
+    condition, 
+    Slide_name, 
+    tissue, 
+    fov)
+
+# Write to specified output directory
+write_csv(metadata, file.path(extraction_out, "seurat_metadata.csv"))
+
+metadata
+```
