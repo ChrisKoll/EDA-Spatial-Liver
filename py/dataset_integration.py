@@ -14,7 +14,8 @@ scvi.settings.verbosity = 10
 torch.set_float32_matmul_precision("high")
 sc.set_figure_params(figsize=(6, 6), frameon=False)
 sns.set_theme()
-save_dir = "./"
+save_dir = "../output/data_integration_13-02-2025_11-40"
+os.mkdir(save_dir)
 
 
 def main(path_to_data: str):
@@ -98,6 +99,13 @@ def main(path_to_data: str):
         color=["condition"],
         frameon=False,
         save="_condition_corrected.png",
+        show=False,
+    )
+    sc.pl.umap(
+        adata,
+        color=["fov"],
+        frameon=False,
+        save="_fov_corrected.png",
         show=False,
     )
 
