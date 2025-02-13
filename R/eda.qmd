@@ -117,8 +117,8 @@ commonly used for nuclear staining in microscopy.
 #| label: load-data-liver1
 
 sobj_liver1 <- LoadSeuratRds(file.path(
-  data_dir,
-  "seurat_objects/seurat_object_liver1.Rds"
+  sobj_dir,
+  "seurat_object_liver1.Rds"
 ))
 sobj_liver1
 ```
@@ -127,8 +127,8 @@ sobj_liver1
 #| label: load-data-liver2
 
 sobj_liver2 <- LoadSeuratRds(file.path(
-  data_dir,
-  "seurat_objects/seurat_object_liver2.Rds"
+  sobj_dir,
+  "seurat_object_liver2.Rds"
 ))
 sobj_liver2
 ```
