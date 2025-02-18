@@ -1,8 +1,6 @@
-# Project folders
+# Project data
 data/*
-output/*
-py/figures/*
-py/scvi_model_23-01-2025_05:41/*
+output/figures/*
 
 # History files
 .Rhistory
