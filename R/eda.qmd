@@ -619,12 +619,22 @@ Needs to increase memory limit to process.
 
 if (!file.exists(file.path(data_dir, "seurat_objects/sobj_merged_liver.Rds"))) {
   # Sets limit to ~4,5GB to enable proper computation for large Seurat objects
-  options(future.globals.maxSize = 4500 * 1024^2)
+  options(future.globals.maxSize = 6000 * 1024^2)
+  
+  # Set object IDs
+  object_ids <- c("liver1", "liver2")
+  
+  # Add IDs according to Seurat object
+  sobj_liver1@meta.data <- sobj_liver1@meta.data |> 
+    mutate(fov = glue("{fov}_{object_ids[1]}"))
+  
+  sobj_liver2@meta.data <- sobj_liver2@meta.data |> 
+    mutate(fov = glue("{fov}_{object_ids[2]}"))
 
   sobj_liver_merged <- utils$merge_seurat_objects(
     sobj_liver1,
     sobj_liver2,
-    ids = c("liver1", "liver2"),
+    ids = object_ids,
     save_dir = sobj_dir
   )
 } else {
