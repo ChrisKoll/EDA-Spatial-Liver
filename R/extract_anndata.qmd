@@ -102,7 +102,8 @@ write_csv(
   col_names = FALSE
 )
 
-as.data.frame(rownames(counts))
+as.data.frame(rownames(counts)) |> 
+  head(10)
 ```
 
 ```{r}
@@ -115,7 +116,8 @@ write_csv(
   col_names = FALSE
 )
 
-as.data.frame(colnames(counts))
+as.data.frame(colnames(counts)) |> 
+  head(10)
 ```
 
 ## Extract Metadata
@@ -147,5 +149,6 @@ metadata <- sobj_liver@meta.data |>
 # Write to specified output directory
 write_csv(metadata, file.path(extraction_out, "seurat_metadata.csv"))
 
-metadata
+metadata |> 
+  head(10)
 ```
