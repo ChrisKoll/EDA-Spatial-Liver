@@ -182,7 +182,7 @@ def convert_training_data():
     logger.debug(adata)
 
     adata.write(
-        os.path.join(results_dir, os.path.basename(data_dir.rstrip("/")), ".h5ad")
+        os.path.join(results_dir, f"{os.path.basename(data_dir.rstrip('/'))}.h5ad")
     )
 
     logger.info(f"💾 Saved AnnData object to: {os.path.basename(data_dir.rstrip('/'))}")
