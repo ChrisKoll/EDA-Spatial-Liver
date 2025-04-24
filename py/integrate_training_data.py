@@ -1,12 +1,16 @@
 # Standard imports
 import argparse
 import datetime
+import gzip
 import logging
 import os
 import sys
 
 # Third-party imports
 import scanpy as sc
+import pandas as pd
+from scipy import io
+from scipy.sparse import csr_matrix
 
 
 def setup_logging() -> tuple[logging.Logger, logging.Formatter]:
@@ -98,11 +102,24 @@ def convert_training_data():
     # |==============|
 
     logger.info("> Start data conversion")
-    logger.info(f"Read data file: {args.data}")
+    logger.info(f"Read data folder: {args.data}")
 
     # CellRanger outputs in directory
     # Stored as `.mtx` format
-    adata = sc.read_10x_mtx(args.data, make_unique=True)
+    matrix = io.mmread(os.path.join(args.data, "matrix.mtx.gz")).tocsc()
+
+    # Load barcodes
+    with gzip.open(os.path.join(args.data, "barcodes.tsv.gz"), "rt") as f:
+        barcodes = [line.strip() for line in f]
+
+    # Load gene names
+    with gzip.open(os.path.join(args.data, "features.tsv.gz"), "rt") as f:
+        genes = [line.strip() for line in f]
+
+    # Construct AnnData manually
+    adata = sc.AnnData(X=matrix.T)
+    adata.var_names = genes
+    adata.obs_names = barcodes
 
     logger.info("Data was successfully loaded")
     logger.debug(adata)
