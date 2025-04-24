@@ -77,7 +77,7 @@ def convert_training_data():
     # Create directory for results
     now = datetime.datetime.now().strftime("%d-%m-%Y_%H-%M")
     results_dir = os.path.join(
-        args.out_dir, f"data_integration_{now}"
+        args.out_dir, f"training_data_integration_{now}"
     )  # Save to add content later
     os.makedirs(results_dir, exist_ok=True)
 
@@ -87,7 +87,7 @@ def convert_training_data():
 
     # Logs to given log file
     file_handler = logging.FileHandler(
-        os.path.join(results_dir, f"data_conversion_{now}.log")
+        os.path.join(results_dir, f"training_data_integration_{now}.log")
     )
     file_handler.setLevel(logging.DEBUG)
     file_handler.setFormatter(formatter)
