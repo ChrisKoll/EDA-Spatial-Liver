@@ -131,7 +131,7 @@ def convert_training_data():
     logger, formatter = setup_logging()
 
     logger.debug("Logger setup complete.")
-    
+
     data_dir = validate_path(args.data, is_dir=True, logger=logger)
     out_dir = validate_path(args.out_dir, is_dir=True, logger=logger)
 
@@ -183,7 +183,7 @@ def convert_training_data():
 
     adata.write(os.path.join(results_dir, os.path.basename(data_dir.rstrip("/"))))
 
-    logger.info(f"💾 Saved AnnData object to: {os.path.basename(data_dir.rstrip("/"))}")
+    logger.info(f"💾 Saved AnnData object to: {os.path.basename(data_dir.rstrip('/'))}")
     logger.info(f"> Finished!")
 
     # Log some quality metrics
