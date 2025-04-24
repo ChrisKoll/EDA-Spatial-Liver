@@ -50,6 +50,60 @@ def setup_logging() -> tuple[logging.Logger, logging.Formatter]:
     return logger, formatter
 
 
+def validate_path(
+    path: str, is_dir: bool = False, logger: logging.Logger = None
+) -> str:
+    """Validates whether the given path is a valid directory or file.
+
+    If `is_dir` is set to `True`, the function checks if the path corresponds to an existing directory. If `is_dir` is `False`, it checks if the path corresponds to an existing file.
+
+    If the path is invalid, a `FileNotFoundError` is raised, and an error message is logged if a logger is provided. If the path is valid, a success message is printed and logged (if a logger is provided).
+
+    :param path: The path to the file or directory to be validated.
+    :type path: str
+    :param is_dir: Boolean flag indicating whether to validate a directory (`True`) or a file (`False`), defaults to `False`.
+    :type is_dir: bool
+    :param logger: Optional logger instance for logging validation messages. If not provided, no logging occurs.
+    :type logger: Logger, optional
+
+    :raises FileNotFoundError: If the path does not exist.
+
+    :return: The validated path if the validation is successful.
+    :rtype: str
+    """
+
+    if is_dir:  # Given path is directory
+        if not os.path.isdir(path):  # If path is not a valid directory
+            err_msg = f"Directory not found: {path}"
+
+            if logger:  # If logger is provided, log error in log file
+                logger.critical(err_msg)
+
+            raise FileNotFoundError(err_msg)
+        else:
+            succ_msg = f"{'📁' if is_dir else '💾'} Valid {'directory' if is_dir else 'file'}: {path}"
+
+            if logger:  # If logger is provided, log success in log file
+                logger.info(succ_msg)
+
+            return path
+    else:  # Given path is file
+        if not os.path.isfile(path):  # If path is not a valid file
+            err_msg = f"File not found: {path}"
+
+            if logger:  # If logger is provided, log error in log file
+                logger.critical(err_msg)
+
+            raise FileNotFoundError(err_msg)
+        else:
+            succ_msg = f"{'📁' if is_dir else '💾'} Valid {'directory' if is_dir else 'file'}: {path}"
+
+            if logger:  # If logger is provided, log success in log file
+                logger.info(succ_msg)
+
+            return path
+
+
 def convert_training_data():
 
     # |================|
@@ -77,11 +131,14 @@ def convert_training_data():
     logger, formatter = setup_logging()
 
     logger.debug("Logger setup complete.")
+    
+    data_dir = validate_path(args.data, is_dir=True, logger=logger)
+    out_dir = validate_path(args.out_dir, is_dir=True, logger=logger)
 
     # Create directory for results
     now = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M")
     results_dir = os.path.join(
-        args.out_dir, f"training_data_integration_{now}"
+        out_dir, f"training_data_integration_{now}"
     )  # Save to add content later
     os.makedirs(results_dir, exist_ok=True)
 
@@ -102,18 +159,18 @@ def convert_training_data():
     # |==============|
 
     logger.info("> Start data conversion")
-    logger.info(f"Read data folder: {args.data}")
+    logger.info(f"Read data folder: {data_dir}")
 
     # CellRanger outputs in directory
     # Stored as `.mtx` format
-    matrix = io.mmread(os.path.join(args.data, "matrix.mtx.gz")).tocsc()
+    matrix = io.mmread(os.path.join(data_dir, "matrix.mtx.gz")).tocsc()
 
     # Load barcodes
-    with gzip.open(os.path.join(args.data, "barcodes.tsv.gz"), "rt") as f:
+    with gzip.open(os.path.join(data_dir, "barcodes.tsv.gz"), "rt") as f:
         barcodes = [line.strip() for line in f]
 
     # Load gene names
-    with gzip.open(os.path.join(args.data, "features.tsv.gz"), "rt") as f:
+    with gzip.open(os.path.join(data_dir, "features.tsv.gz"), "rt") as f:
         genes = [line.strip() for line in f]
 
     # Construct AnnData manually
@@ -121,12 +178,12 @@ def convert_training_data():
     adata.var_names = genes
     adata.obs_names = barcodes
 
-    logger.info("Data was successfully loaded")
+    logger.info("Data was successfully loaded as AnnData")
     logger.debug(adata)
 
-    adata.write(os.path.join(results_dir, os.path.basename(args.data)))
+    adata.write(os.path.join(results_dir, os.path.basename(data_dir.rstrip("/"))))
 
-    logger.info(f"💾 Saved AnnData object to: {os.path.basename(args.data)}")
+    logger.info(f"💾 Saved AnnData object to: {os.path.basename(data_dir.rstrip("/"))}")
     logger.info(f"> Finished!")
 
     # Log some quality metrics
@@ -142,7 +199,7 @@ def convert_training_data():
         ["n_genes_by_counts", "total_counts"],
         jitter=0.4,
         multi_panel=True,
-        save="mla_stst.png",
+        save="mouse_liver_stst.svg",
     )
 
 
