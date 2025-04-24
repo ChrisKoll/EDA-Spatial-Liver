@@ -75,7 +75,7 @@ def convert_training_data():
     logger.debug("Logger setup complete.")
 
     # Create directory for results
-    now = datetime.datetime.now().strftime("%d-%m-%Y_%H-%M")
+    now = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M")
     results_dir = os.path.join(
         args.out_dir, f"training_data_integration_{now}"
     )  # Save to add content later
