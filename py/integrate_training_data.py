@@ -181,7 +181,9 @@ def convert_training_data():
     logger.info("Data was successfully loaded as AnnData")
     logger.debug(adata)
 
-    adata.write(os.path.join(results_dir, os.path.basename(data_dir.rstrip("/"))))
+    adata.write(
+        os.path.join(results_dir, os.path.basename(data_dir.rstrip("/")), ".h5ad")
+    )
 
     logger.info(f"💾 Saved AnnData object to: {os.path.basename(data_dir.rstrip('/'))}")
     logger.info(f"> Finished!")
@@ -194,6 +196,8 @@ def convert_training_data():
     logger.info(adata.var.head())
 
     sc.pp.calculate_qc_metrics(adata, inplace=True)
+
+    sc.settings.figdir = results_dir
     sc.pl.violin(
         adata,
         ["n_genes_by_counts", "total_counts"],
