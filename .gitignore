@@ -1,6 +1,16 @@
+# |=========|
+# | Project |
+# |=========|
+
+.vscode/*
+
 # Project data
 data/*
 output/figures/*
+
+# |===|
+# | R |
+# |===|
 
 # History files
 .Rhistory
@@ -51,3 +61,5 @@ po/*~
 
 # RStudio Connect folder
 rsconnect/
+
+/.quarto/
