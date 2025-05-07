@@ -1,0 +1,259 @@
+---
+title: "IDE Spatial Mouse Liver Transriptomics"
+date: today
+date-format: "DD.MM.YYYY"
+author: 
+  - name: Christian Kolland
+    email: christian.kolland@stud.uni-frankfurt.de
+    affiliation:
+      - name: Goethe University Frankfurt
+        city: Frankfurt am Main
+abstract: >
+  Initial Data Exploration (IDE) of mouse liver spatial transcriptomics (ST) 
+  data generated using NanoString's CosMx™ technology. The data set consists of 
+  single-cell gene expression counts from two separate slides of tissue samples 
+  stored in two separate Seurat objects.
+copyright: 
+  holder: Christian Kolland
+  year: 2025
+title-block-banner: "#002147"
+---
+
+```{r}
+#| label: load-packages
+#| echo: false
+#| include: false
+
+box::use(
+  dplyr[case_when, mutate, select],
+  gt[gt],
+  glue[glue],
+  Seurat[AddMetaData],
+  SeuratObject[LoadSeuratRds],
+  tibble[as_tibble],
+)
+```
+
+## Run Information
+
+```{r}
+#| label: run-information
+#| echo: false
+
+# Input directory
+data_dir <- "../data/Seurat_objects"
+
+# Output directories
+run_dir <- glue("run_{format(Sys.time(), '%Y-%m-%d_%H-%M')}")
+out_dir <- glue("../output/Seurat_objects/{run_dir}")
+
+# Ensure the output directory exists
+if (!dir.exists(out_dir)) {
+  dir.create(out_dir, recursive = TRUE)
+}
+
+message(glue("
+📂 Input Seurat objects from: {data_dir}
+💾 Outputs will be saved in: {out_dir}
+"))
+```
+
+## What Data Do We Have?
+
+The data examined in this IDA consists of mouse model data related to alcoholic 
+liver disease. The data comprises two slides that were prepared with a number of 
+liver samples from different disease states. A [Seurat object](https://satijalab.org/seurat/) 
+was created for each respective slide.
+
+Following disease states are represented in the data:
+
+1. Healthy
+2. Steatosis
+3. Cirrhosis
+4. ACLF
+
+:::{.callout-note title="Disease State Metadata"}
+The disease state must be added to the existing Seurat object, as this data is 
+not currently included in the `meta.data` table. The disease states are mapped 
+via the FOV IDs.
+
+The disease state mapping can be found in the corresponding code blocks.
+:::
+
+## Load the Data
+
+```{r}
+#| label: load-data-liver1
+
+sobj_liver1 <- LoadSeuratRds(file.path(
+  data_dir,
+  "Seurat_object_liver1.Rds"
+))
+sobj_liver1
+```
+
+```{r}
+#| label: load-data-liver2
+
+sobj_liver2 <- LoadSeuratRds(file.path(
+  data_dir,
+  "Seurat_object_liver2.Rds"
+))
+sobj_liver2
+```
+
+## Data Exploration
+
+:::{.callout-note title="Access Seurat Object"}
+To access the count information in the Seurat object:
+```
+sobj_liver1@assays$Nanostring$counts
+```
+
+To access metadata:
+```
+sobj_liver1@meta.data
+```
+:::
+
+Features (genes) are stored as rows in Seurat objects. 
+Cell samples are stored in columns with their dataset-specific unique IDs.
+The count data is stored in sparse matrix format.
+
+```{r}
+#| label: access-counts
+
+sobj_liver1@assays$Nanostring$counts[1:5, 1:5]
+```
+
+Metadata columns that will be important for this project will be:
+
+1. `Slide_name`
+2. `tissue`
+3. `fov`
+
+`fov` assigns each cell to its corresponding tissue "stamp".
+A slide contains multiple tissue slices, with each slice being "stamped" n times.
+The `fov` value indicates in which stamp a given cell is located.
+
+```{r}
+#| label: access-metadata
+
+sobj_liver1@meta.data |> 
+  head(5) |> 
+  gt()
+```
+
+### Add Metadata `disease_state`
+
+```{r}
+#| label: prepare-disease-states-l1
+
+# Disease state to FOV mapping
+healthy <- c(1, 2, 15, 16, 17, 18, 19, 20, 21, 22, 23, 45)
+cirrhosis <- c(5, 6, 24, 25, 26, 30, 31, 34, 35, 40, 41, 44)
+steatosis <- c(3, 4, 9, 10, 13, 14, 27, 28, 29, 38, 39)
+aclf <- c(7, 8, 11, 12, 32, 33, 36, 37, 42, 43)
+
+# Add column "disease_state"
+# Condition is assigned according to defined mapping
+disease_states_l1 <- data.frame(
+  fov = sobj_liver1@meta.data$fov, # Conditions are mapped to FOVs
+  row.names = colnames(sobj_liver1)
+) |>
+  mutate(
+    disease_state = case_when(
+      fov %in% healthy ~ "healthy",
+      fov %in% cirrhosis ~ "cirrhosis",
+      fov %in% steatosis ~ "steatosis",
+      fov %in% aclf ~ "aclf",
+      TRUE ~ "Other"
+    )
+  ) |>
+  select(-fov)
+
+unique(disease_states_l1) |> 
+  as_tibble()
+```
+
+:::{.callout-important title="Expected Values Liver1"}
+1. healthy
+2. steatosis
+3. cirrhosis
+4. aclf
+:::
+
+```{r}
+#| label: prepare-disease-states-l2
+
+cirrhosis <- c(1, 2, 3, 4, 5, 6, 7, 8, 13, 14, 17, 18, 19, 20, 21, 22, 23, 24, 25, 36, 37, 44, 45)
+aclf <- c(9, 10, 11, 12, 15, 16, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 38, 39, 40, 41, 42, 43)
+
+disease_states_l2 <- data.frame(
+  fov = sobj_liver2@meta.data$fov,
+  row.names = colnames(sobj_liver2)
+) |>
+  mutate(
+    disease_state = case_when(
+      fov %in% cirrhosis ~ "cirrhosis",
+      fov %in% aclf ~ "aclf",
+      TRUE ~ "Other"
+    )
+  ) |>
+  select(-fov)
+
+unique(disease_states_l2) |> 
+  as_tibble()
+```
+
+:::{.callout-important title="Expected Values Liver2"}
+1. cirrhosis
+2. aclf
+:::
+
+Add disease state metadata to the Seurat objects.
+
+```{r}
+#| label: add-disease-states-l1
+
+# Add disease condition to metadata
+sobj_liver1 <- AddMetaData(
+  sobj_liver1,
+  metadata = disease_states_l1
+)
+
+if (identical(unique(disease_states_l1)$disease_state, unique(sobj_liver1@meta.data$disease_state))) {
+  message("Metadata added correctly.")
+} else {
+  message("An error occured during metadata attachment...")
+}
+```
+
+```{r}
+#| label: add-conditions-l2
+
+sobj_liver2 <- AddMetaData(
+  sobj_liver2,
+  metadata = disease_states_l2
+)
+
+if (identical(unique(disease_states_l2)$disease_state, unique(sobj_liver2@meta.data$disease_state))) {
+  message("Metadata added correctly.")
+} else {
+  message("An error occured during metadata attachment...")
+}
+```
+
+## Save the Data
+
+```{r}
+#| label: save-object-l1
+
+saveRDS(sobj_liver1, file = file.path(out_dir, "sobj_liver1.Rds"))
+```
+
+```{r}
+#| label: save-object-l2
+
+saveRDS(sobj_liver2, file = file.path(out_dir, "sobj_liver2.Rds"))
+```
