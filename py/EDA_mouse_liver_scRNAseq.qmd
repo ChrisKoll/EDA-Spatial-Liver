@@ -99,16 +99,16 @@ features_ST
 Validate that all our features are found in the training data.
 
 ```{python}
-#| lable: features-not-StSt
+# | label: features-not-StSt
 
 if not np.isin(features_ST.gene_name, adata_stst.var_names).all():
-  features_not_StSt = list(set(features_ST.gene_name) - set(adata_stst.var_names))
+    features_not_StSt = list(set(features_ST.gene_name) - set(adata_stst.var_names))
 
 features_not_StSt
 ```
 
 ```{python}
-#| lable: features-not-NAFLD
+#| label: features-not-NAFLD
 
 if not np.isin(features_ST.gene_name, adata_nafld.var_names).all():
   not_found_nafld = list(set(features_ST.gene_name) - set(adata_nafld.var_names))
@@ -159,7 +159,7 @@ aliases_StSt
 ```
 
 ```{python}
-#| label: get-aliases-StSt
+#| label: get-aliases-NAFLD
 
 aliases_NAFLD = {}
 for symbol in not_found_nafld:
