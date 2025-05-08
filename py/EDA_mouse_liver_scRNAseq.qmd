@@ -75,10 +75,12 @@ adata_nafld
 ```
 
 ```{python}
-#| label: load-data-nafld
+# | label: load-data-nafld
 
 # Load spatial data
-spatial_data_file = os.path.join("../data/h5ad_objects/merged_liver.h5ad")
+spatial_data_file = os.path.join(
+    "../data/h5ad_objects/merged_liver_17-02-2025_16-32.h5ad "
+)
 adata_spatial = ad.read_h5ad(nafld_data_file)
 
 adata_spatial
