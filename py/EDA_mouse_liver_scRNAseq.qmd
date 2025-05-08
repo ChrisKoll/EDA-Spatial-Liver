@@ -242,7 +242,7 @@ plt.plot(
 plt.xlabel("Mean Expression StSt")
 plt.ylabel("Mean Expression ST")
 plt.title("Gene-wise Expression Comparison")
-plt.savefig(os.join.path(out_dir, "mean_expr_comp_StSt.png"))
+plt.savefig(os.path.join(out_dir, "mean_expr_comp_StSt.png"))
 plt.show()
 ```
 
@@ -257,6 +257,6 @@ plt.plot(
 plt.xlabel("Median Expression StSt")
 plt.ylabel("Median Expression ST")
 plt.title("Gene-wise Expression Comparison")
-plt.savefig(os.join.path(out_dir, "median_expr_comp_StSt.png"))
+plt.savefig(os.path.join(out_dir, "median_expr_comp_StSt.png"))
 plt.show()
 ```
