@@ -142,11 +142,19 @@ def get_aliases(symbol: str, aliases: dict):
 ```
 
 ```{python}
-aliases = {}
-for symbol in not_found:
+aliases_stst = {}
+for symbol in not_found_stst:
   aliases = get_aliases(symbol, aliases=aliases)
 
-aliases
+aliases_stst
+```
+
+```{python}
+aliases_nafld = {}
+for symbol in not_found_nafld:
+  aliases = get_aliases(symbol, aliases=aliases)
+
+aliases_nafld
 ```
 
 ```{python}
