@@ -79,9 +79,9 @@ adata_nafld
 
 # Load spatial data
 spatial_data_file = os.path.join(
-    "../data/h5ad_objects/merged_liver_17-02-2025_16-32.h5ad "
+    "../data/h5ad_objects/merged_liver_17-02-2025_16-32.h5ad"
 )
-adata_spatial = ad.read_h5ad(nafld_data_file)
+adata_spatial = ad.read_h5ad(spatial_data_file)
 
 adata_spatial
 ```
@@ -99,8 +99,6 @@ spatial_features
 Validate that all our features are found in the training data.
 
 ```{python}
-#| label: check-missing-features
-
 if not np.isin(spatial_features.gene_name, adata_stst.var_names).all():
   not_found_stst = list(set(spatial_features.gene_name) - set(adata_stst.var_names))
 
@@ -108,8 +106,6 @@ not_found_stst
 ```
 
 ```{python}
-#| label: check-missing-features
-
 if not np.isin(spatial_features.gene_name, adata_nafld.var_names).all():
   not_found_nafld = list(set(spatial_features.gene_name) - set(adata_nafld.var_names))
 
@@ -162,14 +158,6 @@ reduced_stst
 ```
 
 ```{python}
-found_markers_nafld = [x for x in spatial_features.gene_name if x not in not_found_nafld]
-spatial_stst = adata_spatial[:, adata_spatial.var_names.isin(found_markers_nafld)]
-reduced_nafld = adata_nafld[:, adata_nafld.var_names.isin(found_markers_nafld)]
-
-reduced_nafld
-```
-
-```{python}
 def sparse_median(X, axis=0):
     # Convert sparse format for better performance
     if axis == 0:
@@ -207,110 +195,60 @@ def sparse_median(X, axis=0):
     return medians
 ```
 
+Only for steady state since we cant compare signal from different disease states with each other and also not with healty cells.
+
 ```{python}
 mean_stst = np.asarray(reduced_stst.X.mean(axis=0)).flatten()
 median_stst = sparse_median(reduced_stst.X, axis=0)
-
-mean_sp_stst = np.asarray(spatial_stst.X.mean(axis=0)).flatten()
-median_sp_stst = sparse_median(spatial_sp_stst.X, axis=0)
 ```
 
 ```{python}
-mean_nafld = np.asarray(reduced_nafld.X.mean(axis=0)).flatten()
-median_nafld = sparse_median(reduced_nafld.X, axis=0)
+healthy_spatial = spatial_stst[spatial_stst.obs["condition"] == "healthy"]
 
-mean_sp_nafld = np.asarray(spatial_nafld.X.mean(axis=0)).flatten()
-median_sp_nafld = sparse_median(spatial_sp_nafld.X, axis=0)
+mean_spatial = np.asarray(healthy_spatial.X.mean(axis=0)).flatten()
+median_spatial = sparse_median(healthy_spatial.X, axis=0)
 ```
 
 ```{python}
-df = pd.DataFrame(
+expr_dist_df = pd.DataFrame(
     {
-        "gene": reduced_stst.var_names,
-        "mean_expr_stst": mean_stst,
-        "mean_expr_spatial": mean_sp_stst,
+        "gene": healthy_spatial.var_names,
+        "mean_expr_StSt": mean_stst,
+        "mean_expr_ST": mean_spatial,
+        "median_expr_StSt": median_stst,
+        "median_expr_ST": median_spatial
     }
 )
 
-sns.scatterplot(data=df, x="mean_expr_stst", y="mean_expr_stst")
+expr_dist_df.to_feather(os.path.join(out_dir, "pdata_expr_dist.feather"))
+```
+
+```{python}
+sns.scatterplot(data=expr_dist_df, x="mean_expr_StSt", y="mean_expr_ST")
 plt.plot(
-    [0, max(df.mean_expr_stst.max(), df.mean_expr_spatial.max())],
-    [0, max(df.mean_expr_stst.max(), df.mean_expr_spatial.max())],
+    [0, max(expr_dist_df.mean_expr_StSt.max(), expr_dist_df.mean_expr_ST.max())],
+    [0, max(expr_dist_df.mean_expr_StSt.max(), expr_dist_df.mean_expr_ST.max())],
     ls="--",
     color="gray",
 )  # identity line
 plt.xlabel("Mean Expression StSt")
 plt.ylabel("Mean Expression ST")
 plt.title("Gene-wise Expression Comparison")
-plt.savefig(os.join.path(out_dir, "mean_expr_comparison_stst.png"))
+plt.savefig(os.join.path(out_dir, "mean_expr_comp_StSt.png"))
 plt.show()
 ```
 
 ```{python}
-df = pd.DataFrame(
-    {
-        "gene": reduced_stst.var_names,
-        "mean_expr_stst": median_stst,
-        "mean_expr_spatial": median_sp_stst,
-    }
-)
-
-sns.scatterplot(data=df, x="median_stst", y="median_sp_stst")
+sns.scatterplot(data=expr_dist_df, x="median_expr_StSt", y="median_expr_ST")
 plt.plot(
-    [0, max(df.median_stst.max(), df.median_sp_stst.max())],
-    [0, max(df.median_stst.max(), df.median_sp_stst.max())],
+    [0, max(expr_dist_df.median_expr_StSt.max(), expr_dist_df.median_expr_ST.max())],
+    [0, max(expr_dist_df.median_expr_StSt.max(), expr_dist_df.median_expr_ST.max())],
     ls="--",
     color="gray",
 )  # identity line
 plt.xlabel("Median Expression StSt")
 plt.ylabel("Median Expression ST")
 plt.title("Gene-wise Expression Comparison")
-plt.savefig(os.join.path(out_dir, "median_expr_comparison_stst.png"))
-plt.show()
-```
-
-```{python}
-df = pd.DataFrame(
-    {
-        "gene": reduced_nafld.var_names,
-        "mean_expr_nafld": mean_nafld,
-        "mean_expr_spatial": mean_sp_nafld,
-    }
-)
-
-sns.scatterplot(data=df, x="mean_expr_nafld", y="mean_expr_spatial")
-plt.plot(
-    [0, max(df.mean_expr_nafld.max(), df.mean_expr_spatial.max())],
-    [0, max(df.mean_expr_nafld.max(), df.mean_expr_spatial.max())],
-    ls="--",
-    color="gray",
-)  # identity line
-plt.xlabel("Mean Expression NAFLD")
-plt.ylabel("Mean Expression ST")
-plt.title("Gene-wise Expression Comparison")
-plt.savefig(os.join.path(out_dir, "mean_expr_comparison_nafld.png"))
-plt.show()
-```
-
-```{python}
-df = pd.DataFrame(
-    {
-        "gene": reduced_nafld.var_names,
-        "median_expr_nafld": median_nafld,
-        "median_expr_spatial": median_sp_nafld,
-    }
-)
-
-sns.scatterplot(data=df, x="median_expr_nafld", y="median_expr_spatial")
-plt.plot(
-    [0, max(df.median_expr_nafld.max(), df.median_expr_spatial())],
-    [0, max(df.median_expr_nafld.max(), df.median_expr_spatial())],
-    ls="--",
-    color="gray",
-)  # identity line
-plt.xlabel("Median Expression NAFLD")
-plt.ylabel("Median Expression ST")
-plt.title("Gene-wise Expression Comparison")
-plt.savefig(os.join.path(out_dir, "median_expr_comparison_nafld.png"))
+plt.savefig(os.join.path(out_dir, "median_expr_comp_StSt.png"))
 plt.show()
 ```
