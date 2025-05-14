@@ -71,7 +71,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <style>
 
       .quarto-title-block .quarto-title-banner {
-        background: #002147;
+        background: #1D2951;
       }
 </style>
 
@@ -107,7 +107,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <div>
       <div class="quarto-title-meta-heading">Published</div>
       <div class="quarto-title-meta-contents">
-        <p class="date">07.05.2025</p>
+        <p class="date">13.05.2025</p>
       </div>
     </div>
     
@@ -117,7 +117,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <div>
     <div class="abstract">
       <div class="block-title">Abstract</div>
-      <p>Initial Data Exploration (IDE) of mouse liver spatial transcriptomics (ST) data generated using NanoString’s CosMx™ technology. The data set consists of single-cell gene expression counts from two separate slides of tissue samples stored in two separate Seurat objects.</p>
+      <p>The IDE of mouse liver ST data generated using nanoString’s CosMx™ technology. The datasets are composed of single-cell gene expression counts from two separate sample slides, which are stored in two separate Seurat objects.</p>
     </div>
   </div>
   
@@ -129,37 +129,55 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 
 
-<section id="run-information" class="level2">
-<h2 class="anchored" data-anchor-id="run-information">Run Information</h2>
-<div class="cell">
-<div class="cell-output cell-output-stderr">
-<pre><code>📂 Input Seurat objects from: ../data/Seurat_objects
-💾 Outputs will be saved in: ../output/Seurat_objects/run_2025-05-07_17-27</code></pre>
-</div>
-</div>
-</section>
 <section id="what-data-do-we-have" class="level2">
 <h2 class="anchored" data-anchor-id="what-data-do-we-have">What Data Do We Have?</h2>
-<p>The data examined in this IDA consists of mouse model data related to alcoholic liver disease. The data comprises two slides that were prepared with a number of liver samples from different disease states. A <a href="https://satijalab.org/seurat/">Seurat object</a> was created for each respective slide.</p>
+<p>For this initial data exploration (IDE) we have spatial transcriptomics (ST) data generated from mouse model liver tissue. Tissue samples were taken from mice with different stages of alcoholic liver disease.</p>
 <p>Following disease states are represented in the data:</p>
 <ol type="1">
 <li>Healthy</li>
 <li>Steatosis</li>
 <li>Cirrhosis</li>
-<li>ACLF</li>
+<li>Acute-on-Chronic Liver Failure (ACLF)</li>
 </ol>
-<div class="callout callout-style-default callout-note callout-titled" title="Disease State Metadata">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-Disease State Metadata
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>The disease state must be added to the existing Seurat object, as this data is not currently included in the <code>meta.data</code> table. The disease states are mapped via the FOV IDs.</p>
-<p>The disease state mapping can be found in the corresponding code blocks.</p>
+<section id="data-generation" class="level3">
+<h3 class="anchored" data-anchor-id="data-generation">Data Generation</h3>
+<p>The data was generated using nanoString’s CosMx™ spatial molecular imager (SMI). This assay provides transcriptomics data at cellular and subcellular resolutions using a non-damaging in situ approach. The samples were prepared and processed on two separate slides. Each slide led to an individual <a href="https://satijalab.org/seurat/">Seurat object</a>, which stores the resulting expression counts and spatial information.</p>
+<p>The <a href="https://nanostring.com/products/cosmx-spatial-molecular-imager/cosmx-rna-assays/cosmx-mouse-neuroscience-panel/">CosMx™ Mouse Neuroscience Panel</a> defined the set or genetic markers to be tracked. This leads to a certain “brain” bias.</p>
+<p>Markers that were used to visualize the cell morphology:</p>
+<dl>
+<dt>B2M</dt>
+<dd>
+<p>Beta-2 Microglobulin, a small protein that is a component of MHC class I molecules found on all nucleated cells. It is often used as a marker in immunohistochemistry.</p>
+</dd>
+<dt>CD298 (SLC12A2)</dt>
+<dd>
+<p>Protein associated with ion transport and is often used as a marker for certain cellular functions.</p>
+</dd>
+<dt>PanCK</dt>
+<dd>
+<p>Pan-Cytokeratin, a group of cytoskeletal proteins found in epithelial cells. It is used to identify epithelial cell populations in tissue.</p>
+</dd>
+<dt>CD45</dt>
+<dd>
+<p>Marker for leukocytes (white blood cells). It is used to identify immune cells in tissues.</p>
+</dd>
+<dt>CK8/18</dt>
+<dd>
+<p>Cytokeratin 8/18, which are intermediate filament proteins expressed in epithelial cells, particularly in simple epithelia such as those of the liver.</p>
+</dd>
+<dt>DAPI</dt>
+<dd>
+<p>4′,6-diamidino-2-phenylindole, a fluorescent stain that binds strongly to DNA, commonly used for nuclear staining in microscopy.</p>
+</dd>
+</dl>
+</section>
+</section>
+<section id="run-information" class="level2">
+<h2 class="anchored" data-anchor-id="run-information">Run Information</h2>
+<div class="cell">
+<div class="cell-output cell-output-stderr">
+<pre><code>📂 Input Seurat objects from: ../data/Seurat_objects
+💾 Outputs will be saved in: ../output/Seurat_objects/run_2025-05-13_17-06</code></pre>
 </div>
 </div>
 </section>
@@ -170,7 +188,8 @@ Disease State Metadata
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  data_dir,</span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Seurat_object_liver1.Rds"</span></span>
 <span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>))</span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>sobj_liver1</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>sobj_liver1</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>An object of class Seurat 
 970 features across 34452 samples within 1 assay 
@@ -185,7 +204,8 @@ Active assay: Nanostring (970 features, 0 variable features)
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  data_dir,</span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Seurat_object_liver2.Rds"</span></span>
 <span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>))</span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>sobj_liver2</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>sobj_liver2</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>An object of class Seurat 
 970 features across 33333 samples within 1 assay 
@@ -198,23 +218,22 @@ Active assay: Nanostring (970 features, 0 variable features)
 </section>
 <section id="data-exploration" class="level2">
 <h2 class="anchored" data-anchor-id="data-exploration">Data Exploration</h2>
-<div class="callout callout-style-default callout-note callout-titled" title="Access Seurat Object">
+<div class="callout callout-style-default callout-note callout-titled" title="Access Seurat Objects">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-Access Seurat Object
+Access Seurat Objects
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>To access the count information in the Seurat object:</p>
-<pre><code>sobj_liver1@assays$Nanostring$counts</code></pre>
-<p>To access metadata:</p>
-<pre><code>sobj_liver1@meta.data</code></pre>
+<p>To access the count information in a Seurat object:</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>obj_liver1<span class="sc">@</span>assays<span class="sc">$</span>Nanostring<span class="sc">$</span>counts</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>To access metadata in a Seurat object:</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>sobj_liver1<span class="sc">@</span>meta.data</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div>
-<p>Features (genes) are stored as rows in Seurat objects. Cell samples are stored in columns with their dataset-specific unique IDs. The count data is stored in sparse matrix format.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>sobj_liver1<span class="sc">@</span>assays<span class="sc">$</span>Nanostring<span class="sc">$</span>counts[<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>, <span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -227,35 +246,30 @@ Abl1    .   .   .   .   .
 Ace2    .   .   .   .   .</code></pre>
 </div>
 </div>
-<p>Metadata columns that will be important for this project will be:</p>
-<ol type="1">
-<li><code>Slide_name</code></li>
-<li><code>tissue</code></li>
-<li><code>fov</code></li>
-</ol>
-<p><code>fov</code> assigns each cell to its corresponding tissue “stamp”. A slide contains multiple tissue slices, with each slice being “stamped” n times. The <code>fov</code> value indicates in which stamp a given cell is located.</p>
+<p>Features (genes) are stored as rows in Seurat objects. Cell samples are stored in columns with their dataset-specific unique IDs.</p>
+<p>The count data is stored in a sparse matrix format. → Only non-zero values are stored with their coordinates in the matrix</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>sobj_liver1<span class="sc">@</span>meta.data <span class="sc">|&gt;</span> </span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">head</span>(<span class="dv">5</span>) <span class="sc">|&gt;</span> </span>
 <span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gt</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<div id="ehnllbpuph" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#ehnllbpuph table {
+<div id="ljbarojlrz" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#ljbarojlrz table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#ehnllbpuph thead, #ehnllbpuph tbody, #ehnllbpuph tfoot, #ehnllbpuph tr, #ehnllbpuph td, #ehnllbpuph th {
+#ljbarojlrz thead, #ljbarojlrz tbody, #ljbarojlrz tfoot, #ljbarojlrz tr, #ljbarojlrz td, #ljbarojlrz th {
   border-style: none;
 }
 
-#ehnllbpuph p {
+#ljbarojlrz p {
   margin: 0;
   padding: 0;
 }
 
-#ehnllbpuph .gt_table {
+#ljbarojlrz .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -281,12 +295,12 @@ Ace2    .   .   .   .   .</code></pre>
   border-left-color: #D3D3D3;
 }
 
-#ehnllbpuph .gt_caption {
+#ljbarojlrz .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#ehnllbpuph .gt_title {
+#ljbarojlrz .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -298,7 +312,7 @@ Ace2    .   .   .   .   .</code></pre>
   border-bottom-width: 0;
 }
 
-#ehnllbpuph .gt_subtitle {
+#ljbarojlrz .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -310,7 +324,7 @@ Ace2    .   .   .   .   .</code></pre>
   border-top-width: 0;
 }
 
-#ehnllbpuph .gt_heading {
+#ljbarojlrz .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -322,13 +336,13 @@ Ace2    .   .   .   .   .</code></pre>
   border-right-color: #D3D3D3;
 }
 
-#ehnllbpuph .gt_bottom_border {
+#ljbarojlrz .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#ehnllbpuph .gt_col_headings {
+#ljbarojlrz .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -343,7 +357,7 @@ Ace2    .   .   .   .   .</code></pre>
   border-right-color: #D3D3D3;
 }
 
-#ehnllbpuph .gt_col_heading {
+#ljbarojlrz .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -363,7 +377,7 @@ Ace2    .   .   .   .   .</code></pre>
   overflow-x: hidden;
 }
 
-#ehnllbpuph .gt_column_spanner_outer {
+#ljbarojlrz .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -375,15 +389,15 @@ Ace2    .   .   .   .   .</code></pre>
   padding-right: 4px;
 }
 
-#ehnllbpuph .gt_column_spanner_outer:first-child {
+#ljbarojlrz .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#ehnllbpuph .gt_column_spanner_outer:last-child {
+#ljbarojlrz .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#ehnllbpuph .gt_column_spanner {
+#ljbarojlrz .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -395,11 +409,11 @@ Ace2    .   .   .   .   .</code></pre>
   width: 100%;
 }
 
-#ehnllbpuph .gt_spanner_row {
+#ljbarojlrz .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#ehnllbpuph .gt_group_heading {
+#ljbarojlrz .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -425,7 +439,7 @@ Ace2    .   .   .   .   .</code></pre>
   text-align: left;
 }
 
-#ehnllbpuph .gt_empty_group_heading {
+#ljbarojlrz .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -440,15 +454,15 @@ Ace2    .   .   .   .   .</code></pre>
   vertical-align: middle;
 }
 
-#ehnllbpuph .gt_from_md > :first-child {
+#ljbarojlrz .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#ehnllbpuph .gt_from_md > :last-child {
+#ljbarojlrz .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#ehnllbpuph .gt_row {
+#ljbarojlrz .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -467,7 +481,7 @@ Ace2    .   .   .   .   .</code></pre>
   overflow-x: hidden;
 }
 
-#ehnllbpuph .gt_stub {
+#ljbarojlrz .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -480,7 +494,7 @@ Ace2    .   .   .   .   .</code></pre>
   padding-right: 5px;
 }
 
-#ehnllbpuph .gt_stub_row_group {
+#ljbarojlrz .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -494,15 +508,15 @@ Ace2    .   .   .   .   .</code></pre>
   vertical-align: top;
 }
 
-#ehnllbpuph .gt_row_group_first td {
+#ljbarojlrz .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#ehnllbpuph .gt_row_group_first th {
+#ljbarojlrz .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#ehnllbpuph .gt_summary_row {
+#ljbarojlrz .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -512,16 +526,16 @@ Ace2    .   .   .   .   .</code></pre>
   padding-right: 5px;
 }
 
-#ehnllbpuph .gt_first_summary_row {
+#ljbarojlrz .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#ehnllbpuph .gt_first_summary_row.thick {
+#ljbarojlrz .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#ehnllbpuph .gt_last_summary_row {
+#ljbarojlrz .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -531,7 +545,7 @@ Ace2    .   .   .   .   .</code></pre>
   border-bottom-color: #D3D3D3;
 }
 
-#ehnllbpuph .gt_grand_summary_row {
+#ljbarojlrz .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -541,7 +555,7 @@ Ace2    .   .   .   .   .</code></pre>
   padding-right: 5px;
 }
 
-#ehnllbpuph .gt_first_grand_summary_row {
+#ljbarojlrz .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -551,7 +565,7 @@ Ace2    .   .   .   .   .</code></pre>
   border-top-color: #D3D3D3;
 }
 
-#ehnllbpuph .gt_last_grand_summary_row_top {
+#ljbarojlrz .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -561,11 +575,11 @@ Ace2    .   .   .   .   .</code></pre>
   border-bottom-color: #D3D3D3;
 }
 
-#ehnllbpuph .gt_striped {
+#ljbarojlrz .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#ehnllbpuph .gt_table_body {
+#ljbarojlrz .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -574,7 +588,7 @@ Ace2    .   .   .   .   .</code></pre>
   border-bottom-color: #D3D3D3;
 }
 
-#ehnllbpuph .gt_footnotes {
+#ljbarojlrz .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -588,7 +602,7 @@ Ace2    .   .   .   .   .</code></pre>
   border-right-color: #D3D3D3;
 }
 
-#ehnllbpuph .gt_footnote {
+#ljbarojlrz .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -597,7 +611,7 @@ Ace2    .   .   .   .   .</code></pre>
   padding-right: 5px;
 }
 
-#ehnllbpuph .gt_sourcenotes {
+#ljbarojlrz .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -611,7 +625,7 @@ Ace2    .   .   .   .   .</code></pre>
   border-right-color: #D3D3D3;
 }
 
-#ehnllbpuph .gt_sourcenote {
+#ljbarojlrz .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -619,72 +633,72 @@ Ace2    .   .   .   .   .</code></pre>
   padding-right: 5px;
 }
 
-#ehnllbpuph .gt_left {
+#ljbarojlrz .gt_left {
   text-align: left;
 }
 
-#ehnllbpuph .gt_center {
+#ljbarojlrz .gt_center {
   text-align: center;
 }
 
-#ehnllbpuph .gt_right {
+#ljbarojlrz .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#ehnllbpuph .gt_font_normal {
+#ljbarojlrz .gt_font_normal {
   font-weight: normal;
 }
 
-#ehnllbpuph .gt_font_bold {
+#ljbarojlrz .gt_font_bold {
   font-weight: bold;
 }
 
-#ehnllbpuph .gt_font_italic {
+#ljbarojlrz .gt_font_italic {
   font-style: italic;
 }
 
-#ehnllbpuph .gt_super {
+#ljbarojlrz .gt_super {
   font-size: 65%;
 }
 
-#ehnllbpuph .gt_footnote_marks {
+#ljbarojlrz .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#ehnllbpuph .gt_asterisk {
+#ljbarojlrz .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#ehnllbpuph .gt_indent_1 {
+#ljbarojlrz .gt_indent_1 {
   text-indent: 5px;
 }
 
-#ehnllbpuph .gt_indent_2 {
+#ljbarojlrz .gt_indent_2 {
   text-indent: 10px;
 }
 
-#ehnllbpuph .gt_indent_3 {
+#ljbarojlrz .gt_indent_3 {
   text-indent: 15px;
 }
 
-#ehnllbpuph .gt_indent_4 {
+#ljbarojlrz .gt_indent_4 {
   text-indent: 20px;
 }
 
-#ehnllbpuph .gt_indent_5 {
+#ljbarojlrz .gt_indent_5 {
   text-indent: 25px;
 }
 
-#ehnllbpuph .katex-display {
+#ljbarojlrz .katex-display {
   display: inline-flex !important;
   margin-bottom: 0.75em !important;
 }
 
-#ehnllbpuph div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+#ljbarojlrz div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
   height: 0px !important;
 }
 </style>
@@ -903,8 +917,29 @@ Ace2    .   .   .   .   .</code></pre>
 </div>
 </div>
 </div>
+<p>Metadata columns that will be important for this project will be:</p>
+<ol type="1">
+<li><code>Slide_name</code></li>
+<li><code>tissue</code></li>
+<li><code>fov</code></li>
+</ol>
+<p><code>fov</code> assigns each cell to its corresponding tissue “stamp”. A slide contains multiple tissue slices, with each slice being “stamped” n times. The <code>fov</code> value indicates in which stamp a given cell is located.</p>
 <section id="add-metadata-disease_state" class="level3">
 <h3 class="anchored" data-anchor-id="add-metadata-disease_state">Add Metadata <code>disease_state</code></h3>
+<div class="callout callout-style-default callout-note callout-titled" title="Disease State Metadata">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Disease State Metadata
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>The disease state must be added to the existing Seurat object, as this data is not currently included in the <code>meta.data</code> table. The disease states are mapped via the FOV IDs.</p>
+<p>The disease state mapping can be found in the corresponding code blocks.</p>
+</div>
+</div>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Disease state to FOV mapping</span></span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>healthy <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">15</span>, <span class="dv">16</span>, <span class="dv">17</span>, <span class="dv">18</span>, <span class="dv">19</span>, <span class="dv">20</span>, <span class="dv">21</span>, <span class="dv">22</span>, <span class="dv">23</span>, <span class="dv">45</span>)</span>
@@ -941,43 +976,26 @@ Ace2    .   .   .   .   .</code></pre>
 4 aclf         </code></pre>
 </div>
 </div>
-<div class="callout callout-style-default callout-important callout-titled" title="Expected Values Liver1">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-Expected Values Liver1
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<ol type="1">
-<li>healthy</li>
-<li>steatosis</li>
-<li>cirrhosis</li>
-<li>aclf</li>
-</ol>
-</div>
-</div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>cirrhosis <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">5</span>, <span class="dv">6</span>, <span class="dv">7</span>, <span class="dv">8</span>, <span class="dv">13</span>, <span class="dv">14</span>, <span class="dv">17</span>, <span class="dv">18</span>, <span class="dv">19</span>, <span class="dv">20</span>, <span class="dv">21</span>, <span class="dv">22</span>, <span class="dv">23</span>, <span class="dv">24</span>, <span class="dv">25</span>, <span class="dv">36</span>, <span class="dv">37</span>, <span class="dv">44</span>, <span class="dv">45</span>)</span>
-<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>aclf <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">9</span>, <span class="dv">10</span>, <span class="dv">11</span>, <span class="dv">12</span>, <span class="dv">15</span>, <span class="dv">16</span>, <span class="dv">26</span>, <span class="dv">27</span>, <span class="dv">28</span>, <span class="dv">29</span>, <span class="dv">30</span>, <span class="dv">31</span>, <span class="dv">32</span>, <span class="dv">33</span>, <span class="dv">34</span>, <span class="dv">35</span>, <span class="dv">38</span>, <span class="dv">39</span>, <span class="dv">40</span>, <span class="dv">41</span>, <span class="dv">42</span>, <span class="dv">43</span>)</span>
-<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>disease_states_l2 <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
-<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">fov =</span> sobj_liver2<span class="sc">@</span>meta.data<span class="sc">$</span>fov,</span>
-<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">row.names =</span> <span class="fu">colnames</span>(sobj_liver2)</span>
-<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>) <span class="sc">|&gt;</span></span>
-<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
-<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">disease_state =</span> <span class="fu">case_when</span>(</span>
-<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a>      fov <span class="sc">%in%</span> cirrhosis <span class="sc">~</span> <span class="st">"cirrhosis"</span>,</span>
-<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a>      fov <span class="sc">%in%</span> aclf <span class="sc">~</span> <span class="st">"aclf"</span>,</span>
-<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a>      <span class="cn">TRUE</span> <span class="sc">~</span> <span class="st">"Other"</span></span>
-<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span></span>
-<span id="cb13-15"><a href="#cb13-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span>fov)</span>
-<span id="cb13-16"><a href="#cb13-16" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-17"><a href="#cb13-17" aria-hidden="true" tabindex="-1"></a><span class="fu">unique</span>(disease_states_l2) <span class="sc">|&gt;</span> </span>
-<span id="cb13-18"><a href="#cb13-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as_tibble</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># See "prepare-disease-state-liver1"</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>cirrhosis <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">5</span>, <span class="dv">6</span>, <span class="dv">7</span>, <span class="dv">8</span>, <span class="dv">13</span>, <span class="dv">14</span>, <span class="dv">17</span>, <span class="dv">18</span>, <span class="dv">19</span>, <span class="dv">20</span>, <span class="dv">21</span>, <span class="dv">22</span>, <span class="dv">23</span>, <span class="dv">24</span>, <span class="dv">25</span>, <span class="dv">36</span>, <span class="dv">37</span>, <span class="dv">44</span>, <span class="dv">45</span>)</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>aclf <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">9</span>, <span class="dv">10</span>, <span class="dv">11</span>, <span class="dv">12</span>, <span class="dv">15</span>, <span class="dv">16</span>, <span class="dv">26</span>, <span class="dv">27</span>, <span class="dv">28</span>, <span class="dv">29</span>, <span class="dv">30</span>, <span class="dv">31</span>, <span class="dv">32</span>, <span class="dv">33</span>, <span class="dv">34</span>, <span class="dv">35</span>, <span class="dv">38</span>, <span class="dv">39</span>, <span class="dv">40</span>, <span class="dv">41</span>, <span class="dv">42</span>, <span class="dv">43</span>)</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>disease_states_l2 <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">fov =</span> sobj_liver2<span class="sc">@</span>meta.data<span class="sc">$</span>fov,</span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">row.names =</span> <span class="fu">colnames</span>(sobj_liver2)</span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>) <span class="sc">|&gt;</span></span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">disease_state =</span> <span class="fu">case_when</span>(</span>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a>      fov <span class="sc">%in%</span> cirrhosis <span class="sc">~</span> <span class="st">"cirrhosis"</span>,</span>
+<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a>      fov <span class="sc">%in%</span> aclf <span class="sc">~</span> <span class="st">"aclf"</span>,</span>
+<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a>      <span class="cn">TRUE</span> <span class="sc">~</span> <span class="st">"Other"</span></span>
+<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb13-15"><a href="#cb13-15" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span></span>
+<span id="cb13-16"><a href="#cb13-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span>fov)</span>
+<span id="cb13-17"><a href="#cb13-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-18"><a href="#cb13-18" aria-hidden="true" tabindex="-1"></a><span class="fu">unique</span>(disease_states_l2) <span class="sc">|&gt;</span> </span>
+<span id="cb13-19"><a href="#cb13-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as_tibble</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 2 × 1
   disease_state
@@ -986,23 +1004,7 @@ Expected Values Liver1
 2 aclf         </code></pre>
 </div>
 </div>
-<div class="callout callout-style-default callout-important callout-titled" title="Expected Values Liver2">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-Expected Values Liver2
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<ol type="1">
-<li>cirrhosis</li>
-<li>aclf</li>
-</ol>
-</div>
-</div>
-<p>Add disease state metadata to the Seurat objects.</p>
+<p><strong>Add disease state metadata.</strong></p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Add disease condition to metadata</span></span>
 <span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>sobj_liver1 <span class="ot">&lt;-</span> <span class="fu">AddMetaData</span>(</span>
@@ -1010,13 +1012,17 @@ Expected Values Liver2
 <span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">metadata =</span> disease_states_l1</span>
 <span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>)</span>
 <span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="fu">identical</span>(<span class="fu">unique</span>(disease_states_l1)<span class="sc">$</span>disease_state, <span class="fu">unique</span>(sobj_liver1<span class="sc">@</span>meta.data<span class="sc">$</span>disease_state))) {</span>
-<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">message</span>(<span class="st">"Metadata added correctly."</span>)</span>
-<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a>} <span class="cf">else</span> {</span>
-<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">message</span>(<span class="st">"An error occured during metadata attachment..."</span>)</span>
-<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Validate that correct disease states are added.</span></span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="fu">identical</span>(</span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">unique</span>(disease_states_l1)<span class="sc">$</span>disease_state,</span>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">unique</span>(sobj_liver1<span class="sc">@</span>meta.data<span class="sc">$</span>disease_state)</span>
+<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a>)) {</span>
+<span id="cb15-12"><a href="#cb15-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">message</span>(<span class="st">"Metadata added correctly to Liver 1."</span>)</span>
+<span id="cb15-13"><a href="#cb15-13" aria-hidden="true" tabindex="-1"></a>} <span class="cf">else</span> {</span>
+<span id="cb15-14"><a href="#cb15-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">message</span>(<span class="st">"An error occured during metadata attachment..."</span>)</span>
+<span id="cb15-15"><a href="#cb15-15" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
-<pre><code>Metadata added correctly.</code></pre>
+<pre><code>Metadata added correctly to Liver 1.</code></pre>
 </div>
 </div>
 <div class="cell">
@@ -1025,13 +1031,16 @@ Expected Values Liver2
 <span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">metadata =</span> disease_states_l2</span>
 <span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>)</span>
 <span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="fu">identical</span>(<span class="fu">unique</span>(disease_states_l2)<span class="sc">$</span>disease_state, <span class="fu">unique</span>(sobj_liver2<span class="sc">@</span>meta.data<span class="sc">$</span>disease_state))) {</span>
-<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">message</span>(<span class="st">"Metadata added correctly."</span>)</span>
-<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a>} <span class="cf">else</span> {</span>
-<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">message</span>(<span class="st">"An error occured during metadata attachment..."</span>)</span>
-<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="fu">identical</span>(</span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">unique</span>(disease_states_l2)<span class="sc">$</span>disease_state,</span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">unique</span>(sobj_liver2<span class="sc">@</span>meta.data<span class="sc">$</span>disease_state)</span>
+<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a>)) {</span>
+<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">message</span>(<span class="st">"Metadata added correctly to Liver 2."</span>)</span>
+<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a>} <span class="cf">else</span> {</span>
+<span id="cb17-12"><a href="#cb17-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">message</span>(<span class="st">"An error occured during metadata attachment..."</span>)</span>
+<span id="cb17-13"><a href="#cb17-13" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
-<pre><code>Metadata added correctly.</code></pre>
+<pre><code>Metadata added correctly to Liver 2.</code></pre>
 </div>
 </div>
 </section>

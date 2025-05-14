@@ -1,35 +1,3 @@
-#' Merge Two Seurat Objects
-#'
-#' This function merges two Seurat objects, adds unique cell identifiers for
-#' each object, and saves the resulting merged Seurat object as an RDS file.
-#'
-#' @param sobj_1 A Seurat object to be merged.
-#' @param sobj_2 A Seurat object to be merged.
-#' @param ids A character vector of length 2 containing unique cell identifiers
-#'   for each Seurat object.
-#' @param save_dir A string specifying the directory where the merged Seurat
-#'   object should be saved.
-#'
-#' @return A Seurat object containing the merged data.
-#'
-#' @export
-merge_seurat_objects <- function(sobj_1,
-                                 sobj_2,
-                                 ids,
-                                 save_dir) {
-  # Merges the two Seurat objects and adds the provided cell identifiers
-  sobj_liver_merged <- merge(
-    sobj_1,
-    y = sobj_2,
-    add.cell.ids = ids
-  )
-
-  # Saves the merged Seurat object
-  saveRDS(sobj_liver_merged, file = file.path(save_dir, "sobj_merged_liver.Rds"))
-
-  sobj_liver_merged
-}
-
 #' Get the Border Boundaries of Cells in Given FOVs
 #'
 #' This function calculates the boundaries (4 coordinates) of the cells within
