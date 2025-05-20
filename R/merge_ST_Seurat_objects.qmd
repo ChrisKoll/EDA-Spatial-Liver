@@ -55,91 +55,63 @@ message(glue("
 ```{r}
 #| label: load-data-liver1
 
-sobj_liver1 <- LoadSeuratRds(file.path(
+sobj_l1 <- LoadSeuratRds(file.path(
   data_dir,
-  "sobj_liver1.Rds"
+  "Seurat_liver1.Rds"
 ))
 
-sobj_liver1
+sobj_l1
 ```
 
 ```{r}
 #| label: load-data-liver2
 
-sobj_liver2 <- LoadSeuratRds(file.path(
+sobj_l2 <- LoadSeuratRds(file.path(
   data_dir,
-  "sobj_liver2.Rds"
+  "Seurat_liver2.Rds"
 ))
 
-sobj_liver2
+sobj_l2
 ```
 
-## Merge ST Seurat Objects
+## Prepare FOV
+
+Append dataset specific to `fov` in the metadata.
+Both liver1 and liver2 dataset have 45 FOVs.
 
 ```{r}
-#| label: define-merging-function
+#| label: append-suffix-fov
 
-#' Merge two spatial transcriptomics Seurat objects
-#'
-#' This function merges two Seurat objects, adds unique cell identifiers for
-#' each object, and saves the resulting merged Seurat object as an `.Rds` file.
-#'
-#' @param sobj_1 A Seurat object to be merged.
-#' @param sobj_2 A Seurat object to be merged.
-#' @param ids A character vector of length 2 containing unique cell identifiers
-#'   for each Seurat object.
-#' @param save_dir A string specifying the directory where the merged Seurat
-#'   object should be saved.
-#'
-#' @return A Seurat object containing the merged data.
-#'
-#' @export
-merge_ST_Seurat_objects <- function(sobj_1,
-                                    sobj_2,
-                                    ids,
-                                    save_dir) {
-  # Merges the two Seurat objects and adds the provided cell identifiers
-  sobj_liver_merged <- merge(
-    sobj_1,
-    y = sobj_2,
-    add.cell.ids = ids
-  )
+object_ids <- c("liver1", "liver2")
 
-  # Saves the merged Seurat object
-  saveRDS(sobj_liver_merged, file = file.path(save_dir, "sobj_liver_merged.Rds"))
+# Add IDs according to Seurat object
+sobj_l1@meta.data <- sobj_l1@meta.data |>
+  mutate(fov = glue("{fov}_{object_ids[1]}"))
 
-  sobj_liver_merged
-}
+sobj_l2@meta.data <- sobj_l2@meta.data |>
+  mutate(fov = glue("{fov}_{object_ids[2]}"))
 ```
+
+## Merge Objects
 
 Needs to increase memory limit to process. 
 `options(future.globals.maxSize = 6000 * 1024^2)`
 
 ```{r}
-#| label: prepare-objects
+#| label: merge-objects
 
 # Sets limit to ~4,5GB to enable proper computation for large Seurat objects
 options(future.globals.maxSize = 6000 * 1024^2)
 
-object_ids <- c("liver1", "liver2")
-
-# Add IDs according to Seurat object
-sobj_liver1@meta.data <- sobj_liver1@meta.data |>
-  mutate(fov = glue("{fov}_{object_ids[1]}"))
-
-sobj_liver2@meta.data <- sobj_liver2@meta.data |>
-  mutate(fov = glue("{fov}_{object_ids[2]}"))
-```
-
-```{r}
-#| label: merge-objects
-
-sobj_liver_merged <- merge_ST_Seurat_objects(
-  sobj_liver1,
-  sobj_liver2,
-  ids = object_ids,
-  save_dir = out_dir
+# Merges the two Seurat objects and adds the provided cell identifiers
+sobj_liver_merged <- merge(
+  sobj_l1,
+  y = sobj_l2,
+  add.cell.ids = object_ids
 )
+
+# Saves the merged Seurat object
+saveRDS(sobj_liver_merged, file = file.path(out_dir, "Seurat_liver_merged.Rds"))
 
 sobj_liver_merged
 ```
