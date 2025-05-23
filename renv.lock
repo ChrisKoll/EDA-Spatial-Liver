@@ -333,6 +333,28 @@
       ],
       "Hash": "2288423bb0f20a457800d7fc47f6aa54"
     },
+    "arrow": {
+      "Package": "arrow",
+      "Version": "20.0.0",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Requirements": [
+        "R",
+        "R6",
+        "assertthat",
+        "bit64",
+        "cpp11",
+        "glue",
+        "methods",
+        "purrr",
+        "rlang",
+        "stats",
+        "tidyselect",
+        "utils",
+        "vctrs"
+      ],
+      "Hash": "e8a86f88e62d32271ea73cc58b89ac68"
+    },
     "askpass": {
       "Package": "askpass",
       "Version": "1.2.1",
@@ -342,6 +364,16 @@
         "sys"
       ],
       "Hash": "c39f4155b3ceb1a9a2799d700fbd4b6a"
+    },
+    "assertthat": {
+      "Package": "assertthat",
+      "Version": "0.2.1",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Requirements": [
+        "tools"
+      ],
+      "Hash": "50c838a310445e954bc13f26f26a6ecf"
     },
     "base64enc": {
       "Package": "base64enc",
