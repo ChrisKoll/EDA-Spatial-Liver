@@ -4,7 +4,7 @@
 
 .vscode/*
 
-# Project data
+# Input and output data
 # File sizes are too large
 /data/*
 /output/data/*
