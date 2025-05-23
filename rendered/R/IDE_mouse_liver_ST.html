@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.4.555">
+<meta name="generator" content="quarto-1.6.42">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -34,7 +34,7 @@ div.sourceCode { overflow: auto; }
 }
 @media print {
 pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
 }
 pre.numberSource code
   { counter-reset: source-line 0; }
@@ -64,10 +64,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="IDE_mouse_liver_ST_files/libs/quarto-html/tippy.umd.min.js"></script>
 <script src="IDE_mouse_liver_ST_files/libs/quarto-html/anchor.min.js"></script>
 <link href="IDE_mouse_liver_ST_files/libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="IDE_mouse_liver_ST_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="IDE_mouse_liver_ST_files/libs/quarto-html/quarto-syntax-highlighting-2f5df379a58b258e96c21c0638c20c03.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="IDE_mouse_liver_ST_files/libs/bootstrap/bootstrap.min.js"></script>
 <link href="IDE_mouse_liver_ST_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="IDE_mouse_liver_ST_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<link href="IDE_mouse_liver_ST_files/libs/bootstrap/bootstrap-5d3b76306515cd155a2f73bd485761f4.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <style>
 
       .quarto-title-block .quarto-title-banner {
@@ -78,12 +78,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 </head>
 
-<body class="fullcontent">
+<body>
 
 <header id="title-block-header" class="quarto-title-block default page-columns page-full">
   <div class="quarto-title-banner page-columns page-full">
     <div class="quarto-title column-body">
       <h1 class="title">IDE Spatial Mouse Liver Transriptomics</h1>
+            <p class="subtitle lead"></p><p>Initial Data Exploration Across Two Spatial Transcriptomics Seurat Objects</p><p></p>
                       </div>
   </div>
     
@@ -107,7 +108,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <div>
       <div class="quarto-title-meta-heading">Published</div>
       <div class="quarto-title-meta-contents">
-        <p class="date">13.05.2025</p>
+        <p class="date">22.05.2025</p>
       </div>
     </div>
     
@@ -122,7 +123,25 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   </div>
   
   </header><div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
-
+<div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+  <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#what-data-do-we-have" id="toc-what-data-do-we-have" class="nav-link active" data-scroll-target="#what-data-do-we-have">What Data Do We Have?</a>
+  <ul class="collapse">
+  <li><a href="#data-generation" id="toc-data-generation" class="nav-link" data-scroll-target="#data-generation">Data Generation</a></li>
+  </ul></li>
+  <li><a href="#run-information" id="toc-run-information" class="nav-link" data-scroll-target="#run-information">Run Information</a></li>
+  <li><a href="#load-the-data" id="toc-load-the-data" class="nav-link" data-scroll-target="#load-the-data">Load the Data</a></li>
+  <li><a href="#data-exploration" id="toc-data-exploration" class="nav-link" data-scroll-target="#data-exploration">Data Exploration</a>
+  <ul class="collapse">
+  <li><a href="#add-metadata-disease_state" id="toc-add-metadata-disease_state" class="nav-link" data-scroll-target="#add-metadata-disease_state">Add Metadata <code>disease_state</code></a></li>
+  </ul></li>
+  <li><a href="#save-the-data" id="toc-save-the-data" class="nav-link" data-scroll-target="#save-the-data">Save the Data</a></li>
+  </ul>
+</nav>
+</div>
 <main class="content quarto-banner-title-block" id="quarto-document-content">
 
 
@@ -147,27 +166,27 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <dl>
 <dt>B2M</dt>
 <dd>
-<p>Beta-2 Microglobulin, a small protein that is a component of MHC class I molecules found on all nucleated cells. It is often used as a marker in immunohistochemistry.</p>
+Beta-2 Microglobulin, a small protein that is a component of MHC class I molecules found on all nucleated cells. It is often used as a marker in immunohistochemistry.
 </dd>
 <dt>CD298 (SLC12A2)</dt>
 <dd>
-<p>Protein associated with ion transport and is often used as a marker for certain cellular functions.</p>
+Protein associated with ion transport and is often used as a marker for certain cellular functions.
 </dd>
 <dt>PanCK</dt>
 <dd>
-<p>Pan-Cytokeratin, a group of cytoskeletal proteins found in epithelial cells. It is used to identify epithelial cell populations in tissue.</p>
+Pan-Cytokeratin, a group of cytoskeletal proteins found in epithelial cells. It is used to identify epithelial cell populations in tissue.
 </dd>
 <dt>CD45</dt>
 <dd>
-<p>Marker for leukocytes (white blood cells). It is used to identify immune cells in tissues.</p>
+Marker for leukocytes (white blood cells). It is used to identify immune cells in tissues.
 </dd>
 <dt>CK8/18</dt>
 <dd>
-<p>Cytokeratin 8/18, which are intermediate filament proteins expressed in epithelial cells, particularly in simple epithelia such as those of the liver.</p>
+Cytokeratin 8/18, which are intermediate filament proteins expressed in epithelial cells, particularly in simple epithelia such as those of the liver.
 </dd>
 <dt>DAPI</dt>
 <dd>
-<p>4′,6-diamidino-2-phenylindole, a fluorescent stain that binds strongly to DNA, commonly used for nuclear staining in microscopy.</p>
+4′,6-diamidino-2-phenylindole, a fluorescent stain that binds strongly to DNA, commonly used for nuclear staining in microscopy.
 </dd>
 </dl>
 </section>
@@ -177,19 +196,19 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="cell">
 <div class="cell-output cell-output-stderr">
 <pre><code>📂 Input Seurat objects from: ../data/Seurat_objects
-💾 Outputs will be saved in: ../output/Seurat_objects/run_2025-05-13_17-06</code></pre>
+💾 Outputs will be saved in: ../output/data/Seurat_objects/run_2025-05-22_22-45</code></pre>
 </div>
 </div>
 </section>
 <section id="load-the-data" class="level2">
 <h2 class="anchored" data-anchor-id="load-the-data">Load the Data</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>sobj_liver1 <span class="ot">&lt;-</span> <span class="fu">LoadSeuratRds</span>(<span class="fu">file.path</span>(</span>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>sobj_l1 <span class="ot">&lt;-</span> <span class="fu">LoadSeuratRds</span>(<span class="fu">file.path</span>(</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  data_dir,</span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Seurat_object_liver1.Rds"</span></span>
 <span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>))</span>
 <span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>sobj_liver1</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>sobj_l1</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>An object of class Seurat 
 970 features across 34452 samples within 1 assay 
@@ -200,12 +219,12 @@ Active assay: Nanostring (970 features, 0 variable features)
 </div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>sobj_liver2 <span class="ot">&lt;-</span> <span class="fu">LoadSeuratRds</span>(<span class="fu">file.path</span>(</span>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>sobj_l2 <span class="ot">&lt;-</span> <span class="fu">LoadSeuratRds</span>(<span class="fu">file.path</span>(</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  data_dir,</span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Seurat_object_liver2.Rds"</span></span>
 <span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>))</span>
 <span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>sobj_liver2</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>sobj_l2</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>An object of class Seurat 
 970 features across 33333 samples within 1 assay 
@@ -229,13 +248,13 @@ Access Seurat Objects
 </div>
 <div class="callout-body-container callout-body">
 <p>To access the count information in a Seurat object:</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>obj_liver1<span class="sc">@</span>assays<span class="sc">$</span>Nanostring<span class="sc">$</span>counts</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>obj_l1<span class="sc">@</span>assays<span class="sc">$</span>Nanostring<span class="sc">$</span>counts</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>To access metadata in a Seurat object:</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>sobj_liver1<span class="sc">@</span>meta.data</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>sobj_l1<span class="sc">@</span>meta.data</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>sobj_liver1<span class="sc">@</span>assays<span class="sc">$</span>Nanostring<span class="sc">$</span>counts[<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>, <span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>sobj_l1<span class="sc">@</span>assays<span class="sc">$</span>Nanostring<span class="sc">$</span>counts[<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>, <span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>5 x 5 sparse Matrix of class "dgCMatrix"
       3_1 4_1 5_1 7_1 8_1
@@ -249,27 +268,27 @@ Ace2    .   .   .   .   .</code></pre>
 <p>Features (genes) are stored as rows in Seurat objects. Cell samples are stored in columns with their dataset-specific unique IDs.</p>
 <p>The count data is stored in a sparse matrix format. → Only non-zero values are stored with their coordinates in the matrix</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>sobj_liver1<span class="sc">@</span>meta.data <span class="sc">|&gt;</span> </span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">head</span>(<span class="dv">5</span>) <span class="sc">|&gt;</span> </span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gt</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>sobj_l1<span class="sc">@</span>meta.data <span class="sc">|&gt;</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">head</span>(<span class="dv">5</span>) <span class="sc">|&gt;</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>  tables<span class="sc">$</span><span class="fu">render_table</span>(<span class="at">data =</span> _)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<div id="ljbarojlrz" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#ljbarojlrz table {
+<div id="dwjiesvlro" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#dwjiesvlro table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#ljbarojlrz thead, #ljbarojlrz tbody, #ljbarojlrz tfoot, #ljbarojlrz tr, #ljbarojlrz td, #ljbarojlrz th {
+#dwjiesvlro thead, #dwjiesvlro tbody, #dwjiesvlro tfoot, #dwjiesvlro tr, #dwjiesvlro td, #dwjiesvlro th {
   border-style: none;
 }
 
-#ljbarojlrz p {
+#dwjiesvlro p {
   margin: 0;
   padding: 0;
 }
 
-#ljbarojlrz .gt_table {
+#dwjiesvlro .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -295,12 +314,12 @@ Ace2    .   .   .   .   .</code></pre>
   border-left-color: #D3D3D3;
 }
 
-#ljbarojlrz .gt_caption {
+#dwjiesvlro .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#ljbarojlrz .gt_title {
+#dwjiesvlro .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -312,7 +331,7 @@ Ace2    .   .   .   .   .</code></pre>
   border-bottom-width: 0;
 }
 
-#ljbarojlrz .gt_subtitle {
+#dwjiesvlro .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -324,7 +343,7 @@ Ace2    .   .   .   .   .</code></pre>
   border-top-width: 0;
 }
 
-#ljbarojlrz .gt_heading {
+#dwjiesvlro .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -336,13 +355,13 @@ Ace2    .   .   .   .   .</code></pre>
   border-right-color: #D3D3D3;
 }
 
-#ljbarojlrz .gt_bottom_border {
+#dwjiesvlro .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#ljbarojlrz .gt_col_headings {
+#dwjiesvlro .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -357,7 +376,7 @@ Ace2    .   .   .   .   .</code></pre>
   border-right-color: #D3D3D3;
 }
 
-#ljbarojlrz .gt_col_heading {
+#dwjiesvlro .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -377,7 +396,7 @@ Ace2    .   .   .   .   .</code></pre>
   overflow-x: hidden;
 }
 
-#ljbarojlrz .gt_column_spanner_outer {
+#dwjiesvlro .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -389,15 +408,15 @@ Ace2    .   .   .   .   .</code></pre>
   padding-right: 4px;
 }
 
-#ljbarojlrz .gt_column_spanner_outer:first-child {
+#dwjiesvlro .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#ljbarojlrz .gt_column_spanner_outer:last-child {
+#dwjiesvlro .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#ljbarojlrz .gt_column_spanner {
+#dwjiesvlro .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -409,11 +428,11 @@ Ace2    .   .   .   .   .</code></pre>
   width: 100%;
 }
 
-#ljbarojlrz .gt_spanner_row {
+#dwjiesvlro .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#ljbarojlrz .gt_group_heading {
+#dwjiesvlro .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -439,7 +458,7 @@ Ace2    .   .   .   .   .</code></pre>
   text-align: left;
 }
 
-#ljbarojlrz .gt_empty_group_heading {
+#dwjiesvlro .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -454,22 +473,22 @@ Ace2    .   .   .   .   .</code></pre>
   vertical-align: middle;
 }
 
-#ljbarojlrz .gt_from_md > :first-child {
+#dwjiesvlro .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#ljbarojlrz .gt_from_md > :last-child {
+#dwjiesvlro .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#ljbarojlrz .gt_row {
+#dwjiesvlro .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
   padding-right: 5px;
   margin: 10px;
   border-top-style: solid;
-  border-top-width: 1px;
+  border-top-width: 0px;
   border-top-color: #D3D3D3;
   border-left-style: none;
   border-left-width: 1px;
@@ -481,7 +500,7 @@ Ace2    .   .   .   .   .</code></pre>
   overflow-x: hidden;
 }
 
-#ljbarojlrz .gt_stub {
+#dwjiesvlro .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -494,7 +513,7 @@ Ace2    .   .   .   .   .</code></pre>
   padding-right: 5px;
 }
 
-#ljbarojlrz .gt_stub_row_group {
+#dwjiesvlro .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -508,15 +527,15 @@ Ace2    .   .   .   .   .</code></pre>
   vertical-align: top;
 }
 
-#ljbarojlrz .gt_row_group_first td {
+#dwjiesvlro .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#ljbarojlrz .gt_row_group_first th {
+#dwjiesvlro .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#ljbarojlrz .gt_summary_row {
+#dwjiesvlro .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -526,16 +545,16 @@ Ace2    .   .   .   .   .</code></pre>
   padding-right: 5px;
 }
 
-#ljbarojlrz .gt_first_summary_row {
+#dwjiesvlro .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#ljbarojlrz .gt_first_summary_row.thick {
+#dwjiesvlro .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#ljbarojlrz .gt_last_summary_row {
+#dwjiesvlro .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -545,7 +564,7 @@ Ace2    .   .   .   .   .</code></pre>
   border-bottom-color: #D3D3D3;
 }
 
-#ljbarojlrz .gt_grand_summary_row {
+#dwjiesvlro .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -555,7 +574,7 @@ Ace2    .   .   .   .   .</code></pre>
   padding-right: 5px;
 }
 
-#ljbarojlrz .gt_first_grand_summary_row {
+#dwjiesvlro .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -565,7 +584,7 @@ Ace2    .   .   .   .   .</code></pre>
   border-top-color: #D3D3D3;
 }
 
-#ljbarojlrz .gt_last_grand_summary_row_top {
+#dwjiesvlro .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -575,11 +594,11 @@ Ace2    .   .   .   .   .</code></pre>
   border-bottom-color: #D3D3D3;
 }
 
-#ljbarojlrz .gt_striped {
+#dwjiesvlro .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#ljbarojlrz .gt_table_body {
+#dwjiesvlro .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -588,7 +607,7 @@ Ace2    .   .   .   .   .</code></pre>
   border-bottom-color: #D3D3D3;
 }
 
-#ljbarojlrz .gt_footnotes {
+#dwjiesvlro .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -602,7 +621,7 @@ Ace2    .   .   .   .   .</code></pre>
   border-right-color: #D3D3D3;
 }
 
-#ljbarojlrz .gt_footnote {
+#dwjiesvlro .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -611,7 +630,7 @@ Ace2    .   .   .   .   .</code></pre>
   padding-right: 5px;
 }
 
-#ljbarojlrz .gt_sourcenotes {
+#dwjiesvlro .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -625,7 +644,7 @@ Ace2    .   .   .   .   .</code></pre>
   border-right-color: #D3D3D3;
 }
 
-#ljbarojlrz .gt_sourcenote {
+#dwjiesvlro .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -633,281 +652,282 @@ Ace2    .   .   .   .   .</code></pre>
   padding-right: 5px;
 }
 
-#ljbarojlrz .gt_left {
+#dwjiesvlro .gt_left {
   text-align: left;
 }
 
-#ljbarojlrz .gt_center {
+#dwjiesvlro .gt_center {
   text-align: center;
 }
 
-#ljbarojlrz .gt_right {
+#dwjiesvlro .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#ljbarojlrz .gt_font_normal {
+#dwjiesvlro .gt_font_normal {
   font-weight: normal;
 }
 
-#ljbarojlrz .gt_font_bold {
+#dwjiesvlro .gt_font_bold {
   font-weight: bold;
 }
 
-#ljbarojlrz .gt_font_italic {
+#dwjiesvlro .gt_font_italic {
   font-style: italic;
 }
 
-#ljbarojlrz .gt_super {
+#dwjiesvlro .gt_super {
   font-size: 65%;
 }
 
-#ljbarojlrz .gt_footnote_marks {
+#dwjiesvlro .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#ljbarojlrz .gt_asterisk {
+#dwjiesvlro .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#ljbarojlrz .gt_indent_1 {
+#dwjiesvlro .gt_indent_1 {
   text-indent: 5px;
 }
 
-#ljbarojlrz .gt_indent_2 {
+#dwjiesvlro .gt_indent_2 {
   text-indent: 10px;
 }
 
-#ljbarojlrz .gt_indent_3 {
+#dwjiesvlro .gt_indent_3 {
   text-indent: 15px;
 }
 
-#ljbarojlrz .gt_indent_4 {
+#dwjiesvlro .gt_indent_4 {
   text-indent: 20px;
 }
 
-#ljbarojlrz .gt_indent_5 {
+#dwjiesvlro .gt_indent_5 {
   text-indent: 25px;
 }
 
-#ljbarojlrz .katex-display {
+#dwjiesvlro .katex-display {
   display: inline-flex !important;
   margin-bottom: 0.75em !important;
 }
 
-#ljbarojlrz div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+#dwjiesvlro div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
   height: 0px !important;
 }
 </style>
 
 <table class="gt_table caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
+<caption>Overview of available metadata (first five columns)</caption>
 <thead>
-<tr class="header gt_col_headings">
-<th id="orig.ident" class="gt_col_heading gt_columns_bottom_border gt_center" data-quarto-table-cell-role="th" scope="col">orig.ident</th>
-<th id="nCount_Nanostring" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">nCount_Nanostring</th>
-<th id="nFeature_Nanostring" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">nFeature_Nanostring</th>
-<th id="cell_ID" class="gt_col_heading gt_columns_bottom_border gt_left" data-quarto-table-cell-role="th" scope="col">cell_ID</th>
-<th id="fov" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">fov</th>
-<th id="Area" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">Area</th>
-<th id="AspectRatio" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">AspectRatio</th>
-<th id="Width" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">Width</th>
-<th id="Height" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">Height</th>
-<th id="Mean.PanCK" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">Mean.PanCK</th>
-<th id="Max.PanCK" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">Max.PanCK</th>
-<th id="Mean.CK8.18" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">Mean.CK8.18</th>
-<th id="Max.CK8.18" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">Max.CK8.18</th>
-<th id="Mean.Membrane" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">Mean.Membrane</th>
-<th id="Max.Membrane" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">Max.Membrane</th>
-<th id="Mean.CD45" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">Mean.CD45</th>
-<th id="Max.CD45" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">Max.CD45</th>
-<th id="Mean.DAPI" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">Mean.DAPI</th>
-<th id="Max.DAPI" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">Max.DAPI</th>
-<th id="Run_name" class="gt_col_heading gt_columns_bottom_border gt_left" data-quarto-table-cell-role="th" scope="col">Run_name</th>
-<th id="Slide_name" class="gt_col_heading gt_columns_bottom_border gt_left" data-quarto-table-cell-role="th" scope="col">Slide_name</th>
-<th id="ISH.concentration" class="gt_col_heading gt_columns_bottom_border gt_left" data-quarto-table-cell-role="th" scope="col">ISH.concentration</th>
-<th id="CosMx" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">CosMx</th>
-<th id="tissue" class="gt_col_heading gt_columns_bottom_border gt_left" data-quarto-table-cell-role="th" scope="col">tissue</th>
-<th id="slide_ID_numeric" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">slide_ID_numeric</th>
-<th id="Run_Tissue_name" class="gt_col_heading gt_columns_bottom_border gt_left" data-quarto-table-cell-role="th" scope="col">Run_Tissue_name</th>
-<th id="log10totalcounts" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">log10totalcounts</th>
-<th id="IFcolor" class="gt_col_heading gt_columns_bottom_border gt_left" data-quarto-table-cell-role="th" scope="col">IFcolor</th>
-<th id="nb_clus" class="gt_col_heading gt_columns_bottom_border gt_left" data-quarto-table-cell-role="th" scope="col">nb_clus</th>
-<th id="leiden_clus" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">leiden_clus</th>
-<th id="nclust" class="gt_col_heading gt_columns_bottom_border gt_left" data-quarto-table-cell-role="th" scope="col">nclust</th>
-<th id="id" class="gt_col_heading gt_columns_bottom_border gt_left" data-quarto-table-cell-role="th" scope="col">id</th>
+<tr class="gt_col_headings header">
+<th id="orig.ident" class="gt_col_heading gt_columns_bottom_border gt_left" data-quarto-table-cell-role="th" style="font-weight: bold" scope="col">orig.ident</th>
+<th id="nCount_Nanostring" class="gt_col_heading gt_columns_bottom_border gt_left" data-quarto-table-cell-role="th" style="font-weight: bold" scope="col">nCount_Nanostring</th>
+<th id="nFeature_Nanostring" class="gt_col_heading gt_columns_bottom_border gt_left" data-quarto-table-cell-role="th" style="font-weight: bold" scope="col">nFeature_Nanostring</th>
+<th id="cell_ID" class="gt_col_heading gt_columns_bottom_border gt_left" data-quarto-table-cell-role="th" style="font-weight: bold" scope="col">cell_ID</th>
+<th id="fov" class="gt_col_heading gt_columns_bottom_border gt_left" data-quarto-table-cell-role="th" style="font-weight: bold" scope="col">fov</th>
+<th id="Area" class="gt_col_heading gt_columns_bottom_border gt_left" data-quarto-table-cell-role="th" style="font-weight: bold" scope="col">Area</th>
+<th id="AspectRatio" class="gt_col_heading gt_columns_bottom_border gt_left" data-quarto-table-cell-role="th" style="font-weight: bold" scope="col">AspectRatio</th>
+<th id="Width" class="gt_col_heading gt_columns_bottom_border gt_left" data-quarto-table-cell-role="th" style="font-weight: bold" scope="col">Width</th>
+<th id="Height" class="gt_col_heading gt_columns_bottom_border gt_left" data-quarto-table-cell-role="th" style="font-weight: bold" scope="col">Height</th>
+<th id="Mean.PanCK" class="gt_col_heading gt_columns_bottom_border gt_left" data-quarto-table-cell-role="th" style="font-weight: bold" scope="col">Mean.PanCK</th>
+<th id="Max.PanCK" class="gt_col_heading gt_columns_bottom_border gt_left" data-quarto-table-cell-role="th" style="font-weight: bold" scope="col">Max.PanCK</th>
+<th id="Mean.CK8.18" class="gt_col_heading gt_columns_bottom_border gt_left" data-quarto-table-cell-role="th" style="font-weight: bold" scope="col">Mean.CK8.18</th>
+<th id="Max.CK8.18" class="gt_col_heading gt_columns_bottom_border gt_left" data-quarto-table-cell-role="th" style="font-weight: bold" scope="col">Max.CK8.18</th>
+<th id="Mean.Membrane" class="gt_col_heading gt_columns_bottom_border gt_left" data-quarto-table-cell-role="th" style="font-weight: bold" scope="col">Mean.Membrane</th>
+<th id="Max.Membrane" class="gt_col_heading gt_columns_bottom_border gt_left" data-quarto-table-cell-role="th" style="font-weight: bold" scope="col">Max.Membrane</th>
+<th id="Mean.CD45" class="gt_col_heading gt_columns_bottom_border gt_left" data-quarto-table-cell-role="th" style="font-weight: bold" scope="col">Mean.CD45</th>
+<th id="Max.CD45" class="gt_col_heading gt_columns_bottom_border gt_left" data-quarto-table-cell-role="th" style="font-weight: bold" scope="col">Max.CD45</th>
+<th id="Mean.DAPI" class="gt_col_heading gt_columns_bottom_border gt_left" data-quarto-table-cell-role="th" style="font-weight: bold" scope="col">Mean.DAPI</th>
+<th id="Max.DAPI" class="gt_col_heading gt_columns_bottom_border gt_left" data-quarto-table-cell-role="th" style="font-weight: bold" scope="col">Max.DAPI</th>
+<th id="Run_name" class="gt_col_heading gt_columns_bottom_border gt_left" data-quarto-table-cell-role="th" style="font-weight: bold" scope="col">Run_name</th>
+<th id="Slide_name" class="gt_col_heading gt_columns_bottom_border gt_left" data-quarto-table-cell-role="th" style="font-weight: bold" scope="col">Slide_name</th>
+<th id="ISH.concentration" class="gt_col_heading gt_columns_bottom_border gt_left" data-quarto-table-cell-role="th" style="font-weight: bold" scope="col">ISH.concentration</th>
+<th id="CosMx" class="gt_col_heading gt_columns_bottom_border gt_left" data-quarto-table-cell-role="th" style="font-weight: bold" scope="col">CosMx</th>
+<th id="tissue" class="gt_col_heading gt_columns_bottom_border gt_left" data-quarto-table-cell-role="th" style="font-weight: bold" scope="col">tissue</th>
+<th id="slide_ID_numeric" class="gt_col_heading gt_columns_bottom_border gt_left" data-quarto-table-cell-role="th" style="font-weight: bold" scope="col">slide_ID_numeric</th>
+<th id="Run_Tissue_name" class="gt_col_heading gt_columns_bottom_border gt_left" data-quarto-table-cell-role="th" style="font-weight: bold" scope="col">Run_Tissue_name</th>
+<th id="log10totalcounts" class="gt_col_heading gt_columns_bottom_border gt_left" data-quarto-table-cell-role="th" style="font-weight: bold" scope="col">log10totalcounts</th>
+<th id="IFcolor" class="gt_col_heading gt_columns_bottom_border gt_left" data-quarto-table-cell-role="th" style="font-weight: bold" scope="col">IFcolor</th>
+<th id="nb_clus" class="gt_col_heading gt_columns_bottom_border gt_left" data-quarto-table-cell-role="th" style="font-weight: bold" scope="col">nb_clus</th>
+<th id="leiden_clus" class="gt_col_heading gt_columns_bottom_border gt_left" data-quarto-table-cell-role="th" style="font-weight: bold" scope="col">leiden_clus</th>
+<th id="nclust" class="gt_col_heading gt_columns_bottom_border gt_left" data-quarto-table-cell-role="th" style="font-weight: bold" scope="col">nclust</th>
+<th id="id" class="gt_col_heading gt_columns_bottom_border gt_left" data-quarto-table-cell-role="th" style="font-weight: bold" scope="col">id</th>
 </tr>
 </thead>
 <tbody class="gt_table_body">
 <tr class="odd">
-<td class="gt_row gt_center" headers="orig.ident">SeuratProject</td>
-<td class="gt_row gt_right" headers="nCount_Nanostring">450</td>
-<td class="gt_row gt_right" headers="nFeature_Nanostring">181</td>
+<td class="gt_row gt_left" headers="orig.ident">SeuratProject</td>
+<td class="gt_row gt_left" headers="nCount_Nanostring">450</td>
+<td class="gt_row gt_left" headers="nFeature_Nanostring">181</td>
 <td class="gt_row gt_left" headers="cell_ID">c_1_1_3</td>
-<td class="gt_row gt_right" headers="fov">1</td>
-<td class="gt_row gt_right" headers="Area">9988</td>
-<td class="gt_row gt_right" headers="AspectRatio">1.02</td>
-<td class="gt_row gt_right" headers="Width">117</td>
-<td class="gt_row gt_right" headers="Height">115</td>
-<td class="gt_row gt_right" headers="Mean.PanCK">2091</td>
-<td class="gt_row gt_right" headers="Max.PanCK">5256</td>
-<td class="gt_row gt_right" headers="Mean.CK8.18">596</td>
-<td class="gt_row gt_right" headers="Max.CK8.18">1456</td>
-<td class="gt_row gt_right" headers="Mean.Membrane">1054</td>
-<td class="gt_row gt_right" headers="Max.Membrane">2612</td>
-<td class="gt_row gt_right" headers="Mean.CD45">362</td>
-<td class="gt_row gt_right" headers="Max.CD45">1812</td>
-<td class="gt_row gt_right" headers="Mean.DAPI">1459</td>
-<td class="gt_row gt_right" headers="Max.DAPI">3732</td>
+<td class="gt_row gt_left" headers="fov">1</td>
+<td class="gt_row gt_left" headers="Area">9988</td>
+<td class="gt_row gt_left" headers="AspectRatio">1.02</td>
+<td class="gt_row gt_left" headers="Width">117</td>
+<td class="gt_row gt_left" headers="Height">115</td>
+<td class="gt_row gt_left" headers="Mean.PanCK">2091</td>
+<td class="gt_row gt_left" headers="Max.PanCK">5256</td>
+<td class="gt_row gt_left" headers="Mean.CK8.18">596</td>
+<td class="gt_row gt_left" headers="Max.CK8.18">1456</td>
+<td class="gt_row gt_left" headers="Mean.Membrane">1054</td>
+<td class="gt_row gt_left" headers="Max.Membrane">2612</td>
+<td class="gt_row gt_left" headers="Mean.CD45">362</td>
+<td class="gt_row gt_left" headers="Max.CD45">1812</td>
+<td class="gt_row gt_left" headers="Mean.DAPI">1459</td>
+<td class="gt_row gt_left" headers="Max.DAPI">3732</td>
 <td class="gt_row gt_left" headers="Run_name">Run_b12c110e</td>
 <td class="gt_row gt_left" headers="Slide_name">S2</td>
 <td class="gt_row gt_left" headers="ISH.concentration">1nM</td>
-<td class="gt_row gt_right" headers="CosMx">52</td>
+<td class="gt_row gt_left" headers="CosMx">52</td>
 <td class="gt_row gt_left" headers="tissue">liver1</td>
-<td class="gt_row gt_right" headers="slide_ID_numeric">1</td>
+<td class="gt_row gt_left" headers="slide_ID_numeric">1</td>
 <td class="gt_row gt_left" headers="Run_Tissue_name">liver1</td>
-<td class="gt_row gt_right" headers="log10totalcounts">2.653213</td>
+<td class="gt_row gt_left" headers="log10totalcounts">2.653213</td>
 <td class="gt_row gt_left" headers="IFcolor">#EB8895FF</td>
 <td class="gt_row gt_left" headers="nb_clus">Pericentral.hepatocyte</td>
-<td class="gt_row gt_right" headers="leiden_clus">5</td>
+<td class="gt_row gt_left" headers="leiden_clus">5</td>
 <td class="gt_row gt_left" headers="nclust">niche6</td>
 <td class="gt_row gt_left" headers="id">liver1_3_1</td>
 </tr>
 <tr class="even">
-<td class="gt_row gt_center" headers="orig.ident">SeuratProject</td>
-<td class="gt_row gt_right" headers="nCount_Nanostring">780</td>
-<td class="gt_row gt_right" headers="nFeature_Nanostring">241</td>
+<td class="gt_row gt_left" headers="orig.ident">SeuratProject</td>
+<td class="gt_row gt_left" headers="nCount_Nanostring">780</td>
+<td class="gt_row gt_left" headers="nFeature_Nanostring">241</td>
 <td class="gt_row gt_left" headers="cell_ID">c_1_1_4</td>
-<td class="gt_row gt_right" headers="fov">1</td>
-<td class="gt_row gt_right" headers="Area">10727</td>
-<td class="gt_row gt_right" headers="AspectRatio">0.74</td>
-<td class="gt_row gt_right" headers="Width">103</td>
-<td class="gt_row gt_right" headers="Height">139</td>
-<td class="gt_row gt_right" headers="Mean.PanCK">2314</td>
-<td class="gt_row gt_right" headers="Max.PanCK">6060</td>
-<td class="gt_row gt_right" headers="Mean.CK8.18">683</td>
-<td class="gt_row gt_right" headers="Max.CK8.18">4264</td>
-<td class="gt_row gt_right" headers="Mean.Membrane">1187</td>
-<td class="gt_row gt_right" headers="Max.Membrane">5512</td>
-<td class="gt_row gt_right" headers="Mean.CD45">434</td>
-<td class="gt_row gt_right" headers="Max.CD45">4348</td>
-<td class="gt_row gt_right" headers="Mean.DAPI">1652</td>
-<td class="gt_row gt_right" headers="Max.DAPI">3720</td>
+<td class="gt_row gt_left" headers="fov">1</td>
+<td class="gt_row gt_left" headers="Area">10727</td>
+<td class="gt_row gt_left" headers="AspectRatio">0.74</td>
+<td class="gt_row gt_left" headers="Width">103</td>
+<td class="gt_row gt_left" headers="Height">139</td>
+<td class="gt_row gt_left" headers="Mean.PanCK">2314</td>
+<td class="gt_row gt_left" headers="Max.PanCK">6060</td>
+<td class="gt_row gt_left" headers="Mean.CK8.18">683</td>
+<td class="gt_row gt_left" headers="Max.CK8.18">4264</td>
+<td class="gt_row gt_left" headers="Mean.Membrane">1187</td>
+<td class="gt_row gt_left" headers="Max.Membrane">5512</td>
+<td class="gt_row gt_left" headers="Mean.CD45">434</td>
+<td class="gt_row gt_left" headers="Max.CD45">4348</td>
+<td class="gt_row gt_left" headers="Mean.DAPI">1652</td>
+<td class="gt_row gt_left" headers="Max.DAPI">3720</td>
 <td class="gt_row gt_left" headers="Run_name">Run_b12c110e</td>
 <td class="gt_row gt_left" headers="Slide_name">S2</td>
 <td class="gt_row gt_left" headers="ISH.concentration">1nM</td>
-<td class="gt_row gt_right" headers="CosMx">52</td>
+<td class="gt_row gt_left" headers="CosMx">52</td>
 <td class="gt_row gt_left" headers="tissue">liver1</td>
-<td class="gt_row gt_right" headers="slide_ID_numeric">1</td>
+<td class="gt_row gt_left" headers="slide_ID_numeric">1</td>
 <td class="gt_row gt_left" headers="Run_Tissue_name">liver1</td>
-<td class="gt_row gt_right" headers="log10totalcounts">2.892095</td>
+<td class="gt_row gt_left" headers="log10totalcounts">2.892095</td>
 <td class="gt_row gt_left" headers="IFcolor">#FF96ABFF</td>
 <td class="gt_row gt_left" headers="nb_clus">a</td>
-<td class="gt_row gt_right" headers="leiden_clus">5</td>
+<td class="gt_row gt_left" headers="leiden_clus">5</td>
 <td class="gt_row gt_left" headers="nclust">niche3</td>
 <td class="gt_row gt_left" headers="id">liver1_4_1</td>
 </tr>
 <tr class="odd">
-<td class="gt_row gt_center" headers="orig.ident">SeuratProject</td>
-<td class="gt_row gt_right" headers="nCount_Nanostring">752</td>
-<td class="gt_row gt_right" headers="nFeature_Nanostring">260</td>
+<td class="gt_row gt_left" headers="orig.ident">SeuratProject</td>
+<td class="gt_row gt_left" headers="nCount_Nanostring">752</td>
+<td class="gt_row gt_left" headers="nFeature_Nanostring">260</td>
 <td class="gt_row gt_left" headers="cell_ID">c_1_1_5</td>
-<td class="gt_row gt_right" headers="fov">1</td>
-<td class="gt_row gt_right" headers="Area">9910</td>
-<td class="gt_row gt_right" headers="AspectRatio">1.07</td>
-<td class="gt_row gt_right" headers="Width">115</td>
-<td class="gt_row gt_right" headers="Height">107</td>
-<td class="gt_row gt_right" headers="Mean.PanCK">1553</td>
-<td class="gt_row gt_right" headers="Max.PanCK">5136</td>
-<td class="gt_row gt_right" headers="Mean.CK8.18">469</td>
-<td class="gt_row gt_right" headers="Max.CK8.18">3620</td>
-<td class="gt_row gt_right" headers="Mean.Membrane">791</td>
-<td class="gt_row gt_right" headers="Max.Membrane">6168</td>
-<td class="gt_row gt_right" headers="Mean.CD45">370</td>
-<td class="gt_row gt_right" headers="Max.CD45">8720</td>
-<td class="gt_row gt_right" headers="Mean.DAPI">1155</td>
-<td class="gt_row gt_right" headers="Max.DAPI">3000</td>
+<td class="gt_row gt_left" headers="fov">1</td>
+<td class="gt_row gt_left" headers="Area">9910</td>
+<td class="gt_row gt_left" headers="AspectRatio">1.07</td>
+<td class="gt_row gt_left" headers="Width">115</td>
+<td class="gt_row gt_left" headers="Height">107</td>
+<td class="gt_row gt_left" headers="Mean.PanCK">1553</td>
+<td class="gt_row gt_left" headers="Max.PanCK">5136</td>
+<td class="gt_row gt_left" headers="Mean.CK8.18">469</td>
+<td class="gt_row gt_left" headers="Max.CK8.18">3620</td>
+<td class="gt_row gt_left" headers="Mean.Membrane">791</td>
+<td class="gt_row gt_left" headers="Max.Membrane">6168</td>
+<td class="gt_row gt_left" headers="Mean.CD45">370</td>
+<td class="gt_row gt_left" headers="Max.CD45">8720</td>
+<td class="gt_row gt_left" headers="Mean.DAPI">1155</td>
+<td class="gt_row gt_left" headers="Max.DAPI">3000</td>
 <td class="gt_row gt_left" headers="Run_name">Run_b12c110e</td>
 <td class="gt_row gt_left" headers="Slide_name">S2</td>
 <td class="gt_row gt_left" headers="ISH.concentration">1nM</td>
-<td class="gt_row gt_right" headers="CosMx">52</td>
+<td class="gt_row gt_left" headers="CosMx">52</td>
 <td class="gt_row gt_left" headers="tissue">liver1</td>
-<td class="gt_row gt_right" headers="slide_ID_numeric">1</td>
+<td class="gt_row gt_left" headers="slide_ID_numeric">1</td>
 <td class="gt_row gt_left" headers="Run_Tissue_name">liver1</td>
-<td class="gt_row gt_right" headers="log10totalcounts">2.876218</td>
+<td class="gt_row gt_left" headers="log10totalcounts">2.876218</td>
 <td class="gt_row gt_left" headers="IFcolor">#F16575FF</td>
 <td class="gt_row gt_left" headers="nb_clus">Pericentral.hepatocyte</td>
-<td class="gt_row gt_right" headers="leiden_clus">5</td>
+<td class="gt_row gt_left" headers="leiden_clus">5</td>
 <td class="gt_row gt_left" headers="nclust">niche3</td>
 <td class="gt_row gt_left" headers="id">liver1_5_1</td>
 </tr>
 <tr class="even">
-<td class="gt_row gt_center" headers="orig.ident">SeuratProject</td>
-<td class="gt_row gt_right" headers="nCount_Nanostring">725</td>
-<td class="gt_row gt_right" headers="nFeature_Nanostring">323</td>
+<td class="gt_row gt_left" headers="orig.ident">SeuratProject</td>
+<td class="gt_row gt_left" headers="nCount_Nanostring">725</td>
+<td class="gt_row gt_left" headers="nFeature_Nanostring">323</td>
 <td class="gt_row gt_left" headers="cell_ID">c_1_1_7</td>
-<td class="gt_row gt_right" headers="fov">1</td>
-<td class="gt_row gt_right" headers="Area">11704</td>
-<td class="gt_row gt_right" headers="AspectRatio">1.20</td>
-<td class="gt_row gt_right" headers="Width">133</td>
-<td class="gt_row gt_right" headers="Height">111</td>
-<td class="gt_row gt_right" headers="Mean.PanCK">374</td>
-<td class="gt_row gt_right" headers="Max.PanCK">1720</td>
-<td class="gt_row gt_right" headers="Mean.CK8.18">192</td>
-<td class="gt_row gt_right" headers="Max.CK8.18">4968</td>
-<td class="gt_row gt_right" headers="Mean.Membrane">249</td>
-<td class="gt_row gt_right" headers="Max.Membrane">5776</td>
-<td class="gt_row gt_right" headers="Mean.CD45">493</td>
-<td class="gt_row gt_right" headers="Max.CD45">8064</td>
-<td class="gt_row gt_right" headers="Mean.DAPI">734</td>
-<td class="gt_row gt_right" headers="Max.DAPI">3644</td>
+<td class="gt_row gt_left" headers="fov">1</td>
+<td class="gt_row gt_left" headers="Area">11704</td>
+<td class="gt_row gt_left" headers="AspectRatio">1.20</td>
+<td class="gt_row gt_left" headers="Width">133</td>
+<td class="gt_row gt_left" headers="Height">111</td>
+<td class="gt_row gt_left" headers="Mean.PanCK">374</td>
+<td class="gt_row gt_left" headers="Max.PanCK">1720</td>
+<td class="gt_row gt_left" headers="Mean.CK8.18">192</td>
+<td class="gt_row gt_left" headers="Max.CK8.18">4968</td>
+<td class="gt_row gt_left" headers="Mean.Membrane">249</td>
+<td class="gt_row gt_left" headers="Max.Membrane">5776</td>
+<td class="gt_row gt_left" headers="Mean.CD45">493</td>
+<td class="gt_row gt_left" headers="Max.CD45">8064</td>
+<td class="gt_row gt_left" headers="Mean.DAPI">734</td>
+<td class="gt_row gt_left" headers="Max.DAPI">3644</td>
 <td class="gt_row gt_left" headers="Run_name">Run_b12c110e</td>
 <td class="gt_row gt_left" headers="Slide_name">S2</td>
 <td class="gt_row gt_left" headers="ISH.concentration">1nM</td>
-<td class="gt_row gt_right" headers="CosMx">52</td>
+<td class="gt_row gt_left" headers="CosMx">52</td>
 <td class="gt_row gt_left" headers="tissue">liver1</td>
-<td class="gt_row gt_right" headers="slide_ID_numeric">1</td>
+<td class="gt_row gt_left" headers="slide_ID_numeric">1</td>
 <td class="gt_row gt_left" headers="Run_Tissue_name">liver1</td>
-<td class="gt_row gt_right" headers="log10totalcounts">2.860338</td>
+<td class="gt_row gt_left" headers="log10totalcounts">2.860338</td>
 <td class="gt_row gt_left" headers="IFcolor">#FF1830FF</td>
 <td class="gt_row gt_left" headers="nb_clus">Stromal.cell</td>
-<td class="gt_row gt_right" headers="leiden_clus">6</td>
+<td class="gt_row gt_left" headers="leiden_clus">6</td>
 <td class="gt_row gt_left" headers="nclust">niche3</td>
 <td class="gt_row gt_left" headers="id">liver1_7_1</td>
 </tr>
 <tr class="odd">
-<td class="gt_row gt_center" headers="orig.ident">SeuratProject</td>
-<td class="gt_row gt_right" headers="nCount_Nanostring">395</td>
-<td class="gt_row gt_right" headers="nFeature_Nanostring">142</td>
+<td class="gt_row gt_left" headers="orig.ident">SeuratProject</td>
+<td class="gt_row gt_left" headers="nCount_Nanostring">395</td>
+<td class="gt_row gt_left" headers="nFeature_Nanostring">142</td>
 <td class="gt_row gt_left" headers="cell_ID">c_1_1_8</td>
-<td class="gt_row gt_right" headers="fov">1</td>
-<td class="gt_row gt_right" headers="Area">8547</td>
-<td class="gt_row gt_right" headers="AspectRatio">0.93</td>
-<td class="gt_row gt_right" headers="Width">101</td>
-<td class="gt_row gt_right" headers="Height">109</td>
-<td class="gt_row gt_right" headers="Mean.PanCK">1599</td>
-<td class="gt_row gt_right" headers="Max.PanCK">4276</td>
-<td class="gt_row gt_right" headers="Mean.CK8.18">378</td>
-<td class="gt_row gt_right" headers="Max.CK8.18">2696</td>
-<td class="gt_row gt_right" headers="Mean.Membrane">788</td>
-<td class="gt_row gt_right" headers="Max.Membrane">5104</td>
-<td class="gt_row gt_right" headers="Mean.CD45">277</td>
-<td class="gt_row gt_right" headers="Max.CD45">3564</td>
-<td class="gt_row gt_right" headers="Mean.DAPI">1079</td>
-<td class="gt_row gt_right" headers="Max.DAPI">2556</td>
+<td class="gt_row gt_left" headers="fov">1</td>
+<td class="gt_row gt_left" headers="Area">8547</td>
+<td class="gt_row gt_left" headers="AspectRatio">0.93</td>
+<td class="gt_row gt_left" headers="Width">101</td>
+<td class="gt_row gt_left" headers="Height">109</td>
+<td class="gt_row gt_left" headers="Mean.PanCK">1599</td>
+<td class="gt_row gt_left" headers="Max.PanCK">4276</td>
+<td class="gt_row gt_left" headers="Mean.CK8.18">378</td>
+<td class="gt_row gt_left" headers="Max.CK8.18">2696</td>
+<td class="gt_row gt_left" headers="Mean.Membrane">788</td>
+<td class="gt_row gt_left" headers="Max.Membrane">5104</td>
+<td class="gt_row gt_left" headers="Mean.CD45">277</td>
+<td class="gt_row gt_left" headers="Max.CD45">3564</td>
+<td class="gt_row gt_left" headers="Mean.DAPI">1079</td>
+<td class="gt_row gt_left" headers="Max.DAPI">2556</td>
 <td class="gt_row gt_left" headers="Run_name">Run_b12c110e</td>
 <td class="gt_row gt_left" headers="Slide_name">S2</td>
 <td class="gt_row gt_left" headers="ISH.concentration">1nM</td>
-<td class="gt_row gt_right" headers="CosMx">52</td>
+<td class="gt_row gt_left" headers="CosMx">52</td>
 <td class="gt_row gt_left" headers="tissue">liver1</td>
-<td class="gt_row gt_right" headers="slide_ID_numeric">1</td>
+<td class="gt_row gt_left" headers="slide_ID_numeric">1</td>
 <td class="gt_row gt_left" headers="Run_Tissue_name">liver1</td>
-<td class="gt_row gt_right" headers="log10totalcounts">2.596597</td>
+<td class="gt_row gt_left" headers="log10totalcounts">2.596597</td>
 <td class="gt_row gt_left" headers="IFcolor">#B4685FFF</td>
 <td class="gt_row gt_left" headers="nb_clus">a</td>
-<td class="gt_row gt_right" headers="leiden_clus">2</td>
+<td class="gt_row gt_left" headers="leiden_clus">2</td>
 <td class="gt_row gt_left" headers="nclust">niche4</td>
 <td class="gt_row gt_left" headers="id">liver1_8_1</td>
 </tr>
@@ -950,8 +970,8 @@ Disease State Metadata
 <span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Add column "disease_state"</span></span>
 <span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Condition is assigned according to defined mapping</span></span>
 <span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>disease_states_l1 <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
-<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">fov =</span> sobj_liver1<span class="sc">@</span>meta.data<span class="sc">$</span>fov, <span class="co"># Conditions are mapped to FOVs</span></span>
-<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">row.names =</span> <span class="fu">colnames</span>(sobj_liver1)</span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">fov =</span> sobj_l1<span class="sc">@</span>meta.data<span class="sc">$</span>fov, <span class="co"># Conditions are mapped to FOVs</span></span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">row.names =</span> <span class="fu">colnames</span>(sobj_l1)</span>
 <span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a>) <span class="sc">|&gt;</span></span>
 <span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
 <span id="cb11-14"><a href="#cb11-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">disease_state =</span> <span class="fu">case_when</span>(</span>
@@ -959,12 +979,12 @@ Disease State Metadata
 <span id="cb11-16"><a href="#cb11-16" aria-hidden="true" tabindex="-1"></a>      fov <span class="sc">%in%</span> cirrhosis <span class="sc">~</span> <span class="st">"cirrhosis"</span>,</span>
 <span id="cb11-17"><a href="#cb11-17" aria-hidden="true" tabindex="-1"></a>      fov <span class="sc">%in%</span> steatosis <span class="sc">~</span> <span class="st">"steatosis"</span>,</span>
 <span id="cb11-18"><a href="#cb11-18" aria-hidden="true" tabindex="-1"></a>      fov <span class="sc">%in%</span> aclf <span class="sc">~</span> <span class="st">"aclf"</span>,</span>
-<span id="cb11-19"><a href="#cb11-19" aria-hidden="true" tabindex="-1"></a>      <span class="cn">TRUE</span> <span class="sc">~</span> <span class="st">"Other"</span></span>
+<span id="cb11-19"><a href="#cb11-19" aria-hidden="true" tabindex="-1"></a>      <span class="cn">TRUE</span> <span class="sc">~</span> <span class="st">"other"</span></span>
 <span id="cb11-20"><a href="#cb11-20" aria-hidden="true" tabindex="-1"></a>    )</span>
 <span id="cb11-21"><a href="#cb11-21" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span></span>
 <span id="cb11-22"><a href="#cb11-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span>fov)</span>
 <span id="cb11-23"><a href="#cb11-23" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-24"><a href="#cb11-24" aria-hidden="true" tabindex="-1"></a><span class="fu">unique</span>(disease_states_l1) <span class="sc">|&gt;</span> </span>
+<span id="cb11-24"><a href="#cb11-24" aria-hidden="true" tabindex="-1"></a><span class="fu">unique</span>(disease_states_l1) <span class="sc">|&gt;</span></span>
 <span id="cb11-25"><a href="#cb11-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as_tibble</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 4 × 1
@@ -982,19 +1002,19 @@ Disease State Metadata
 <span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>aclf <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">9</span>, <span class="dv">10</span>, <span class="dv">11</span>, <span class="dv">12</span>, <span class="dv">15</span>, <span class="dv">16</span>, <span class="dv">26</span>, <span class="dv">27</span>, <span class="dv">28</span>, <span class="dv">29</span>, <span class="dv">30</span>, <span class="dv">31</span>, <span class="dv">32</span>, <span class="dv">33</span>, <span class="dv">34</span>, <span class="dv">35</span>, <span class="dv">38</span>, <span class="dv">39</span>, <span class="dv">40</span>, <span class="dv">41</span>, <span class="dv">42</span>, <span class="dv">43</span>)</span>
 <span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>disease_states_l2 <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
-<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">fov =</span> sobj_liver2<span class="sc">@</span>meta.data<span class="sc">$</span>fov,</span>
-<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">row.names =</span> <span class="fu">colnames</span>(sobj_liver2)</span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">fov =</span> sobj_l2<span class="sc">@</span>meta.data<span class="sc">$</span>fov,</span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">row.names =</span> <span class="fu">colnames</span>(sobj_l2)</span>
 <span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>) <span class="sc">|&gt;</span></span>
 <span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
 <span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">disease_state =</span> <span class="fu">case_when</span>(</span>
 <span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a>      fov <span class="sc">%in%</span> cirrhosis <span class="sc">~</span> <span class="st">"cirrhosis"</span>,</span>
 <span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a>      fov <span class="sc">%in%</span> aclf <span class="sc">~</span> <span class="st">"aclf"</span>,</span>
-<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a>      <span class="cn">TRUE</span> <span class="sc">~</span> <span class="st">"Other"</span></span>
+<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a>      <span class="cn">TRUE</span> <span class="sc">~</span> <span class="st">"other"</span></span>
 <span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a>    )</span>
 <span id="cb13-15"><a href="#cb13-15" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span></span>
 <span id="cb13-16"><a href="#cb13-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span>fov)</span>
 <span id="cb13-17"><a href="#cb13-17" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-18"><a href="#cb13-18" aria-hidden="true" tabindex="-1"></a><span class="fu">unique</span>(disease_states_l2) <span class="sc">|&gt;</span> </span>
+<span id="cb13-18"><a href="#cb13-18" aria-hidden="true" tabindex="-1"></a><span class="fu">unique</span>(disease_states_l2) <span class="sc">|&gt;</span></span>
 <span id="cb13-19"><a href="#cb13-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as_tibble</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 2 × 1
@@ -1007,38 +1027,23 @@ Disease State Metadata
 <p><strong>Add disease state metadata.</strong></p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Add disease condition to metadata</span></span>
-<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>sobj_liver1 <span class="ot">&lt;-</span> <span class="fu">AddMetaData</span>(</span>
-<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>  sobj_liver1,</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>sobj_l1 <span class="ot">&lt;-</span> <span class="fu">AddMetaData</span>(</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>  sobj_l1,</span>
 <span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">metadata =</span> disease_states_l1</span>
-<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Validate that correct disease states are added.</span></span>
-<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="fu">identical</span>(</span>
-<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">unique</span>(disease_states_l1)<span class="sc">$</span>disease_state,</span>
-<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">unique</span>(sobj_liver1<span class="sc">@</span>meta.data<span class="sc">$</span>disease_state)</span>
-<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a>)) {</span>
-<span id="cb15-12"><a href="#cb15-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">message</span>(<span class="st">"Metadata added correctly to Liver 1."</span>)</span>
-<span id="cb15-13"><a href="#cb15-13" aria-hidden="true" tabindex="-1"></a>} <span class="cf">else</span> {</span>
-<span id="cb15-14"><a href="#cb15-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">message</span>(<span class="st">"An error occured during metadata attachment..."</span>)</span>
-<span id="cb15-15"><a href="#cb15-15" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
 <div class="cell-output cell-output-stderr">
 <pre><code>Metadata added correctly to Liver 1.</code></pre>
 </div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>sobj_liver2 <span class="ot">&lt;-</span> <span class="fu">AddMetaData</span>(</span>
-<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>  sobj_liver2,</span>
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>sobj_l2 <span class="ot">&lt;-</span> <span class="fu">AddMetaData</span>(</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>  sobj_l2,</span>
 <span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">metadata =</span> disease_states_l2</span>
-<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="fu">identical</span>(</span>
-<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">unique</span>(disease_states_l2)<span class="sc">$</span>disease_state,</span>
-<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">unique</span>(sobj_liver2<span class="sc">@</span>meta.data<span class="sc">$</span>disease_state)</span>
-<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a>)) {</span>
-<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">message</span>(<span class="st">"Metadata added correctly to Liver 2."</span>)</span>
-<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a>} <span class="cf">else</span> {</span>
-<span id="cb17-12"><a href="#cb17-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">message</span>(<span class="st">"An error occured during metadata attachment..."</span>)</span>
-<span id="cb17-13"><a href="#cb17-13" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
 <div class="cell-output cell-output-stderr">
 <pre><code>Metadata added correctly to Liver 2.</code></pre>
 </div>
@@ -1048,10 +1053,10 @@ Disease State Metadata
 <section id="save-the-data" class="level2">
 <h2 class="anchored" data-anchor-id="save-the-data">Save the Data</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">saveRDS</span>(sobj_liver1, <span class="at">file =</span> <span class="fu">file.path</span>(out_dir, <span class="st">"sobj_liver1.Rds"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">saveRDS</span>(sobj_l1, <span class="at">file =</span> <span class="fu">file.path</span>(out_dir, <span class="st">"Seurat_liver1.Rds"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">saveRDS</span>(sobj_liver2, <span class="at">file =</span> <span class="fu">file.path</span>(out_dir, <span class="st">"sobj_liver2.Rds"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">saveRDS</span>(sobj_l2, <span class="at">file =</span> <span class="fu">file.path</span>(out_dir, <span class="st">"Seurat_liver2.Rds"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 
@@ -1092,18 +1097,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     }
     return false;
   }
-  const clipboard = new window.ClipboardJS('.code-copy-button', {
-    text: function(trigger) {
-      const codeEl = trigger.previousElementSibling.cloneNode(true);
-      for (const childEl of codeEl.children) {
-        if (isCodeAnnotation(childEl)) {
-          childEl.remove();
-        }
-      }
-      return codeEl.innerText;
-    }
-  });
-  clipboard.on('success', function(e) {
+  const onCopySuccess = function(e) {
     // button target
     const button = e.trigger;
     // don't keep focus
@@ -1135,7 +1129,27 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     }, 1000);
     // clear code selection
     e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
   });
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
     var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
     var mailtoRegex = new RegExp(/^mailto:/);
       var filterRegex = new RegExp('/' + window.location.host + '/');
@@ -1143,7 +1157,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
         return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
     }
     // Inspect non-navigation links and adorn them if external
- 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool)');
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
     for (var i=0; i<links.length; i++) {
       const link = links[i];
       if (!isInternal(link.href)) {
@@ -1240,7 +1254,6 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       if (window.Quarto?.typesetMath) {
         window.Quarto.typesetMath(note);
       }
-      // TODO in 1.5, we should make sure this works without a callout special case
       if (note.classList.contains("callout")) {
         return note.outerHTML;
       } else {
