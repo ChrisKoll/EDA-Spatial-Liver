@@ -424,6 +424,9 @@ render_umap_plot <- function(data,
     custom_colors <- custom_categorical[1:n_groups]
 
     plot <- plot + ggplot2$scale_color_manual(values = custom_colors, name = legend)
+  } else if (n_groups > length(custom_categorical) & n_groups <= 20) {
+    # No custom colors but custom legend name
+    plot <- plot + ggplot2$labs(color = legend)
   } else {
     plot <- plot + ggplot2$guides(color = "none")
   }
@@ -468,10 +471,10 @@ render_bar_plot <- function(data,
   )
 
   # Convert to symbol
-  group <- ensym(group)
+  color <- ensym(color)
 
   # Get custom colors for number of groups to plot
-  custom_colors <- get_custom_colors(data, as_string(group))
+  custom_colors <- get_custom_colors(data, as_string(color))
 
   plot <- data |>
     ggplot2$ggplot(ggplot2$aes(x = value, y = group, fill = !!color)) +

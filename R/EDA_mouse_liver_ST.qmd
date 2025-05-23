@@ -1,5 +1,7 @@
 ---
 title: "EDA Spatial Mouse Liver Transriptomics"
+subtitle: >
+  Exploratory Data Analysis Across Spatial Transcriptomics Seurat Objects
 date: today
 date-format: "DD.MM.YYYY"
 author: 
@@ -17,6 +19,7 @@ copyright:
   holder: Christian Kolland
   year: 2025
 title-block-banner: "#1D2951"
+toc: true
 ---
 
 ```{r}
@@ -115,7 +118,7 @@ integrated.
 Plot all cells in a number of selected fields of view (FOV).
 
 ```{r}
-#| label: plot-cell-map
+#| label: fig-cell-map
 #| fig-cap: "Spatial distribution of cells in liver1, FOVs 1 and 2."
 
 # Plot cells in liver1 FOV 1 and 2
@@ -128,7 +131,7 @@ ggplot2$ggsave(file.path(out_dir, "cell_map_fov_1_2.svg"))
 plot
 ```
 
-Observations @plot-cell-map:
+Observations @fig-cell-map:
 
 - Not all parts of the FOV are filled with cells
   - Can lead to different cell count distributions across FOVs
@@ -136,7 +139,7 @@ Observations @plot-cell-map:
 Plot transcripts across cells in a selected FOV.
 
 ```{r}
-#| label: plot-transcript-map
+#| label: fig-transcript-map
 #| fig-cap: "Spatial expression of genes Pecam1, C1qc, and Dcn in liver1 FOV 1."
 
 # Plot transcripts in liver1 FOV 1
@@ -152,7 +155,7 @@ ggplot2$ggsave(file.path(out_dir, "transcript_map_fov_1.svg"))
 plot
 ```
 
-Observations @plot-transcript-map:
+Observations @fig-transcript-map:
 
 - Exact locations were transcripts are measured
   - Marker genes can visually quantify cell types
@@ -166,7 +169,7 @@ This section examines the individual count distributions within both datasets.
 Value found in the `meta.data` table in our Seurat objects.
 
 ```{r}
-#| label: validate-nCount-Nanostring
+#| label: tbl-validate-nCount-Nanostring
 #| tbl-cap: |
 #|   Validation that nCount_Nanostring in metadata equals the sum of raw counts 
 #|   per cell.
@@ -189,13 +192,13 @@ tibble(
   tables$render_table(data = _)
 ```
 
-In @validate-nCount-Nanostring we see that `nCount_Nanostring` is equal to sum 
+In @tbl-validate-nCount-Nanostring we see that `nCount_Nanostring` is equal to sum 
 of counts for each individual cell.
 
 ##### Descriptive Statistics
 
 ```{r}
-#| label: descriptive-statistics-cell-counts
+#| label: tbl-descriptive-statistics-cell-counts
 #| tbl-cap: |
 #|   Descriptive statistics for total counts per cell in liver1 and liver2 
 #|   datasets.
@@ -234,7 +237,7 @@ desc_stats_counts |>
 ##### Plots
 
 ```{r}
-#| label: plot-cell-counts-density
+#| label: fig-cell-counts-density
 #| fig-cap: |
 #|   Kernel density estimates of total counts per cell in both datasets.
 
@@ -249,7 +252,7 @@ cell_counts_dist_l2 <- as_tibble(sobj_l2@meta.data$nCount_Nanostring) |>
 # Combine to plotting data
 # Save plotting data later as it is changed
 pdata_counts_per_cell <- cell_counts_dist_l1 |>
-  dplyr::bind_rows(cell_count_dists_l2)
+  dplyr::bind_rows(cell_counts_dist_l2)
 
 plot <- plots$render_density_plot(
   pdata_counts_per_cell,
@@ -265,7 +268,7 @@ ggplot2$ggsave(file.path(out_dir, "density_counts_per_cell.svg"))
 plot
 ```
 
-Observations @plot-cell-counts-density:
+Observations @fig-cell-counts-density:
 
 - Both curves are positive (mean greater then median)
 - Mean appears to be around a total expression of ~500
@@ -275,7 +278,7 @@ Observations @plot-cell-counts-density:
 - Similar distributions &rarr; **enables dataset integration**
 
 ```{r}
-#| label: plot-cell-counts-violin
+#| label: fig-cell-counts-violin
 #| fig-cap: "Violin plot comparing per-cell counts across datasets."
 
 plot <- plots$render_violin_plot(
@@ -293,7 +296,7 @@ ggplot2$ggsave(file.path(out_dir, "violin_counts_per_cell.svg"))
 plot
 ```
 
-Observations @plot-cell-counts-violin:
+Observations @fig-cell-counts-violin:
 
 - median value for both distributions
   - Value at ~800 counts per cell
@@ -302,7 +305,7 @@ Observations @plot-cell-counts-violin:
 - **Similarity between distributions is reconfirmed**
   
 ```{r}
-#| label: plot-cell-counts-ECDF
+#| label: fig-cell-counts-ECDF
 #| fig-cap: "ECDF plot showing cumulative distribution of counts per cell."
 
 plot <- plots$render_ecdf_plot(
@@ -320,7 +323,7 @@ ggplot2$ggsave(file.path(out_dir, "ECDF_counts_per_cell.svg"))
 plot
 ```
 
-Observations @plot-cell-counts-ECDF:
+Observations @fig-cell-counts-ECDF:
 
 - Around 50% of cells have summarized counts less then 1000
 - Around 88% of cells have summarized counts less then 2000
@@ -331,7 +334,7 @@ Observations @plot-cell-counts-ECDF:
 Value found in the `meta.data` table in our Seurat objects.
 
 ```{r}
-#| label: validate-nFeature-Nanostring
+#| label: tbl-validate-nFeature-Nanostring
 #| tbl-cap: |
 #|   Validation that nFeature_Nanostring in metadata equals the sum of non-zero 
 #|   features per cell.
@@ -347,13 +350,13 @@ tibble(
   tables$render_table(data = _)
 ```
 
-In @validate-nFeature-Nanostring we see that `nFeature_Nanostring` is equal to 
+In @tbl-validate-nFeature-Nanostring we see that `nFeature_Nanostring` is equal to 
 sum of of all non-zero features for each individual cell.
 
 ##### Descriptive Statistics
 
 ```{r}
-#| label: descriptive-statistics-feature-counts
+#| label: tbl-descriptive-statistics-feature-counts
 #| tbl-cap: |
 #|   Descriptive statistics for non-zero features (genes) detected per cell 
 #|   across datasets.
@@ -392,7 +395,7 @@ desc_stats_counts |>
 ##### Plots
 
 ```{r}
-#| label: plot-cell-features-density
+#| label: fig-cell-features-density
 #| fig-cap: "Density plot of detected non-zero features (genes) per cell."
 
 # Prepare data for plotting
@@ -427,7 +430,7 @@ ggplot2$ggsave(file.path(out_dir, "density_features_per_cell.svg"))
 plot
 ```
 
-Observations @plot-cell-features-density:
+Observations @fig-cell-features-density:
 
 - Almost normal distributions
   - Small tail on the right
@@ -453,7 +456,7 @@ gene_counts_l2 <- rowSums(sobj_l2@assays$Nanostring$counts) |>
 ##### Descriptive Statistics
 
 ```{r}
-#| label: descriptive-statistics-gene-counts
+#| label: tbl-descriptive-statistics-gene-counts
 #| tbl-cap: |
 #|   Descriptive statistics for gene-level total counts in liver1 and liver2.
 
@@ -491,7 +494,7 @@ desc_stats_counts |>
 ##### Plots
 
 ```{r}
-#| label: plot-gene-counts-density
+#| label: fig-gene-counts-density
 #| fig-cap: |
 #|   "Log-transformed density plot of total counts per gene across both datasets."
 
@@ -523,7 +526,7 @@ ggplot2$ggsave(file.path(out_dir, "density_counts_per_gene.svg"))
 plot
 ```
 
-Observations @plot-gene-counts-density:
+Observations @fig-gene-counts-density:
 
 - Values are log10 normalized
   - Values near 0 mean no expression
@@ -557,7 +560,7 @@ Need to be 90 FOVs in merged dataset.
 Plot the precalculated UMAPs from both datasets in one UMAP.
 
 ```{r}
-#| label: precalculated-umap-slide
+#| label: fig-precalculated-umap-slide
 #| fig-cap: "UMAP visualization colored by slide origin."
 
 # Extract UMAP coordinates from both datasets
@@ -601,13 +604,13 @@ ggplot2$ggsave(file.path(out_dir, "precalc_umap_slide.svg"))
 plot
 ```
 
-Observations @precalculated-umap-slide:
+Observations @fig-precalculated-umap-slide:
 
 - Both samples show same UMAP shape
 - There appears to be a different batch effect
 
 ```{r}
-#| label: precalc-umap-disease-state
+#| label: fig-precalc-umap-disease-state
 #| fig-cap: "UMAP visualization colored by cell disease state."
 
 plot <- plots$render_umap_plot(
@@ -623,14 +626,14 @@ ggplot2$ggsave(file.path(out_dir, "precalc_umap_disease_state.svg"))
 plot
 ```
 
-Observations @precalc-umap-disease-state:
+Observations @fig-precalc-umap-disease-state:
 
 - Clusters according to disease state
   - ACLF cells on top and bottom cluster
 - Another stronger batch effect
 
 ```{r}
-#| label: precalc-umap-cell-type
+#| label: fig-precalc-umap-cell-type
 #| fig-cap: "UMAP visualization colored by nanoString annotated cell types."
 
 plot <- plots$render_umap_plot(
@@ -646,7 +649,7 @@ ggplot2$ggsave(file.path(out_dir, "precalc_umap_cell_type.svg"))
 plot
 ```
 
-Observations @precalc-umap-cell-type:
+Observations @fig-precalc-umap-cell-type:
 
 - Cell type does not appear to be batch effect
   - **Batch effect needs to be removed**
@@ -685,7 +688,7 @@ n_fovs
 ### Plots
 
 ```{r}
-#| label: plot-density-disease-state
+#| label: fig-density-disease-state
 #| fig-cap: "Density plot of counts per cell grouped by disease state."
 
 # Counts per cell with disease state information
@@ -711,7 +714,7 @@ ggplot2$ggsave(file.path(out_dir, "density_cell_counts_per_disease_state.svg"))
 plot
 ```
 
-Observations @plot-density-disease-state:
+Observations @fig-density-disease-state:
 
 - Healthy very positively skewed
   - Highest peak
@@ -720,7 +723,7 @@ Observations @plot-density-disease-state:
 - All have outliers
 
 ```{r}
-#| label: plot-density-cells-per-fov
+#| label: fig-density-cells-per-fov
 #| fig-cap: "Horizontal bar plot of cell counts per FOV, grouped by dataset."
 
 # Create cells per FOV distribution data
@@ -748,7 +751,7 @@ ggplot2$ggsave(file.path(out_dir, "bars_cells_per_fov.svg"))
 plot
 ```
 
-Observations @plot-density-cells-per-fov:
+Observations @fig-density-cells-per-fov:
 
 - Reveals heterogeneous count distributions
   - Cells are not similar distributed across FOVs in the dataset
