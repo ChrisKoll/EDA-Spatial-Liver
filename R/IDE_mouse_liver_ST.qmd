@@ -1,5 +1,7 @@
 ---
 title: "IDE Spatial Mouse Liver Transriptomics"
+subtitle: > 
+  Initial Data Exploration Across Two Spatial Transcriptomics Seurat Objects
 date: today
 date-format: "DD.MM.YYYY"
 author: 
@@ -16,9 +18,7 @@ copyright:
   holder: Christian Kolland
   year: 2025
 title-block-banner: "#1D2951"
-editor: 
-  markdown: 
-    wrap: 80
+toc: true
 ---
 
 ```{r}
