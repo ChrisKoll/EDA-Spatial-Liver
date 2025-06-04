@@ -1,0 +1,209 @@
+---
+title: "Seurat to AnnData Conversion"
+subtitle: "Extraction of relevant data from the Seurat object"
+date: today
+date-format: "DD.MM.YYYY"
+author: 
+  - name: Christian Kolland
+    email: christian.kolland@stud.uni-frankfurt.de
+    affiliation:
+      - name: Goethe University Frankfurt
+        city: Frankfurt am Main
+abstract: >
+  Extract the relevant data from the merged liver Seurat object to prepare it 
+  for conversion into an AnnData object in Python. This includes the expression 
+  matrix as well as metadata such as condition, field of view (FOV), and other 
+  relevant annotations.
+copyright: 
+  holder: Christian Kolland
+  year: 2025
+title-block-banner: "#1D2951"
+---
+
+```{r}
+#| label: load-packages
+#| echo: false
+#| include: false
+
+box::use(
+  arrow[write_feather],
+  dplyr[mutate, select],
+  glue[glue],
+  Matrix[writeMM],
+  readr[write_csv],
+  SeuratObject[LoadSeuratRds],
+  tibble[tibble]
+)
+```
+
+## Run Information
+
+```{r}
+#| label: run-information
+#| echo: false
+
+# Input directory
+data_dir <- "../data/Seurat_objects"
+
+# Output directories
+run_dir <- glue("run_{format(Sys.time(), '%Y-%m-%d_%H-%M')}")
+out_dir <- glue("../output/data/Seurat_to_h5ad/{run_dir}")
+
+# Ensure the output directory exists
+if (!dir.exists(out_dir)) {
+  dir.create(out_dir, recursive = TRUE)
+}
+
+message(glue("
+📂 Input Seurat objects from: {data_dir}
+💾 Outputs will be saved in: {out_dir}
+"))
+```
+
+## Load the Data
+
+```{r}
+#| label: load-data
+
+sobj_liver_merged <- LoadSeuratRds(file.path(
+  data_dir,
+  "Seurat_liver_merged.Rds"
+))
+
+sobj_liver_merged
+```
+
+## Counts
+
+To efficiently store the counts in their sparse representation, they are saved 
+in the **Matrix Market (MM) format**. The data is stored in an `.mtx` file using the 
+coordinate format, where only non-zero values are stored along with their 
+respective row and column indices in the matrix.
+
+For more details on the **Matrix Market format**, refer to the 
+[official documentation](https://citeseerx.ist.psu.edu/document?repid=rep1&type=pdf&doi=5bce84be62e12ffe4d8a63fd118e4cd42f512807).
+
+```{r}
+#| label: extract-counts
+
+# Save sparse counts
+counts <- sobj_liver_merged@assays$Nanostring$counts
+
+# Write to format that keeps sparsity in tact
+write_out <- writeMM(counts, file.path(out_dir, "Seurat_counts.mtx"))
+
+# Print for visual confirmation
+counts |> head(10)
+```
+
+### Sanity Checks
+
+```{r}
+#| label: sanity-checks-counts
+
+sanity_checks <- tibble(
+  n_rows = nrow(counts), # Matrix rows
+  n_cols = ncol(counts), # Matrix columns
+  count_sum = sum(counts), # Sum of counts
+  spotcheck_1 = list(as.matrix(counts[1:5, 1:5])), # Random count spots
+  spotcheck_2 = list(as.matrix(counts[483:487, 33890:33894])),
+  spotcheck_3 = list(as.matrix(counts[966:970, 67781:67785]))
+)
+```
+
+## Extract Row and Column Names
+
+Row and column names are not stored inside the `.mtx` file created above. 
+Therefor this information needs to be stored separately.
+
+### Row Names
+
+```{r}
+#| label: extract-row-names
+
+# Save row names to csv
+write_csv(
+  as.data.frame(rownames(counts)),
+  file.path(out_dir, "Seurat_row_names.csv"),
+  col_names = FALSE
+)
+
+as.data.frame(rownames(counts)) |> head(10)
+```
+
+### Column Names
+
+```{r}
+#| label: extract-col-names
+#| 
+# Save column names to csv
+write_csv(
+  as.data.frame(colnames(counts)),
+  file.path(out_dir, "Seurat_col_names.csv"),
+  col_names = FALSE
+)
+
+as.data.frame(colnames(counts)) |> head(10)
+```
+
+### Sanity Checks
+
+```{r}
+#| label: sanity-checks-rows-cols
+
+sanity_checks <- sanity_checks |>
+  mutate(
+    row_names = list(rownames(counts)),
+    col_names = list(colnames(counts))
+  )
+```
+
+## Extract Metadata
+
+Identify if these values are identical.
+
+```{r}
+#| label: compare-tissue-RunTissueName
+
+tissues <- sobj_liver_merged@meta.data$tissue
+run_tissues <- sobj_liver_merged@meta.data$Run_Tissue_name
+identical(tissues, run_tissues)
+```
+
+```{r}
+#| label: extract-metadata
+
+# Store metadata as
+metadata <- sobj_liver_merged@meta.data |>
+  select(
+    nCount_Nanostring,
+    nFeature_Nanostring,
+    cell_ID,
+    disease_state,
+    Slide_name,
+    tissue,
+    fov
+  )
+
+# Write to specified output directory
+write_csv(metadata, file.path(out_dir, "Seurat_metadata.csv"))
+
+metadata |> head(10)
+```
+
+### Saniy Checks
+
+```{r}
+#| label: sanity-checks-metadata
+
+sanity_checks <- sanity_checks |> 
+  mutate(
+    n_fovs = length(unique(metadata$fov)), # Must be 90 (45 for each slide)
+    spotcheck_4 = list(metadata[1:5,]),
+    spotcheck_5 = list(metadata[33890:33894,]),
+    spotcheck_6 = list(metadata[67781:67785,])
+  )
+
+# Store sanity checks as .feather to make them usable in Python
+write_feather(sanity_checks, file.path(out_dir, "sanity_checks.feather"))
+```
