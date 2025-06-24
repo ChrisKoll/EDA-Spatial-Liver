@@ -55,7 +55,7 @@ def convert_training_data():
     #     Prepare data
     # --------------------
 
-    logger.info("Start data integration")
+    logger.info("Start integration of training data...")
 
     # CellRanger outputs in directory
     # Stored as `.mtx` format
@@ -67,12 +67,12 @@ def convert_training_data():
     # Load barcodes
     with gzip.open(data_dir / "barcodes.tsv.gz", "rt") as f:
         barcodes = [line.strip() for line in f]
-    logger.info(f"Successfully loaded sample names.")
+    logger.info(f"Successfully loaded {len(barcodes)} observations.")
 
     # Load gene names
     with gzip.open(data_dir / "features.tsv.gz", "rt") as f:
         genes = [line.strip() for line in f]
-    logger.info(f"Successfully loaded feature names.")
+    logger.info(f"Successfully loaded {len(genes)} feature names.")
 
     # Construct AnnData manually
     adata = sc.AnnData(X=matrix.T)
@@ -84,19 +84,29 @@ def convert_training_data():
     #     Add annotation
     # ----------------------
 
-    annotation = pd.read_csv(anno_file)
+    # For this special case: All values not found in the annotation did not pass the QC
+    # Remove them for better training results
+    obs_anno = pd.read_csv(anno_file)
+    logger.debug(f"Annotation matrix loaded successfully.\n{obs_anno}")
 
-    # Make sure the cell barcodes in annotation and adata match and are in the same order
-    # Set the index of annotation to the cell column
-    annotation = annotation.set_index("cell")
+    # Set cell column as index that can be alligned
+    obs_anno = obs_anno.set_index("cell")
 
     # Reorder annotation to match adata.obs_names
-    annotation = annotation.loc[adata.obs_names]
-    logger.debug(f"Annotation matrix loaded successfully.\n{annotation}")
+    obs_anno = obs_anno.reindex(adata.obs_names)
 
     # Assign annotation as observations to adata
-    adata.obs = annotation
+    adata.obs = obs_anno
     logger.info(f"Annotation matrix added as observations to AnnData object.\n{adata}")
+
+    # Save number of obs for user ouput
+    init_obs = adata.n_obs
+    # Drop all samples that did not pass the QC
+    obs_mask = ~adata.obs.isna().all(axis=1)
+    adata = adata[obs_mask].copy()
+    logger.info(
+        f"Removed low quality samples. Reduced number from {init_obs} to {adata.n_obs}."
+    )
 
     # ------------
     #     Save
