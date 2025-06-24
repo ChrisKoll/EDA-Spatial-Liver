@@ -6,7 +6,7 @@ import scanpy as sc
 import pandas as pd
 from scipy import io
 
-from .utils import utils
+from utils import utils
 
 
 def convert_training_data():
@@ -21,7 +21,7 @@ def convert_training_data():
     )
 
     parser.add_argument(
-        "--data", "-d", type=str, required=True, help="Path to the data file."
+        "--data", "-d", type=str, required=True, help="Path to the data directory."
     )
     parser.add_argument(
         "--annotation",
