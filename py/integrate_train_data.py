@@ -62,17 +62,17 @@ def convert_training_data():
     matrix = io.mmread(
         data_dir / "matrix.mtx.gz"
     ).tocsc()  # Converst to csr when transposed
-    logger.info(f"Loaded data matrix of shape: {matrix.shape}")
+    logger.info(f"📁 Loaded data matrix of shape: {matrix.shape}")
 
     # Load barcodes
     with gzip.open(data_dir / "barcodes.tsv.gz", "rt") as f:
         barcodes = [line.strip() for line in f]
-    logger.info(f"Successfully loaded {len(barcodes)} observations.")
+    logger.info(f"📁 Loaded {len(barcodes)} observations.")
 
     # Load gene names
     with gzip.open(data_dir / "features.tsv.gz", "rt") as f:
         genes = [line.strip() for line in f]
-    logger.info(f"Successfully loaded {len(genes)} feature names.")
+    logger.info(f"📁 Loaded {len(genes)} feature names.")
 
     # Construct AnnData manually
     adata = sc.AnnData(X=matrix.T)
@@ -87,7 +87,7 @@ def convert_training_data():
     # For this special case: All values not found in the annotation did not pass the QC
     # Remove them for better training results
     obs_anno = pd.read_csv(anno_file)
-    logger.debug(f"Annotation matrix loaded successfully.\n{obs_anno}")
+    logger.debug(f"📁 Annotation matrix loaded successfully.\n{obs_anno}")
 
     # Set cell column as index that can be alligned
     obs_anno = obs_anno.set_index("cell")
@@ -115,7 +115,6 @@ def convert_training_data():
     adata_path = results_dir / f"{results_dir.parts[-1]}.h5ad"
     adata.write(adata_path)
     logger.info(f"💾 Saved AnnData object to: {adata_path}")
-    logger.info(f"Finished!")
 
     # ----------
     #     QC
@@ -130,8 +129,11 @@ def convert_training_data():
         ["n_genes_by_counts", "total_counts"],
         jitter=0.4,
         multi_panel=True,
-        save="quality_metrics.png",
+        save="_quality_metrics.png",
     )
+
+    logger.info("Created QC plot.")
+    logger.info(f"Finished!")
 
 
 if __name__ == "__main__":
