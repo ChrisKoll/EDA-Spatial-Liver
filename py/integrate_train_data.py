@@ -127,7 +127,6 @@ def convert_training_data():
     sc.pl.violin(
         adata,
         ["n_genes_by_counts", "total_counts"],
-        jitter=0.4,
         multi_panel=True,
         save="_quality_metrics.png",
     )
