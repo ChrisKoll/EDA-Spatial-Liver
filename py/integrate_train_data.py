@@ -43,7 +43,7 @@ def convert_training_data():
 
     # Create directory for results
     now = datetime.now().strftime("%Y-%m-%d_%H-%M")
-    results_dir = out_dir / now
+    results_dir = out_dir / f"run_{now}"
     results_dir.mkdir(parents=True, exist_ok=True)
 
     # Setup logging
