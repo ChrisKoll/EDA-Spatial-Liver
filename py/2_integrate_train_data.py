@@ -176,7 +176,7 @@ def preprocess_data(adata: AnnData, results_dir: Path, logger: Logger) -> AnnDat
     return adata
 
 
-def run_qc(adata: AnnData, results_dir: Path):
+def run_qc(adata: AnnData, results_dir: Path, logger: Logger):
     """Generate and save quality control metrics and reports.
 
     Creates separate files containing cell-level and gene-level quality metrics
