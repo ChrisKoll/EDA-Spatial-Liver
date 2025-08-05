@@ -166,6 +166,7 @@ def preprocess_data(adata: AnnData, results_dir: Path, logger: Logger) -> AnnDat
     gene_sparsity = 1 - (csc_matrix.getnnz(axis=0) / adata.n_obs)
     adata.var["sparsity"] = gene_sparsity
     logger.info("Added gene specific metrics to 'var'")
+    logger.info(f"{adata}")
 
     # Save processed AnnData object to disk
     # Use directory name as filename for consistency
