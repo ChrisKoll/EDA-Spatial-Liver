@@ -62,7 +62,7 @@ def setup_logging(path_to_log: str) -> logging.Logger:
 
     # Custom formatter
     formatter = logging.Formatter(
-        "%(asctime)s || LEVEL: %(levelname)s |> %(message)s",
+        "[%(levelname)s] %(asctime)s |> %(message)s",
         datefmt="%Y-%m-%d %H:%M:%S",
     )
 
