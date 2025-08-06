@@ -6,8 +6,25 @@
 
 # Input and output data
 # File sizes are too large
-/data/*
-/output/data/*
+data/cell_type_annotation/*
+!data/cell_type_annotation/README
+
+data/Seurat_objects/*
+data/training_data/*
+output/data/h5ad_objects/liver_merged.h5ad
+output/data/h5ad_objects/original_liver_merged.h5ad
+output/data/Seurat_objects/*
+output/data/Seurat_to_h5ad/Seurat_col_names.csv
+output/data/Seurat_to_h5ad/Seurat_counts.mtx
+output/data/Seurat_to_h5ad/Seurat_metadata.csv
+output/data/Seurat_to_h5ad/Seurat_row_names.csv
+output/data/ST_data_integration
+output/data/train_data_integration/healthy_mouse_liver_scRNAseq/healthy_mouse_liver_scRNAseq.h5ad
+output/data/train_data_integration/NAFLD_mouse_liver_scRNAseq/NAFLD_mouse_liver_scRNAseq.h5ad
+
+!data/Seurat_objects/README
+!data/training_data/README
+!output/data/Seurat_objects/README
 
 # ---------
 #     R
