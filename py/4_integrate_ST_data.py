@@ -111,8 +111,8 @@ def main():
     args = parser.parse_args()
 
     # Validate and resolve file paths
-    data_file = utils.assert_path(args.adata, is_dir=False)
-    out_dir = utils.assert_path(args.out_dir, is_dir=True)
+    data_file = utils.assert_path(args.adata, assert_dir=False)
+    out_dir = utils.assert_path(args.out_dir, assert_dir=True)
 
     # Create run directory
     now = datetime.datetime.now().strftime(TIMESTAMP_FORMAT)
