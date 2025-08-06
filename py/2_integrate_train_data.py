@@ -5,23 +5,30 @@ barcodes.tsv.gz, features.tsv.gz) to AnnData format, preprocess the data, and ge
 quality control metrics.
 """
 
+# Standard imports
 import argparse
 from datetime import datetime
 import gzip
 from logging import Logger
 from pathlib import Path
 
+# Third-party imports
 from anndata import AnnData
 import scanpy as sc
 import pandas as pd
 from scipy import io
 
+# Local imports
 from utils import utils
+
+
+__license__ = "MIT"
+__copyright__ = "Copyright (c) 2025 Christian Kolland"
 
 
 # Constants
 DATETIME_FORMAT = "%Y-%m-%d_%H-%M"
-LOG_FILENAME = "train_data_integration.log"
+LOGFILE_NAME = "train_data_integration.log"
 MATRIX_FILENAME = "matrix.mtx.gz"
 BARCODES_FILENAME = "barcodes.tsv.gz"
 FEATURES_FILENAME = "features.tsv.gz"
@@ -172,7 +179,7 @@ def preprocess_data(adata: AnnData, results_dir: Path, logger: Logger) -> AnnDat
     # Use directory name as filename for consistency
     adata_path = results_dir / f"{results_dir.parts[-1]}.h5ad"
     adata.write(adata_path, compression="gzip")
-    logger.info(f"💾 Saved AnnData object to: '{adata_path}'.")
+    logger.info(f"💾 Saved AnnData object to: '{adata_path}'")
 
     return adata
 
@@ -206,7 +213,7 @@ def run_qc(adata: AnnData, results_dir: Path, logger: Logger):
 
     save_path = results_dir / f"{results_dir.parts[-1]}_sample_metrics.feather"
     sample_metrics.to_feather(save_path)
-    logger.info(f"💾 Saved sample specific metrics in: '{save_path}'.")
+    logger.info(f"💾 Saved sample specific metrics in: '{save_path}'")
 
     # Create and save gene-level metrics DataFrame
     gene_metrics = pd.DataFrame(
@@ -219,12 +226,12 @@ def run_qc(adata: AnnData, results_dir: Path, logger: Logger):
 
     save_path = results_dir / f"{results_dir.parts[-1]}_gene_metrics.feather"
     gene_metrics.to_feather(save_path)
-    logger.info(f"💾 Saved gene specific metrics in: '{save_path}'.")
+    logger.info(f"💾 Saved gene specific metrics in: '{save_path}'")
 
     # Log basic data statistics for quality assessment
     logger.info("---")
-    logger.info(f"Range of counts: {adata.X.min()} - {adata.X.max()}.")
-    logger.info(f"Mean expression: {adata.X.mean()}.")
+    logger.info(f"Range of counts: {adata.X.min()} - {adata.X.max()}")
+    logger.info(f"Mean expression: {adata.X.mean()}")
     logger.info("---")
 
     logger.info(f"Finished!")
@@ -238,7 +245,7 @@ def main():
     """
     # Setup argument parser
     parser = argparse.ArgumentParser(
-        description="Convert CellRanger mouse liver training data to AnnData."
+        description="Convert CellRanger mouse liver training data to AnnData"
     )
 
     parser.add_argument(
@@ -246,20 +253,20 @@ def main():
         "-d",
         type=str,
         required=True,
-        help="Path to the data directory containing CellRanger output files.",
+        help="Path to the data directory containing CellRanger output files",
     )
     parser.add_argument(
         "--output",
         "-o",
         type=str,
         required=True,
-        help="Path to the output directory where results will be saved.",
+        help="Path to the output directory where results will be saved",
     )
     parser.add_argument(
         "--annotation",
         "-a",
         type=str,
-        help="Path to the data annotation file. Must be '.csv' format.",
+        help="Path to the data annotation file (.csv)",
     )
 
     # Parse command line arguments
@@ -280,7 +287,7 @@ def main():
     results_dir.mkdir(parents=True, exist_ok=True)
 
     # Setup logging
-    logging_path = results_dir / LOG_FILENAME
+    logging_path = results_dir / LOGFILE_NAME
     logger = utils.setup_logging(logging_path)
     logger.info("✅ Setup complete.")
     logger.info("----")

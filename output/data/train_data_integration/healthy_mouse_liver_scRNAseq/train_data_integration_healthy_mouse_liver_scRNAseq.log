@@ -33,11 +33,11 @@ AnnData object with n_obs × n_vars = 389056 × 31053
     obs: 'UMAP_1', 'UMAP_2', 'cluster', 'annot', 'sample', 'digest', 'typeSample', 'counts_per_sample', 'sparsity'
     var: 'counts_per_gene', 'sparsity'
     layers: 'raw', 'log1p'
-[INFO] 2025-08-05 18:13:01 |> 💾 Saved AnnData object to: 'output/data/train_data_integration/run_2025-08-05_18-07/run_2025-08-05_18-07.h5ad'.
-[INFO] 2025-08-05 18:13:01 |> 💾 Saved sample specific metrics in: 'output/data/train_data_integration/run_2025-08-05_18-07/run_2025-08-05_18-07_sample_metrics.feather'.
-[INFO] 2025-08-05 18:13:01 |> 💾 Saved gene specific metrics in: 'output/data/train_data_integration/run_2025-08-05_18-07/run_2025-08-05_18-07_gene_metrics.feather'.
+[INFO] 2025-08-05 18:13:01 |> 💾 Saved AnnData object to: 'output/data/train_data_integration/run_2025-08-05_18-07/run_2025-08-05_18-07.h5ad'
+[INFO] 2025-08-05 18:13:01 |> 💾 Saved sample specific metrics in: 'output/data/train_data_integration/run_2025-08-05_18-07/run_2025-08-05_18-07_sample_metrics.feather'
+[INFO] 2025-08-05 18:13:01 |> 💾 Saved gene specific metrics in: 'output/data/train_data_integration/run_2025-08-05_18-07/run_2025-08-05_18-07_gene_metrics.feather'
 [INFO] 2025-08-05 18:13:01 |> ---
-[INFO] 2025-08-05 18:13:02 |> Range of counts: 0 - 3716.
-[INFO] 2025-08-05 18:14:10 |> Mean expression: 0.18488074737916385.
+[INFO] 2025-08-05 18:13:02 |> Range of counts: 0 - 3716
+[INFO] 2025-08-05 18:14:10 |> Mean expression: 0.18488074737916385
 [INFO] 2025-08-05 18:14:10 |> ---
 [INFO] 2025-08-05 18:14:10 |> Finished!
