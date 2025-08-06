@@ -152,7 +152,7 @@ def preprocess_data(adata: AnnData, results_dir: Path, logger: Logger) -> AnnDat
     # Sparsity: fraction of genes with zero expression in each cell
     sample_sparsity = 1 - (adata.X.getnnz(axis=1) / adata.n_vars)
     adata.obs["sparsity"] = sample_sparsity
-    logger.info("Added sample specific metrics to 'obs'")
+    logger.info("Added sample specific metrics to 'obs'.")
 
     # Calculate gene-level (variable) quality metrics
     # Convert to CSC format for efficient column operations
@@ -165,14 +165,14 @@ def preprocess_data(adata: AnnData, results_dir: Path, logger: Logger) -> AnnDat
     # Gene sparsity: fraction of cells with zero expression for each gene
     gene_sparsity = 1 - (csc_matrix.getnnz(axis=0) / adata.n_obs)
     adata.var["sparsity"] = gene_sparsity
-    logger.info("Added gene specific metrics to 'var'")
+    logger.info("Added gene specific metrics to 'var'.")
     logger.info(f"{adata}")
 
     # Save processed AnnData object to disk
     # Use directory name as filename for consistency
     adata_path = results_dir / f"{results_dir.parts[-1]}.h5ad"
     adata.write(adata_path, compression="gzip")
-    logger.info(f"💾 Saved AnnData object to: {adata_path}")
+    logger.info(f"💾 Saved AnnData object to: '{adata_path}'.")
 
     return adata
 
@@ -206,7 +206,7 @@ def run_qc(adata: AnnData, results_dir: Path, logger: Logger):
 
     save_path = results_dir / f"{results_dir.parts[-1]}_sample_metrics.feather"
     sample_metrics.to_feather(save_path)
-    logger.info(f"💾 Saved sample specific metrics in: '{save_path}'")
+    logger.info(f"💾 Saved sample specific metrics in: '{save_path}'.")
 
     # Create and save gene-level metrics DataFrame
     gene_metrics = pd.DataFrame(
@@ -219,7 +219,7 @@ def run_qc(adata: AnnData, results_dir: Path, logger: Logger):
 
     save_path = results_dir / f"{results_dir.parts[-1]}_gene_metrics.feather"
     gene_metrics.to_feather(save_path)
-    logger.info(f"💾 Saved gene specific metrics in: '{save_path}'")
+    logger.info(f"💾 Saved gene specific metrics in: '{save_path}'.")
 
     # Log basic data statistics for quality assessment
     logger.info("---")
