@@ -141,7 +141,7 @@ def main():
 
     # Create backup of unprocessed data for safety
     backup_file = run_dir / f"unprocessed_{data_file.name}"
-    adata.write(backup_file)
+    adata.write(backup_file, compression="gzip")
     logger.debug(f"Saved unprocessed AnnData object as fallback: '{backup_file}'")
 
     # scVI needs raw counts as input!
@@ -198,7 +198,7 @@ def main():
 
     # Save the updated AnnData object with all results
     adata_file = run_dir / data_file.name
-    adata.write(adata_file)
+    adata.write(adata_file, compression="gzip")
     logger.info(f"💾 Saved AnnData object to: '{adata_file}'")
 
     logger.info("🎉 Finished!")
