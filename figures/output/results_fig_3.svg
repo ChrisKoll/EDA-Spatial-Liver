@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <svg
-   width="210mm"
-   height="158.49417mm"
-   viewBox="0 0 595.2756 449.27481"
+   width="160mm"
+   height="120.75747mm"
+   viewBox="0 0 453.54331 342.30463"
    version="1.1"
    id="svg316"
-   sodipodi:docname="density_sample_counts.svg"
+   sodipodi:docname="results_fig_3.svg"
    xml:space="preserve"
    inkscape:version="1.2 (dc2aedaf03, 2022-05-15)"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
@@ -26,12 +26,12 @@
      inkscape:deskcolor="#505050"
      inkscape:document-units="pt"
      showgrid="false"
-     inkscape:zoom="0.44976128"
-     inkscape:cx="474.69627"
-     inkscape:cy="-35.574428"
+     inkscape:zoom="1.272117"
+     inkscape:cx="324.26263"
+     inkscape:cy="282.20675"
      inkscape:window-width="1920"
      inkscape:window-height="1009"
-     inkscape:window-x="3832"
+     inkscape:window-x="1912"
      inkscape:window-y="-8"
      inkscape:window-maximized="1"
      inkscape:current-layer="svg316" /><metadata
@@ -379,7 +379,7 @@
          id="path311" /></clipPath></defs><g
      id="g5020"
      inkscape:label="Figure"
-     transform="matrix(0.63783634,0,0,0.63783634,141.52702,14.997592)"><g
+     transform="matrix(0.48597055,0,0,0.48597055,107.83011,11.426737)"><g
        id="figure_1"
        transform="translate(-221.3861,-23.013225)"
        inkscape:label="Figure A"><g
