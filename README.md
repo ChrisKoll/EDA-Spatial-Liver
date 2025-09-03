@@ -1,7 +1,4 @@
-**Master’s Thesis Project – Bioinformatics**  
-Goethe University Frankfurt
-
-**Thesis Title:**  
+**Master’s Thesis Project – Bioinformatics** (Goethe University Frankfurt):
 *Neural Network-Based Gene Expression Imputation for Subcellular Spatial Transcriptomics Data*
 
 For the companion repository focusing on model training and evaluation, see: [Liver-Expression-Imputation](https://github.com/CKolland/Liver-Expression-Imputation).
@@ -31,7 +28,6 @@ The project workflow is organized into two main parts:
 This hybrid approach leverages both *Seurat* (*R*) and *scverse* (*Python*), combining their strengths for high-resolution analysis of spatial transcriptomics data.
 
 >⚠️ Note: Large raw and intermediate data files have been excluded from this repository due to size limitations. They can be provided upon request.
-
 
 ---
 
@@ -77,7 +73,7 @@ renv::restore()
 ### Setup Python Environment
 
 ```bash
-mamba env create -n <env_name> -f environment.yml
+mamba env create -n <env_name> -f py_env.yml
 mamba activate <env_name>
 ```
 
