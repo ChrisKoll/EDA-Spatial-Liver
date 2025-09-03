@@ -1,7 +1,7 @@
-**Master’s Thesis Project – Bioinformatics**
+**Master’s Thesis Project – Bioinformatics**  
 Goethe University Frankfurt
 
-**Thesis Title:**
+**Thesis Title:**  
 *Neural Network-Based Gene Expression Imputation for Subcellular Spatial Transcriptomics Data*
 
 For the companion repository focusing on model training and evaluation, see: [Liver-Expression-Imputation](https://github.com/CKolland/Liver-Expression-Imputation).
@@ -10,8 +10,6 @@ For the companion repository focusing on model training and evaluation, see: [Li
 
 [![Python Version](https://img.shields.io/badge/python-3.10%2B-blue.svg)](https://www.python.org/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-
----
 
 ## 📂 Project Structure
 
@@ -28,6 +26,13 @@ The project workflow is organized into two main parts:
     - Preprocessing and preparation for neural network–based model training
     - Integration with *scVI-tools* for representation learning and harmonization
     - Clustering and cell type annotation within the scverse framework
+
+This hybrid approach leverages both *Seurat* (*R*) and *scverse* (*Python*), combining their strengths for high-resolution analysis of spatial transcriptomics data.
+
+>⚠️ Note: Large raw and intermediate data files have been excluded from this repository due to size limitations. They can be provided upon request.
+
+
+---
 
 ```
 EDA-Spatial-Liver/
@@ -49,10 +54,6 @@ EDA-Spatial-Liver/
     ├── 5_cell_type_annotation.ipynb
     └── 6_export_results.ipynb
 ```
-
-This hybrid approach leverages both *Seurat* (*R*) and *scverse* (*Python*), combining their strengths for high-resolution analysis of spatial transcriptomics data.
-
->⚠️ Note: Large raw and intermediate data files have been excluded from this repository due to size limitations. They can be provided upon request.
 
 ---
 
@@ -79,17 +80,13 @@ mamba env create -n <env_name> -f environment.yml
 mamba activate <env_name>
 ```
 
----
-
 ## 📜 License
 
 This project is licensed under the MIT License.   
 See [LICENSE](LICENSE) for details.
 
----
-
 ## 📬 Contact
 
-For questions, requests (including access to large data files), or feedback, please contact the maintainer directly.
-
 *Maintainer:* Christian Kolland ([Schulz Lab](https://schulzlab.github.io/))
+
+For questions, requests (including access to large data files), or feedback, please contact the maintainer directly.
