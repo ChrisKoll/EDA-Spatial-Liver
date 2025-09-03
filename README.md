@@ -1,9 +1,19 @@
 # EDA-Spatial-Liver
 
-[![Python Version](https://img.shields.io/badge/python-3.8%2B-blue.svg)](https://www.python.org/)
+[![Python Version](https://img.shields.io/badge/python-3.10%2B-blue.svg)](https://www.python.org/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
-Exploratory data analysis of a spatial liver dataset.
+---
+
+🧬 **This repository contains code for a master thesis project in Bioinformatics at Goethe University Frankfurt.**
+
+## Thesis Title
+
+**Neural Network-Based Gene Expression Imputation for Subcellular Spatial Transcriptomics Data**
+
+---
+
+📦 **This is one part of the thesis project. For the companion repository, see: [Link to be added]**
 
 ---
 
@@ -29,7 +39,8 @@ Exploratory data analysis of a spatial liver dataset.
 
 **EDA-Spatial-Liver**  
 A toolkit for assembling, processing, and exploring spatial transcriptomics data from liver tissue.  
-It streamlines the creation of AnnData (`.h5ad`) objects from raw data, enabling efficient downstream analysis and visualization.
+It streamlines the creation of AnnData (`.h5ad`) objects from raw data, enabling efficient downstream analysis and visualization.  
+This project supports the thesis by providing robust data preprocessing and exploratory workflows for spatial transcriptomics.
 
 ---
 
@@ -48,7 +59,7 @@ It streamlines the creation of AnnData (`.h5ad`) objects from raw data, enabling
 
 ### Prerequisites
 
-- Python 3.8 or higher
+- Python 3.10 or higher
 - pip
 - Jupyter Notebook
 
@@ -96,6 +107,7 @@ sc.pl.spatial(adata, color="GeneA")
 
 - `requirements.txt` for dependencies
 - Paths and settings are set within notebook cells or Python scripts
+- No environment variables required by default
 
 ---
 
@@ -128,11 +140,28 @@ pytest
 
 ## 7. Additional Sections
 
+### Screenshots
+
+<!-- Add screenshots or demo GIFs here if available -->
+<!-- Example: ![Spatial Gene Expression Visualization](docs/screenshots/spatial_plot_example.png) -->
+
 ### License
 
 This project is licensed under the MIT License. See [LICENSE](LICENSE) for details.
 
+### Changelog
+
+<!-- Add changelog or version history if available -->
+<!-- Example: See [CHANGELOG.md](CHANGELOG.md) for version history and updates. -->
+
 ### Acknowledgments
 
 - Built with scanpy, anndata, and the Python scientific stack.
-- Inspired by open-source spatial transcriptomics
+- Inspired by open-source spatial transcriptomics analysis workflows.
+- Special thanks to the Bioinformatics group at Goethe University Frankfurt.
+
+---
+
+## Contact
+
+For questions or feedback, please open an issue or contact the maintainer at
