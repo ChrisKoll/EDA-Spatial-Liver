@@ -1,4 +1,4 @@
-**Master’s Thesis Project – Bioinformatics** (Goethe University Frankfurt):
+**Master’s Thesis Project – Bioinformatics** (Goethe University Frankfurt):  
 *Neural Network-Based Gene Expression Imputation for Subcellular Spatial Transcriptomics Data*
 
 For the companion repository focusing on model training and evaluation, see: [Liver-Expression-Imputation](https://github.com/CKolland/Liver-Expression-Imputation).
