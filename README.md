@@ -1,3 +1,11 @@
+**Master’s Thesis Project – Bioinformatics**
+Goethe University Frankfurt
+
+**Thesis Title:**
+*Neural Network-Based Gene Expression Imputation for Subcellular Spatial Transcriptomics Data*
+
+For the companion repository focusing on model training and evaluation, see: [Liver-Expression-Imputation](https://github.com/CKolland/Liver-Expression-Imputation).
+
 # EDA-Spatial-Liver
 
 [![Python Version](https://img.shields.io/badge/python-3.10%2B-blue.svg)](https://www.python.org/)
@@ -5,163 +13,83 @@
 
 ---
 
-🧬 **This repository contains code for a master thesis project in Bioinformatics at Goethe University Frankfurt.**
+## 📂 Project Structure
 
-## Thesis Title
+The project workflow is organized into two main parts:
 
-**Neural Network-Based Gene Expression Imputation for Subcellular Spatial Transcriptomics Data**
+1. Exploratory Data Analysis (EDA) in *R*
 
----
+    - Initial inspection and quality control of spatial transcriptomics datasets
+    - Merging of two *Seurat* objects for integrated analysis
+    
+2. Transition to *Python* & Advanced Analysis
 
-📦 **This is one part of the thesis project. For the companion repository, see: [Link to be added]**
+    - Conversion of merged *Seurat* objects into *AnnData* format for use in *Python*
+    - Preprocessing and preparation for neural network–based model training
+    - Integration with *scVI-tools* for representation learning and harmonization
+    - Clustering and cell type annotation within the scverse framework
 
----
+```
+EDA-Spatial-Liver/
+├── R/
+│   ├── 1_IDE_mouse_liver_ST.qmd
+│   ├── 2_merge_ST_Seurat_objects.qmd
+│   ├── 3_EDA_mouse_liver_ST.qmd
+│   ├── 4_extract_from_Seurat.qmd
+│   └── helpers/
+│       ├── render_plots.R
+│       └── render_tables.R
+└── py/
+    ├── 1_assemble_h5ad.ipynb
+    ├── 2_integrate_train_data.py
+    ├── 2_visualize_train_integration.ipynb
+    ├── 3_update_h5ad.ipynb
+    ├── 4_integrate_ST_data.py
+    ├── 4_visualize_ST_integration.ipynb
+    ├── 5_cell_type_annotation.ipynb
+    └── 6_export_results.ipynb
+```
 
-## Project Structure Analysis
+This hybrid approach leverages both *Seurat* (*R*) and *scverse* (*Python*), combining their strengths for high-resolution analysis of spatial transcriptomics data.
 
-**Main Programming Language(s) and Frameworks:**  
-- Python (Jupyter Notebooks, scanpy, anndata, pandas, numpy, matplotlib)
-
-**Project Type:**  
-- Data analysis toolkit for spatial transcriptomics, focused on assembling and exploring `.h5ad` (AnnData) files.
-
-**Dependencies and Package Managers:**  
-- Dependencies managed via `pip` (see `requirements.txt`).
-- Jupyter Notebook for interactive analysis.
-
-**Build Tools and Configuration Files:**  
-- No build tools detected (not required for notebooks).
-- Configuration via Python scripts and notebook cells.
-
----
-
-## 1. Project Title and Description
-
-**EDA-Spatial-Liver**  
-A toolkit for assembling, processing, and exploring spatial transcriptomics data from liver tissue.  
-It streamlines the creation of AnnData (`.h5ad`) objects from raw data, enabling efficient downstream analysis and visualization.  
-This project supports the thesis by providing robust data preprocessing and exploratory workflows for spatial transcriptomics.
-
----
-
-## 2. Features
-
-- Assemble AnnData objects from raw spatial transcriptomics files
-- Integrate count matrices, spatial coordinates, and metadata
-- Quality control and preprocessing workflows
-- Interactive exploratory data analysis in Jupyter Notebooks
-- Visualization of spatial gene expression patterns
-- Modular Python scripts for reproducibility
+>⚠️ Note: Large raw and intermediate data files have been excluded from this repository due to size limitations. They can be provided upon request.
 
 ---
 
-## 3. Installation
-
-### Prerequisites
-
-- Python 3.10 or higher
-- pip
-- Jupyter Notebook
-
-### Step-by-Step Instructions
+## ⚙️ Installation
 
 ```bash
-git clone https://github.com/yourusername/EDA-Spatial-Liver.git
+git clone https://github.com/CKolland/EDA-Spatial-Liver.git
 cd EDA-Spatial-Liver
-python3 -m venv venv
-source venv/bin/activate
-pip install -r requirements.txt
-jupyter notebook
 ```
 
----
+### Setup R Environment
 
-## 4. Usage
+Open project in *R* with `EDA-Spatial-Liver.Rproj`
 
-### Assembling AnnData Objects
-
-Open `1_assemble_h5ad.ipynb` and follow the notebook instructions to assemble AnnData objects.
-
-```python
-import scanpy as sc
-import anndata
-
-# Load count matrix, spatial coordinates, and metadata
-# ...see notebook for details...
-
-adata = anndata.AnnData(X=counts, obs=metadata, obsm={"spatial": coordinates})
-adata.write("liver_spatial.h5ad")
+```R
+library(renv)
+renv::restore()
 ```
 
-### Exploratory Data Analysis
-
-Use the provided notebooks to visualize and analyze spatial gene expression.
-
-```python
-sc.pl.spatial(adata, color="GeneA")
-```
-
----
-
-## 5. Configuration
-
-- `requirements.txt` for dependencies
-- Paths and settings are set within notebook cells or Python scripts
-- No environment variables required by default
-
----
-
-## 6. Development
-
-### Setting Up
-
-- Follow installation steps above.
-- Open notebooks in Jupyter for interactive development.
-
-### Running Tests
-
-If unit tests are present, run:
+### Setup Python Environment
 
 ```bash
-pytest
+mamba env create -n <env_name> -f environment.yml
+mamba activate <env_name>
 ```
 
-### Building the Project
+---
 
-- No build step required; notebooks and scripts are ready to use.
+## 📜 License
 
-### Contributing
-
-- Fork the repository and submit pull requests.
-- Follow PEP8 style guidelines.
-- Add docstrings and comments to new code.
+This project is licensed under the MIT License.   
+See [LICENSE](LICENSE) for details.
 
 ---
 
-## 7. Additional Sections
+## 📬 Contact
 
-### Screenshots
+For questions, requests (including access to large data files), or feedback, please contact the maintainer directly.
 
-<!-- Add screenshots or demo GIFs here if available -->
-<!-- Example: ![Spatial Gene Expression Visualization](docs/screenshots/spatial_plot_example.png) -->
-
-### License
-
-This project is licensed under the MIT License. See [LICENSE](LICENSE) for details.
-
-### Changelog
-
-<!-- Add changelog or version history if available -->
-<!-- Example: See [CHANGELOG.md](CHANGELOG.md) for version history and updates. -->
-
-### Acknowledgments
-
-- Built with scanpy, anndata, and the Python scientific stack.
-- Inspired by open-source spatial transcriptomics analysis workflows.
-- Special thanks to the Bioinformatics group at Goethe University Frankfurt.
-
----
-
-## Contact
-
-For questions or feedback, please open an issue or contact the maintainer at
+*Maintainer:* Christian Kolland ([Schulz Lab](https://schulzlab.github.io/))
