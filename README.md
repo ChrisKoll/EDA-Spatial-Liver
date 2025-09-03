@@ -9,6 +9,7 @@ For the companion repository focusing on model training and evaluation, see: [Li
 # EDA-Spatial-Liver
 
 [![Python Version](https://img.shields.io/badge/python-3.10%2B-blue.svg)](https://www.python.org/)
+[![R version](https://img.shields.io/badge/R-%3E%3D4.4.2-blue)(https://www.r-project.org/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
 ## 📂 Project Structure
