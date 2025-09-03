@@ -1,0 +1,10 @@
+# --------------------
+#     Project Data
+# --------------------
+
+# Ignore Python files
+/py/*
+
+# Input and output data
+/data/*
+/output/data/*

@@ -1,0 +1,761 @@
+---
+title: "EDA Spatial Mouse Liver Transriptomics"
+subtitle: >
+  Exploratory Data Analysis Across Spatial Transcriptomics Seurat Objects
+date: today
+date-format: "DD.MM.YYYY"
+author: 
+  - name: Christian Kolland
+    email: christian.kolland@stud.uni-frankfurt.de
+    affiliation:
+      - name: Goethe University Frankfurt
+        city: Frankfurt am Main
+abstract: >
+  The EDA of mouse liver ST data generated using nanoString's CosMx™ technology. 
+  The datasets are composed of single-cell gene expression counts from two 
+  separate sample slides, which are stored in two separate Seurat objects and
+  merged to a single object.
+copyright: 
+  holder: Christian Kolland
+  year: 2025
+title-block-banner: "#1D2951"
+toc: true
+---
+
+```{r}
+#| label: load-packages
+#| echo: false
+#| include: false
+
+box::use(
+  arrow[write_feather],
+  dplyr[bind_rows, case_when, count, filter, mutate, rename, select],
+  ggplot2[ggsave],
+  ggplot2,
+  glue[glue],
+  Matrix[rowSums],
+  purrr[map],
+  SeuratObject[LoadSeuratRds],
+  tibble[as_tibble, tibble],
+  tidyr[separate],
+)
+```
+
+```{r}
+#| label: load-utils
+#| echo: false
+#| include: false
+
+box::use(
+  plots = ./helpers/render_plots,
+  tables = ./helpers/render_tables
+)
+```
+
+## What Data Do We Have?
+
+For this exploratory data analysis (EDA) we have the same spatial 
+transcriptomics (ST) data generated from mouse model liver tissue that was 
+initially explored in `IDE_mouse_liver_ST.qmd`.
+
+## Run Information
+
+```{r}
+#| label: run-information
+#| echo: false
+
+# Input directories
+data_dir <- "../data/Seurat_objects"
+
+# Output directories
+run_dir <- glue("run_{format(Sys.time(), '%Y-%m-%d_%H-%M')}")
+out_dir <- glue("../output/EDA_mouse_liver_ST/{run_dir}")
+
+# Ensure the output directory exists
+if (!dir.exists(out_dir)) {
+  dir.create(out_dir, recursive = TRUE)
+}
+
+message(glue("
+📂 Input Seurat objects from: {data_dir}
+💾 Outputs will be saved under: {out_dir}
+"))
+```
+
+## Load the Data
+
+```{r}
+#| label: load-liver1
+
+sobj_l1 <- LoadSeuratRds(file.path(
+  data_dir,
+  "Seurat_liver1.Rds"
+))
+
+sobj_l1
+```
+
+```{r}
+#| label: load-liver2
+
+sobj_l2 <- LoadSeuratRds(file.path(
+  data_dir,
+  "Seurat_liver2.Rds"
+))
+
+sobj_l2
+```
+
+## Data Exploration
+
+We aim to visualize a variety of features in order to better understand our ST 
+datasets. Our goal is to explore the individual datasets in detail to assess 
+their comparability and determine whether they can be meaningfully merged and 
+integrated.
+
+### Spatial Information
+
+Plot all cells in a number of selected fields of view (FOV).
+
+```{r}
+#| label: fig-cell-map
+#| fig-cap: "Spatial distribution of cells in liver1, FOVs 1 and 2."
+
+# Plot cells in liver1 FOV 1 and 2
+plot <- plots$render_cell_map(sobj_l1, fovs = c("1", "2"))
+
+# Save as .png and .svg to be flexible
+ggplot2$ggsave(file.path(out_dir, "cell_map_fov_1_2.png"))
+ggplot2$ggsave(file.path(out_dir, "cell_map_fov_1_2.svg"))
+
+plot
+```
+
+Observations @fig-cell-map:
+
+- Not all parts of the FOV are filled with cells
+  - Can lead to different cell count distributions across FOVs
+  
+Plot transcripts across cells in a selected FOV.
+
+```{r}
+#| label: fig-transcript-map
+#| fig-cap: "Spatial expression of genes Pecam1, C1qc, and Dcn in liver1 FOV 1."
+
+# Plot transcripts in liver1 FOV 1
+plot <- plots$render_transcript_map(
+  sobj_l1,
+  fovs = c("1"),
+  genes = c("Pecam1", "C1qc", "Dcn")
+)
+
+ggplot2$ggsave(file.path(out_dir, "transcript_map_fov_1.png"))
+ggplot2$ggsave(file.path(out_dir, "transcript_map_fov_1.svg"))
+
+plot
+```
+
+Observations @fig-transcript-map:
+
+- Exact locations were transcripts are measured
+  - Marker genes can visually quantify cell types
+
+### Counts
+
+This section examines the individual count distributions within both datasets.
+
+#### `nCount_Nanostring`
+
+Value found in the `meta.data` table in our Seurat objects.
+
+```{r}
+#| label: tbl-validate-nCount-Nanostring
+#| tbl-cap: |
+#|   Validation that nCount_Nanostring in metadata equals the sum of raw counts 
+#|   per cell.
+
+# Names of first five cells in liver1 dataset
+# Extracted from metadata table (cells are columns in Seurat)
+row_names_first_5 <- rownames(sobj_l1@meta.data)[1:5]
+
+# Counts for first five cells
+counts_first_5 <- sobj_l1@assays$Nanostring$counts[, row_names_first_5]
+
+# Sum of counts for first five cells
+count_sums_first_5 <- map(row_names_first_5, ~ sum(counts_first_5[, .x]))
+
+# Create tibble for plotting
+tibble(
+  "sum" = count_sums_first_5,
+  "nCounts_Nanostring" = sobj_l1@meta.data$nCount_Nanostring[1:5]
+) |>
+  tables$render_table(data = _)
+```
+
+In @tbl-validate-nCount-Nanostring we see that `nCount_Nanostring` is equal to sum 
+of counts for each individual cell.
+
+##### Descriptive Statistics
+
+```{r}
+#| label: tbl-descriptive-statistics-cell-counts
+#| tbl-cap: |
+#|   Descriptive statistics for total counts per cell in liver1 and liver2 
+#|   datasets.
+
+# Calculate descriptive stats for counts per cell
+cell_counts_stats_l1 <- tibble(
+  "scope" = "cell",
+  "dataset" = "liver1",
+  "min" = min(sobj_l1@meta.data$nCount_Nanostring),
+  "max" = max(sobj_l1@meta.data$nCount_Nanostring),
+  "median" = median(sobj_l1@meta.data$nCount_Nanostring),
+  "mean" = mean(sobj_l1@meta.data$nCount_Nanostring),
+)
+
+count_counts_stats_l2 <- tibble(
+  "scope" = "cell",
+  "dataset" = "liver2",
+  "min" = min(sobj_l2@meta.data$nCount_Nanostring),
+  "max" = max(sobj_l2@meta.data$nCount_Nanostring),
+  "median" = median(sobj_l2@meta.data$nCount_Nanostring),
+  "mean" = mean(sobj_l2@meta.data$nCount_Nanostring),
+)
+
+# Combine tibbles for plotting
+# Combine different count statistics in this tibble
+desc_stats_counts <- cell_counts_stats_l1 |>
+  bind_rows(count_counts_stats_l2)
+
+# Plot counts per cell statistics
+desc_stats_counts |>
+  filter(scope == "cell") |> # Counts per cell
+  select(-scope) |>
+  tables$render_table(data = _)
+```
+
+##### Plots
+
+```{r}
+#| label: fig-cell-counts-density
+#| fig-cap: |
+#|   Kernel density estimates of total counts per cell in both datasets.
+
+# Prepare data for plotting
+# Sum of counts per cell
+cell_counts_dist_l1 <- as_tibble(sobj_l1@meta.data$nCount_Nanostring) |>
+  mutate(dataset = "liver1")
+
+cell_counts_dist_l2 <- as_tibble(sobj_l2@meta.data$nCount_Nanostring) |>
+  mutate(dataset = "liver2")
+
+# Combine to plotting data
+# Save plotting data later as it is changed
+pdata_counts_per_cell <- cell_counts_dist_l1 |>
+  dplyr::bind_rows(cell_counts_dist_l2)
+
+plot <- plots$render_density_plot(
+  pdata_counts_per_cell,
+  dataset,
+  legend = "Datasets",
+  title = "Count Distributions: Liver1 vs. Liver2",
+  x_lab = "Counts per Cell"
+)
+
+ggplot2$ggsave(file.path(out_dir, "density_counts_per_cell.png"))
+ggplot2$ggsave(file.path(out_dir, "density_counts_per_cell.svg"))
+
+plot
+```
+
+Observations @fig-cell-counts-density:
+
+- Both curves are positive (mean greater then median)
+- Mean appears to be around a total expression of ~500
+- Tail on right signals bigger amount of outlier cells with very high expression
+- Looks like negative binomial distribution
+  - Similar to scRNA-seq counts
+- Similar distributions &rarr; **enables dataset integration**
+
+```{r}
+#| label: fig-cell-counts-violin
+#| fig-cap: "Violin plot comparing per-cell counts across datasets."
+
+plot <- plots$render_violin_plot(
+  pdata_counts_per_cell,
+  dataset,
+  legend = "Datasets",
+  title = "Count Distributions: Liver1 vs. Liver2",
+  x_lab = "Datasets",
+  y_lab = "Counts per Cell"
+)
+
+ggplot2$ggsave(file.path(out_dir, "violin_counts_per_cell.png"))
+ggplot2$ggsave(file.path(out_dir, "violin_counts_per_cell.svg"))
+
+plot
+```
+
+Observations @fig-cell-counts-violin:
+
+- median value for both distributions
+  - Value at ~800 counts per cell
+- Similar distribution for outliers
+  - liver2 has some outliers that have counts above 7000
+- **Similarity between distributions is reconfirmed**
+  
+```{r}
+#| label: fig-cell-counts-ECDF
+#| fig-cap: "ECDF plot showing cumulative distribution of counts per cell."
+
+plot <- plots$render_ecdf_plot(
+  pdata_counts_per_cell,
+  dataset,
+  legend = "Datasets",
+  title = "Count Distributions: Liver1 vs. Liver2",
+  x_lab = "Counts per Cell",
+  y_lab = "Cumulative Probability"
+)
+
+ggplot2$ggsave(file.path(out_dir, "ECDF_counts_per_cell.png"))
+ggplot2$ggsave(file.path(out_dir, "ECDF_counts_per_cell.svg"))
+
+plot
+```
+
+Observations @fig-cell-counts-ECDF:
+
+- Around 50% of cells have summarized counts less then 1000
+- Around 88% of cells have summarized counts less then 2000
+- Small amount of outliers with very high expressions
+
+#### `nFeature_Nanostring`
+
+Value found in the `meta.data` table in our Seurat objects.
+
+```{r}
+#| label: tbl-validate-nFeature-Nanostring
+#| tbl-cap: |
+#|   Validation that nFeature_Nanostring in metadata equals the sum of non-zero 
+#|   features per cell.
+
+# Sum all non-zero features in a cell
+feature_sums_first_5 <- map(row_names_first_5, ~ sum(counts_first_5[, .x] != 0))
+
+# Create tibble for plotting
+tibble(
+  "sum" = count_sums_first_5,
+  "nFeature_Nanostring" = sobj_l1@meta.data$nFeature_Nanostring[1:5]
+) |>
+  tables$render_table(data = _)
+```
+
+In @tbl-validate-nFeature-Nanostring we see that `nFeature_Nanostring` is equal to 
+sum of of all non-zero features for each individual cell.
+
+##### Descriptive Statistics
+
+```{r}
+#| label: tbl-descriptive-statistics-feature-counts
+#| tbl-cap: |
+#|   Descriptive statistics for non-zero features (genes) detected per cell 
+#|   across datasets.
+
+# Calculate descriptive stats non-zero features per cell
+cell_feats_stats_l1 <- tibble(
+  "scope" = "feature",
+  "dataset" = "liver1",
+  "min" = min(sobj_l1@meta.data$nFeature_Nanostring),
+  "max" = max(sobj_l1@meta.data$nFeature_Nanostring),
+  "median" = median(sobj_l1@meta.data$nFeature_Nanostring),
+  "mean" = mean(sobj_l1@meta.data$nFeature_Nanostring),
+)
+
+cell_feats_stats_l2 <- tibble(
+  "scope" = "feature",
+  "dataset" = "liver2",
+  "min" = min(sobj_l2@meta.data$nFeature_Nanostring),
+  "max" = max(sobj_l2@meta.data$nFeature_Nanostring),
+  "median" = median(sobj_l2@meta.data$nFeature_Nanostring),
+  "mean" = mean(sobj_l2@meta.data$nFeature_Nanostring),
+)
+
+# Add scope to count statistics
+desc_stats_counts <- desc_stats_counts |>
+  bind_rows(cell_feats_stats_l1) |>
+  bind_rows(cell_feats_stats_l2)
+
+# Plot non-zero features per cell statistics
+desc_stats_counts |>
+  filter(scope == "feature") |>
+  select(-scope) |>
+  tables$render_table(data = _)
+```
+
+##### Plots
+
+```{r}
+#| label: fig-cell-features-density
+#| fig-cap: "Density plot of detected non-zero features (genes) per cell."
+
+# Prepare data for plotting
+# Sum of features per cell
+cell_feats_dist_l1 <- as_tibble(sobj_l1@meta.data$nFeature_Nanostring) |>
+  mutate(dataset = "liver1")
+
+cell_feats_dist_l2 <- as_tibble(sobj_l2@meta.data$nFeature_Nanostring) |>
+  mutate(dataset = "liver2")
+
+pdata_features_per_cell <- cell_feats_dist_l1 |>
+  bind_rows(cell_feats_dist_l2)
+
+# Save plotting data
+# .feather good for data transfer between R and Python
+write_feather(
+  pdata_features_per_cell,
+  glue("{out_dir}/pdata_features_per_cell.feather")
+)
+
+plot <- plots$render_density_plot(
+  pdata_features_per_cell,
+  dataset,
+  legend = "Datasets",
+  title = "Non-zero Feature Distributions: Liver1 vs. Liver2",
+  x_lab = "Non-zero Features per Cell"
+)
+
+ggplot2$ggsave(file.path(out_dir, "density_features_per_cell.png"))
+ggplot2$ggsave(file.path(out_dir, "density_features_per_cell.svg"))
+
+plot
+```
+
+Observations @fig-cell-features-density:
+
+- Almost normal distributions
+  - Small tail on the right
+- No unexpected results
+- Similar distributions &rarr; **enables dataset integration**
+
+#### Counts per Gene
+
+```{r}
+#| label: calculate-gene-counts
+
+# Calculate sum of counts per gene for both datasets
+# Matrix::rowSums for sparse matrices
+gene_counts_l1 <- rowSums(sobj_l1@assays$Nanostring$counts) |>
+  as_tibble() |>
+  mutate("dataset" = "liver1")
+
+gene_counts_l2 <- rowSums(sobj_l2@assays$Nanostring$counts) |>
+  as_tibble() |>
+  mutate("dataset" = "liver2")
+```
+
+##### Descriptive Statistics
+
+```{r}
+#| label: tbl-descriptive-statistics-gene-counts
+#| tbl-cap: |
+#|   Descriptive statistics for gene-level total counts in liver1 and liver2.
+
+# Calculate descriptive stats counts per gene
+gene_counts_stats_l1 <- tibble(
+  "scope" = "gene",
+  "dataset" = "liver1",
+  "min" = min(gene_counts_l1$value),
+  "max" = max(gene_counts_l1$value),
+  "median" = median(gene_counts_l1$value),
+  "mean" = mean(gene_counts_l1$value),
+)
+
+gene_counts_stats_l2 <- tibble(
+  "scope" = "gene",
+  "dataset" = "liver2",
+  "min" = min(gene_counts_l2$value),
+  "max" = max(gene_counts_l2$value),
+  "median" = median(gene_counts_l2$value),
+  "mean" = mean(gene_counts_l2$value),
+)
+
+# Add scope to count statistics
+desc_stats_counts <- desc_stats_counts |>
+  bind_rows(gene_counts_stats_l1) |>
+  bind_rows(gene_counts_stats_l2)
+
+# Plot counts per gene statistics
+desc_stats_counts |>
+  filter(scope == "gene") |>
+  select(-scope) |>
+  tables$render_table(data = _)
+```
+
+##### Plots
+
+```{r}
+#| label: fig-gene-counts-density
+#| fig-cap: |
+#|   "Log-transformed density plot of total counts per gene across both datasets."
+
+# Combine data for plotting
+pdata_counts_per_gene <- gene_counts_l1 |>
+  bind_rows(gene_counts_l2)
+
+# Preprocess for better plotting
+pdata_counts_per_gene <- pdata_counts_per_gene |> 
+  rename(raw_counts = value) |> 
+  mutate(value = log10(raw_counts + 1))
+
+write_feather(
+  pdata_counts_per_gene,
+  glue("{out_dir}/pdata_counts_per_gene.feather")
+)
+
+plot <- plots$render_density_plot(
+  pdata_counts_per_gene,
+  dataset,
+  legend = "Datasets",
+  title = "Count Distributions: Liver1 vs. Liver2",
+  x_lab = "log10(Counts per Gene + 1)"
+)
+
+ggplot2$ggsave(file.path(out_dir, "density_counts_per_gene.png"))
+ggplot2$ggsave(file.path(out_dir, "density_counts_per_gene.svg"))
+
+plot
+```
+
+Observations @fig-gene-counts-density:
+
+- Values are log10 normalized
+  - Values near 0 mean no expression
+  - Higher values indicate higher expression
+- Compared to scRNA-seq data we see high average expression
+- No 0 expressed genes (see @descriptive-statistics-gene-counts)
+- Similar distributions &rarr; **enables dataset integration**
+
+### `fov`
+
+```{r}
+#| label: explore-fov-liver1
+
+unique(sobj_l1@meta.data$fov)
+```
+
+```{r}
+#| label: explore-fov-liver2
+
+unique(sobj_l2@meta.data$fov)
+```
+
+Equal number of FOVs. Need to be properly split in merged dataset.
+
+:::{.callout-important title="Number of Unique FOVs"}
+Need to be 90 FOVs in merged dataset.
+:::
+
+### Visualize UMAPs
+
+Plot the precalculated UMAPs from both datasets in one UMAP.
+
+```{r}
+#| label: fig-precalculated-umap-slide
+#| fig-cap: "UMAP visualization colored by slide origin."
+
+# Extract UMAP coordinates from both datasets
+# Also add metadata for plotting
+precalc_umap_l1 <- tibble(
+  "dataset" = "liver1",
+  "umap1" = sobj_l1@reductions$umap@cell.embeddings[, 1],
+  "umap2" = sobj_l1@reductions$umap@cell.embeddings[, 2],
+  "slide" = sobj_l1@meta.data$Slide_name,
+  "disease_state" = sobj_l1@meta.data$disease_state,
+  "cell_type" = sobj_l1@meta.data$nb_clus
+)
+
+precalc_umap_l2 <- tibble(
+  "dataset" = "liver2",
+  "umap1" = sobj_l2@reductions$umap@cell.embeddings[, 1],
+  "umap2" = sobj_l2@reductions$umap@cell.embeddings[, 2],
+  "slide" = sobj_l2@meta.data$Slide_name,
+  "disease_state" = sobj_l2@meta.data$disease_state,
+  "cell_type" = sobj_l2@meta.data$nb_clus
+)
+
+pdata_precalculated_umap <- precalc_umap_l1 |>
+  bind_rows(precalc_umap_l2)
+
+write_feather(
+  pdata_precalculated_umap,
+  glue("{out_dir}/pdata_precalculated_umap.feather")
+)
+
+plot <- plots$render_umap_plot(
+  pdata_precalculated_umap,
+  slide,
+  legend =  "Slide",
+  title = "Precalculated UMAP"
+)
+
+ggplot2$ggsave(file.path(out_dir, "precalc_umap_slide.png"))
+ggplot2$ggsave(file.path(out_dir, "precalc_umap_slide.svg"))
+
+plot
+```
+
+Observations @fig-precalculated-umap-slide:
+
+- Both samples show same UMAP shape
+- There appears to be a different batch effect
+
+```{r}
+#| label: fig-precalc-umap-disease-state
+#| fig-cap: "UMAP visualization colored by cell disease state."
+
+plot <- plots$render_umap_plot(
+  pdata_precalculated_umap,
+  disease_state,
+  legend =  "Disease State",
+  title = "Precalculated UMAP"
+)
+
+ggplot2$ggsave(file.path(out_dir, "precalc_umap_disease_state.png"))
+ggplot2$ggsave(file.path(out_dir, "precalc_umap_disease_state.svg"))
+
+plot
+```
+
+Observations @fig-precalc-umap-disease-state:
+
+- Clusters according to disease state
+  - ACLF cells on top and bottom cluster
+- Another stronger batch effect
+
+```{r}
+#| label: fig-precalc-umap-cell-type
+#| fig-cap: "UMAP visualization colored by nanoString annotated cell types."
+
+plot <- plots$render_umap_plot(
+  pdata_precalculated_umap,
+  cell_type,
+  legend =  "Cell Type",
+  title = "Precalculated UMAP"
+)
+
+ggplot2$ggsave(file.path(out_dir, "precalc_umap_cell_type.png"))
+ggplot2$ggsave(file.path(out_dir, "precalc_umap_cell_type.svg"))
+
+plot
+```
+
+Observations @fig-precalc-umap-cell-type:
+
+- Cell type does not appear to be batch effect
+  - **Batch effect needs to be removed**
+
+## Load Merged Data
+
+```{r}
+#| label: load-merged-liver
+
+sobj_liver_merged <- LoadSeuratRds(file.path(
+  data_dir,
+  "Seurat_liver_merged.Rds"
+))
+
+sobj_liver_merged
+```
+
+### `fov`
+
+```{r}
+#| label: check-fovs
+
+# Gather all unique FOVs
+merged_fovs <- unique(sobj_liver_merged@meta.data$fov)
+# Number of unique FOVs
+n_fovs <- length(merged_fovs)
+
+n_fovs
+```
+
+::: {.callout-tip title="FOVs in Merged Dataset"}
+90 unique FOVs in the merged dataset.
+&rarr; As expected
+:::
+
+### Plots
+
+```{r}
+#| label: fig-density-disease-state
+#| fig-cap: "Density plot of counts per cell grouped by disease state."
+
+# Counts per cell with disease state information
+pdata_cell_counts_per_x <- pdata_counts_per_cell |>
+  mutate(disease_state = sobj_liver_merged@meta.data$disease_state)
+
+write_feather(
+  pdata_cell_counts_per_x,
+  file.path(out_dir, "pdata_counts_per_cell.feather")
+)
+
+plot <- plots$render_density_plot(
+  pdata_cell_counts_per_x,
+  disease_state,
+  legend = "Disease State",
+  title = "Count Distributions Across Disease States",
+  x_lab = "Counts per Cell"
+)
+
+ggplot2$ggsave(file.path(out_dir, "density_cell_counts_per_disease_state.png"))
+ggplot2$ggsave(file.path(out_dir, "density_cell_counts_per_disease_state.svg"))
+
+plot
+```
+
+Observations @fig-density-disease-state:
+
+- Healthy very positively skewed
+  - Highest peak
+- Similar mean expression over all states
+- Other three conditions with more variability
+- All have outliers
+
+```{r}
+#| label: fig-density-cells-per-fov
+#| fig-cap: "Horizontal bar plot of cell counts per FOV, grouped by dataset."
+
+# Create cells per FOV distribution data
+pdata_cells_per_fov <- tibble(fov = sobj_liver_merged@meta.data$fov) |>
+  count(fov, name = "value") |>
+  separate(col = fov, into = c("group", "dataset"), sep = "_")
+
+write_feather(
+  pdata_cells_per_fov,
+  file.path(out_dir, "pdata_cells_per_fov.feather")
+)
+
+plot <- plots$render_bar_plot(
+  pdata_cells_per_fov,
+  dataset,
+  legend = "Datasets",
+  title = "Cells per FOV: Liver1 vs. Liver2",
+  x_lab = "Number of Cells",
+  y_lab = "FOV"
+)
+
+ggplot2$ggsave(file.path(out_dir, "bars_cells_per_fov.png"))
+ggplot2$ggsave(file.path(out_dir, "bars_cells_per_fov.svg"))
+
+plot
+```
+
+Observations @fig-density-cells-per-fov:
+
+- Reveals heterogeneous count distributions
+  - Cells are not similar distributed across FOVs in the dataset
+  - Cells are not similar distributed across FOVs over both datasets
+- Expected, since tissue samples are "random"
+  - Not 100% of the FOV is tissue
+  - Big gaps lead to less cells

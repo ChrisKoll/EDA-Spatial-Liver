@@ -1,0 +1,24 @@
+[INFO] 2025-08-06 13:20:07 |> ✅ Setup complete.
+[INFO] 2025-08-06 13:20:07 |> ----
+[INFO] 2025-08-06 13:20:07 |> Start integration process...
+[INFO] 2025-08-06 13:20:10 |> Successfully loaded dataset: 'output/data/h5ad_objects/liver_merged.h5ad'
+[DEBUG] 2025-08-06 13:20:10 |> AnnData object with n_obs × n_vars = 67785 × 951
+    obs: 'counts_per_cell', 'non_zero_features', 'cell_id', 'disease_state', 'slide', 'tissue', 'fov'
+    var: 'counts_per_gene', 'highly_variable', 'highly_variable_rank', 'means', 'variances', 'variances_norm'
+    uns: 'disease_state_colors', 'hvg', 'log1p', 'neighbors', 'pca', 'slide_colors', 'umap'
+    obsm: 'X_pca', 'X_umap'
+    varm: 'PCs'
+    layers: 'log1p', 'raw'
+    obsp: 'connectivities', 'distances'
+[DEBUG] 2025-08-06 13:20:11 |> Saved unprocessed AnnData object as fallback: 'output/ST_data_integration/scVI_run_2025-08-06_13-20/unprocessed_liver_merged.h5ad'
+[INFO] 2025-08-06 13:20:11 |> Configured scVI to correct for the following batch effects: ['slide', 'disease_state', 'fov']
+[INFO] 2025-08-06 13:20:11 |> Built scVI model with:
+- 2 hidden layers
+- 128 nodes per hidden layer
+- 30 latent dimensions
+- Gene likelihood: nb
+[INFO] 2025-08-06 13:36:07 |> Saved trained model to: 'output/ST_data_integration/scVI_run_2025-08-06_13-20/scVI_trained.pt'
+[INFO] 2025-08-06 13:36:08 |> Saved latent representation to AnnData object.
+[INFO] 2025-08-06 13:36:11 |> Saved scVI normalized values to AnnData object.
+[INFO] 2025-08-06 13:36:13 |> 💾 Saved AnnData object to: 'output/ST_data_integration/scVI_run_2025-08-06_13-20/liver_merged.h5ad'
+[INFO] 2025-08-06 13:36:13 |> 🎉 Finished!

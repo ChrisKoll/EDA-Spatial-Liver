@@ -1,3 +1,40 @@
+# --------------
+#     Editor
+# --------------
+
+.vscode/*
+
+# -------------------
+#     Project I/O
+# -------------------
+
+# --> Large files are ignored
+data/Seurat_objects/*
+!data/Seurat_objects/.gitkeep
+data/training_data/*
+!data/training_data/.gitkeep
+output/cell_type_annotation_ST/collaborator_results
+output/cell_type_annotation_ST/liver_merged.h5ad
+output/cell_type_annotation_ST/unannotated_liver_merged.h5ad
+output/data/h5ad_objects/liver_merged.h5ad
+output/data/h5ad_objects/original_liver_merged.h5ad
+output/data/Seurat_objects/*
+!output/data/Seurat_objects/.gitkeep
+output/data/Seurat_to_h5ad/Seurat_col_names.csv
+output/data/Seurat_to_h5ad/Seurat_counts.mtx
+output/data/Seurat_to_h5ad/Seurat_metadata.csv
+output/data/Seurat_to_h5ad/Seurat_row_names.csv
+output/data/ST_data_integration/liver_merged.h5ad
+output/data/ST_data_integration/unprocessed_liver_merged.h5ad
+output/data/ST_data_integration/visualization/unembedded_liver_merged.h5ad
+output/data/train_data_integration/healthy_mouse_liver_scRNAseq/healthy_mouse_liver_scRNAseq.h5ad
+output/data/train_data_integration/NAFLD_mouse_liver_scRNAseq/NAFLD_mouse_liver_scRNAseq.h5ad
+
+
+# ---------
+#     R
+# ---------
+
 # History files
 .Rhistory
 .Rapp.history
@@ -9,24 +46,8 @@
 # User-specific files
 .Ruserdata
 
-# Example code in package build process
-*-Ex.R
-
-# Output files from R CMD build
-/*.tar.gz
-
-# Output files from R CMD check
-/*.Rcheck/
-
 # RStudio files
 .Rproj.user/
-
-# produced vignettes
-vignettes/*.html
-vignettes/*.pdf
-
-# OAuth2 token, see https://github.com/hadley/httr/releases/tag/v0.3
-.httr-oauth
 
 # knitr and R markdown default cache directories
 *_cache/
@@ -39,11 +60,15 @@ vignettes/*.pdf
 # R Environment Variables
 .Renviron
 
-# pkgdown site
-docs/
+# Quarto files
+/.quarto/
 
-# translation temp files
-po/*~
+# --------------
+#     Python
+# --------------
 
-# RStudio Connect folder
-rsconnect/
+# Sphinx documentation
+docs/_build/
+
+# Jupyter Notebook
+.ipynb_checkpoints

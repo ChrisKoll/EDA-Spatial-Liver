@@ -1,0 +1,43 @@
+[INFO] 2025-08-05 17:50:40 |> ✅ Setup complete.
+[INFO] 2025-08-05 17:50:40 |> ----
+[INFO] 2025-08-05 17:50:40 |> Start integration of training data...
+[INFO] 2025-08-05 17:51:17 |> 📁 Loaded data matrix of shape: (31053, 256345)
+[INFO] 2025-08-05 17:51:17 |> 📁 Loaded 256345 observations.
+[INFO] 2025-08-05 17:51:17 |> 📁 Loaded 31053 feature names.
+[INFO] 2025-08-05 17:51:17 |> Data was successfully converted to AnnData.
+AnnData object with n_obs × n_vars = 256345 × 31053
+[DEBUG] 2025-08-05 17:51:17 |> 📁 Annotation matrix loaded successfully.
+           UMAP_1     UMAP_2  cluster                    annot sample                 cell  digest typeSample diet
+0       -1.273569  13.116292       25                  T cells   ARE3   AAACGGGTCACAAACC-1  exVivo    citeSeq   SD
+1        0.552846  13.156577       17                  T cells   ARE3   AAACGGGTCGGAGGTA-1  exVivo    citeSeq   SD
+2        2.397447  13.893211       25                  T cells   ARE3   AAAGTAGCAACACCCG-1  exVivo    citeSeq   SD
+3       -0.478933  15.607198       29                  T cells   ARE3   AAAGTAGTCAACCAAC-1  exVivo    citeSeq   SD
+4       -3.750585   5.847472        4                     pDCs   ARE3   AAATGCCGTGCCTGGT-1  exVivo    citeSeq   SD
+...           ...        ...      ...                      ...    ...                  ...     ...        ...  ...
+121975  11.681448  10.506598       23              Hepatocytes  CS197  TTTGTTGGTAGGAGGG-39  nuclei     nucSeq   WD
+121976   7.546720   2.628551       12  Mono/mono-derived cells  CS197  TTTGTTGGTGTTGAGG-39  nuclei     nucSeq   WD
+121977  11.839629   7.993183       22              Hepatocytes  CS197  TTTGTTGGTGTTTACG-39  nuclei     nucSeq   WD
+121978  12.751298   7.613603       18              Hepatocytes  CS197  TTTGTTGTCCATCTGC-39  nuclei     nucSeq   WD
+121979  20.197927  18.664259       20            Stromal cells  CS197  TTTGTTGTCGGAACTT-39  nuclei     nucSeq   WD
+
+[121980 rows x 9 columns]
+[INFO] 2025-08-05 17:51:17 |> Annotation matrix added as observations to AnnData object.
+AnnData object with n_obs × n_vars = 256345 × 31053
+    obs: 'UMAP_1', 'UMAP_2', 'cluster', 'annot', 'sample', 'digest', 'typeSample', 'diet'
+[INFO] 2025-08-05 17:51:24 |> Removed low quality samples. Reduced number from 256345 to 121980.
+[INFO] 2025-08-05 17:51:25 |> Added original counts to layer 'raw'.
+[INFO] 2025-08-05 17:51:28 |> Added log1p scaled counts to layer 'log1p'.
+[INFO] 2025-08-05 17:51:29 |> Added sample specific metrics to 'obs'.
+[INFO] 2025-08-05 17:51:36 |> Added gene specific metrics to 'var'.
+[INFO] 2025-08-05 17:51:36 |> AnnData object with n_obs × n_vars = 121980 × 31053
+    obs: 'UMAP_1', 'UMAP_2', 'cluster', 'annot', 'sample', 'digest', 'typeSample', 'diet', 'counts_per_sample', 'sparsity'
+    var: 'counts_per_gene', 'sparsity'
+    layers: 'raw', 'log1p'
+[INFO] 2025-08-05 17:53:16 |> 💾 Saved AnnData object to: 'output/data/train_data_integration/run_2025-08-05_17-50/run_2025-08-05_17-50.h5ad'
+[INFO] 2025-08-05 17:53:16 |> 💾 Saved sample specific metrics in: 'output/data/train_data_integration/run_2025-08-05_17-50/run_2025-08-05_17-50_sample_metrics.feather'
+[INFO] 2025-08-05 17:53:16 |> 💾 Saved gene specific metrics in: 'output/data/train_data_integration/run_2025-08-05_17-50/run_2025-08-05_17-50_gene_metrics.feather'
+[INFO] 2025-08-05 17:53:16 |> ---
+[INFO] 2025-08-05 17:53:17 |> Range of counts: 0 - 2715
+[INFO] 2025-08-05 17:53:20 |> Mean expression: 0.11725538638337236
+[INFO] 2025-08-05 17:53:20 |> ---
+[INFO] 2025-08-05 17:53:20 |> Finished!

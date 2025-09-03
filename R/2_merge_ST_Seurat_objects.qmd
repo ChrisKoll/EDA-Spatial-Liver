@@ -1,0 +1,121 @@
+---
+title: "Merge CosMx Spatial Transcriptomics Seurat Objects"
+date: today
+date-format: "DD.MM.YYYY"
+author: 
+  - name: Christian Kolland
+    email: christian.kolland@stud.uni-frankfurt.de
+    affiliation:
+      - name: Goethe University Frankfurt
+        city: Frankfurt am Main
+copyright: 
+  holder: Christian Kolland
+  year: 2025
+title-block-banner: "#1D2951"
+---
+
+```{r}
+#| label: load-packages
+#| echo: false
+#| include: false
+
+box::use(
+  dplyr[mutate],
+  glue[glue],
+  SeuratObject[LoadSeuratRds],
+)
+```
+
+## Run Information
+
+```{r}
+#| label: run-information
+#| echo: false
+
+# Input directory
+data_dir <- "../data/Seurat_objects"
+
+# Output directories
+run_dir <- glue("run_{format(Sys.time(), '%Y-%m-%d_%H-%M')}")
+out_dir <- glue("../output/data/Seurat_objects/{run_dir}")
+
+# Ensure the output directory exists
+if (!dir.exists(out_dir)) {
+  dir.create(out_dir, recursive = TRUE)
+}
+
+message(glue("
+📂 Input Seurat objects from: {data_dir}
+💾 Outputs will be saved in: {out_dir}
+"))
+```
+
+## Load Data
+
+```{r}
+#| label: load-data-liver1
+
+sobj_l1 <- LoadSeuratRds(file.path(
+  data_dir,
+  "Seurat_liver1.Rds"
+))
+
+sobj_l1
+```
+
+```{r}
+#| label: load-data-liver2
+
+sobj_l2 <- LoadSeuratRds(file.path(
+  data_dir,
+  "Seurat_liver2.Rds"
+))
+
+sobj_l2
+```
+
+## Prepare FOV
+
+Append dataset specific to `fov` in the metadata.
+Both liver1 and liver2 dataset have 45 FOVs.
+
+```{r}
+#| label: append-suffix-fov
+
+object_ids <- c("liver1", "liver2")
+
+# Add IDs according to Seurat object
+sobj_l1@meta.data <- sobj_l1@meta.data |>
+  mutate(fov = glue("{fov}_{object_ids[1]}"))
+
+sobj_l2@meta.data <- sobj_l2@meta.data |>
+  mutate(fov = glue("{fov}_{object_ids[2]}"))
+```
+
+## Merge Objects
+
+Needs to increase memory limit to process. 
+`options(future.globals.maxSize = 6000 * 1024^2)`
+
+```{r}
+#| label: merge-objects
+
+# Sets limit to ~4,5GB to enable proper computation for large Seurat objects
+options(future.globals.maxSize = 6000 * 1024^2)
+
+# Merges the two Seurat objects and adds the provided cell identifiers
+sobj_liver_merged <- merge(
+  sobj_l1,
+  y = sobj_l2,
+  add.cell.ids = object_ids
+)
+
+# Saves the merged Seurat object
+saveRDS(sobj_liver_merged, file = file.path(out_dir, "Seurat_liver_merged.Rds"))
+
+sobj_liver_merged
+```
+
+::: {.callout-important title="Expected Sample Counts"}
+$34452 + 33333 = 67785$
+:::

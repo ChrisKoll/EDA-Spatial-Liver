@@ -1,0 +1,43 @@
+[INFO] 2025-08-05 18:07:36 |> ✅ Setup complete.
+[INFO] 2025-08-05 18:07:36 |> ----
+[INFO] 2025-08-05 18:07:36 |> Start integration of training data...
+[INFO] 2025-08-05 18:09:01 |> 📁 Loaded data matrix of shape: (31053, 389056)
+[INFO] 2025-08-05 18:09:01 |> 📁 Loaded 389056 observations.
+[INFO] 2025-08-05 18:09:01 |> 📁 Loaded 31053 feature names.
+[INFO] 2025-08-05 18:09:01 |> Data was successfully converted to AnnData.
+AnnData object with n_obs × n_vars = 389056 × 31053
+[DEBUG] 2025-08-05 18:09:01 |> 📁 Annotation matrix loaded successfully.
+           UMAP_1    UMAP_2  cluster        annot  sample                 cell  digest typeSample
+0       10.199693 -7.500118       21      T cells  CISE12   AAACCTGAGTTCGCGC-1  exVivo    citeSeq
+1       12.429611 -5.372781       11      T cells  CISE12   AAACCTGGTGAGGCTA-1  exVivo    citeSeq
+2       14.550602 -2.247851       26        ILC1s  CISE12   AAACCTGTCGGTGTCG-1  exVivo    citeSeq
+3       11.260082 -5.692209       11      T cells  CISE12   AAACGGGAGTACGCGA-1  exVivo    citeSeq
+4       13.879457 -1.479918       26        ILC1s  CISE12   AAACGGGCAGTATGCT-1  exVivo    citeSeq
+...           ...       ...      ...          ...     ...                  ...     ...        ...
+185889   7.300422 -5.189817       19  Neutrophils    CS16  TTCTTAGCACATAACC-46  exVivo   scRnaSeq
+185890   5.629435 -6.119583       19  Neutrophils    CS16  TTGAACGAGTGAAGTT-46  exVivo   scRnaSeq
+185891   6.191045 -5.096178       19  Neutrophils    CS16  TTGACTTTCCAATGGT-46  exVivo   scRnaSeq
+185892   6.637616 -5.062717       19  Neutrophils    CS16  TTGTAGGTCACTCCTG-46  exVivo   scRnaSeq
+185893   7.274597 -5.612700       19  Neutrophils    CS16  TTTCCTCTCAGCATGT-46  exVivo   scRnaSeq
+
+[185894 rows x 8 columns]
+[INFO] 2025-08-05 18:09:02 |> Annotation matrix added as observations to AnnData object.
+AnnData object with n_obs × n_vars = 389056 × 31053
+    obs: 'UMAP_1', 'UMAP_2', 'cluster', 'annot', 'sample', 'digest', 'typeSample'
+[INFO] 2025-08-05 18:09:09 |> Removed low quality samples. Reduced number from 389056 to 185894.
+[INFO] 2025-08-05 18:09:11 |> Added original counts to layer 'raw'.
+[INFO] 2025-08-05 18:09:17 |> Added log1p scaled counts to layer 'log1p'.
+[INFO] 2025-08-05 18:09:17 |> Added sample specific metrics to 'obs'.
+[INFO] 2025-08-05 18:09:32 |> Added gene specific metrics to 'var'.
+[INFO] 2025-08-05 18:09:32 |> AnnData object with n_obs × n_vars = 185894 × 31053
+    obs: 'UMAP_1', 'UMAP_2', 'cluster', 'annot', 'sample', 'digest', 'typeSample', 'counts_per_sample', 'sparsity'
+    var: 'counts_per_gene', 'sparsity'
+    layers: 'raw', 'log1p'
+[INFO] 2025-08-05 18:13:01 |> 💾 Saved AnnData object to: 'output/data/train_data_integration/run_2025-08-05_18-07/run_2025-08-05_18-07.h5ad'
+[INFO] 2025-08-05 18:13:01 |> 💾 Saved sample specific metrics in: 'output/data/train_data_integration/run_2025-08-05_18-07/run_2025-08-05_18-07_sample_metrics.feather'
+[INFO] 2025-08-05 18:13:01 |> 💾 Saved gene specific metrics in: 'output/data/train_data_integration/run_2025-08-05_18-07/run_2025-08-05_18-07_gene_metrics.feather'
+[INFO] 2025-08-05 18:13:01 |> ---
+[INFO] 2025-08-05 18:13:02 |> Range of counts: 0 - 3716
+[INFO] 2025-08-05 18:14:10 |> Mean expression: 0.18488074737916385
+[INFO] 2025-08-05 18:14:10 |> ---
+[INFO] 2025-08-05 18:14:10 |> Finished!

@@ -1,0 +1,136 @@
+---
+title: "thesis_plots"
+format: html
+---
+
+```{r}
+#| label: load-packages
+#| echo: false
+#| include: false
+
+box::use(
+  arrow[write_feather],
+  dplyr[bind_rows, select],
+  ggplot2,
+  SeuratObject[LoadSeuratRds],
+)
+```
+
+```{r}
+#| label: load-utils
+#| echo: false
+#| include: false
+
+box::use(plots = ../R/helpers/render_plots)
+```
+
+## FOV Images
+
+```{r}
+#| label: load-data-liver1
+
+sobj_file <- "../output/data/Seurat_objects/Seurat_liver1.Rds"
+sobj_liver1 <- LoadSeuratRds(sobj_file)
+
+sobj_liver1
+```
+
+```{r}
+#| label: load-data-liver2
+
+sobj_file <- "../output/data/Seurat_objects/Seurat_liver2.Rds"
+sobj_liver2 <- LoadSeuratRds(sobj_file)
+
+sobj_liver2
+```
+
+```{r}
+#| label: extract-cell-types
+
+cts_liver1 <- sobj_liver1@meta.data |>
+  select("id", "tissue", "nb_clus")
+
+cts_liver2 <- sobj_liver2@meta.data |>
+  select("id", "tissue", "nb_clus")
+
+cell_types <- cts_liver1 |> bind_rows(cts_liver2)
+cell_types |> write_feather("data/pdata_original_cell_types.feather")
+cell_types
+```
+
+```{r}
+#| label: cell-map-fov1
+
+plot <- plots$render_cell_map(sobj_l1, fovs = c("1"))
+plot <- plot +
+  ggplot2$theme(
+    plot.title = ggplot2$element_text(hjust = 0, size = 14, face = "bold"),
+    legend.title = ggplot2$element_text(size = 11, face = "plain"),
+    legend.key.size = ggplot2$unit(0.5, "cm"),
+    legend.text = ggplot2$element_text(size = 8),
+
+  )
+
+ggplot2$ggsave(file.path("output/cell_map_fov_1.svg"))
+
+plot
+```
+
+```{r}
+#| label: cell-map-fov15-16-17-45
+
+plot <- plots$render_cell_map(sobj_l1, fovs = c("15", "16", "17", "45"))
+plot <- plot + ggplot2$theme(
+  legend.key.size = ggplot2$unit(0.5, "cm"),
+  legend.text = ggplot2$element_text(size = 8)
+)
+
+ggplot2$ggsave("output/cell_map_fov_15-17_45.svg")
+
+plot
+```
+
+```{r}
+#| label: cell-map-fov1-2-5-6
+
+plot <- plots$render_cell_map(sobj_l2, fovs = c("1", "2", "5", "6"))
+plot <- plot + ggplot2$theme(
+  legend.key.size = ggplot2$unit(0.5, "cm"),
+  legend.text = ggplot2$element_text(size = 8)
+)
+
+ggplot2$ggsave("output/cell_map_fov_1-2_5-6.svg")
+
+plot
+```
+
+```{r}
+#| label: cell-map-fov18-19-20
+
+plot <- plots$render_cell_map(sobj_liver1, fovs = c("18", "19", "20"))
+plot <- plot +
+  ggplot2$labs(tag = "B") +
+  ggplot2$guides(fill = "none") +
+  ggplot2$theme(
+    text = ggplot2$element_text(family = "DejaVu Sans"),
+    plot.tag = ggplot2$element_text(face = "bold", color = "#fff")
+  )
+
+ggplot2$ggsave("output/parts/cell_map_fov_18-20.svg", width = 6.4, height = 4.8, dpi = 300)
+
+plot
+```
+
+```{r}
+#| label: fig-transcript-map
+
+plot <- plots$render_transcript_map(
+  sobj_l1,
+  fovs = c("1"),
+  genes = c("Pecam1", "C1qc", "Dcn")
+)
+
+ggplot2$ggsave("output/transcript_map_fov_1.svg")
+
+plot
+```
